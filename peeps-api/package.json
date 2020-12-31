@@ -22,7 +22,8 @@
     "oauth": "^0.9.15",
     "passport": "^0.4.1",
     "passport-twitter": "^1.0.4",
-    "query-string": "^6.13.8"
+    "query-string": "^6.13.8",
+    "twit": "^2.2.11"
   },
   "devDependencies": {
     "eslint": "^7.16.0"

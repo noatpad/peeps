@@ -8,7 +8,8 @@ const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-const twitter = require('./twitter');
+const auth = require('./auth');
+const { get } = require('./api');
 
 /* INITIALIZATION */
 const app = express();
@@ -29,7 +30,7 @@ app.use(bodyParser.json());
 /* AUTHENTICATION */
 // Start authentication with a request token
 app.get('/auth', (_, res) => {
-  twitter.getRequestToken()
+  auth.getRequestToken()
     .then(data => {
       console.log(data);
       res.status(200).send(data);
@@ -42,7 +43,7 @@ app.get('/auth', (_, res) => {
 
 // Obtain access token to complete authentication
 app.get('/auth/complete', ({ query: { request_token, request_secret, verifier }}, res) => {
-  twitter.getAccessToken(request_token, request_secret, verifier)
+  auth.getAccessToken(request_token, request_secret, verifier)
     .then(data => {
       console.log(data);
       res.cookie('token', data.oauth_token);
@@ -59,17 +60,18 @@ app.get('/auth/complete', ({ query: { request_token, request_secret, verifier }}
 // Retrieve user info
 app.get('/api/getUser', (req, res) => {
   const { token, secret } = req.cookies;
-  twitter.getUser(token, secret)
-    .then(data => {
+  get(token, secret, 'account/verify_credentials')
+    .then(({ data }) => {
       console.log(data);
       res.status(200).send(data);
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send('Error verifying user');
+      res.status(500).send('Error getting user data')
     })
 })
 
+/* LISTEN */
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}!`);
 })

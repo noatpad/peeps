@@ -4,7 +4,7 @@ const qs = require('query-string');
 
 const { API_KEY, API_SECRET, CALLBACK_URL } = require('./config.js');
 const AUTH_URL = 'https://api.twitter.com';
-const BASE_URL = 'https://api.twitter.com/1.1';
+// const BASE_URL = 'https://api.twitter.com/1.1';
 
 // "Percent encode" a string
 const percentEncode = (str) => encodeURIComponent(str).replace(/[!*()']/g, c => '%' + c.charCodeAt(0).toString(16))
@@ -74,13 +74,4 @@ const getAccessToken = (request_token, request_secret, verifier) => {
     .catch(err => err)
 }
 
-// Get user info
-const getUser = (token, secret) => {
-  const url = `${BASE_URL}/account/verify_credentials.json`;
-
-  return axios.get(url, { headers: { 'Authorization': getAuthHeader('GET', url, token, secret) }})
-    .then(({ data }) => data)
-    .catch(err => err)
-}
-
-module.exports = { getRequestToken, getAccessToken, getUser }
+module.exports = { getRequestToken, getAccessToken }
