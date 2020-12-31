@@ -1,0 +1,30 @@
+{
+  "name": "peeps-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.5",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jssha": "^3.2.0",
+    "morgan": "^1.10.0",
+    "oauth": "^0.9.15",
+    "passport": "^0.4.1",
+    "passport-twitter": "^1.0.4",
+    "query-string": "^6.13.8"
+  },
+  "devDependencies": {
+    "eslint": "^7.16.0"
+  }
+}
