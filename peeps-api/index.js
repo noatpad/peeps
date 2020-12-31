@@ -45,8 +45,8 @@ app.get('/auth/complete', ({ query: { request_token, request_secret, verifier }}
   twitter.getAccessToken(request_token, request_secret, verifier)
     .then(data => {
       console.log(data);
-      res.cookie('token', data.oauth_token, { httpOnly: true });
-      res.cookie('secret', data.oauth_token_secret, { httpOnly: true });
+      res.cookie('token', data.oauth_token);
+      res.cookie('secret', data.oauth_token_secret);
       res.status(200).send(data);
     })
     .catch(err => {

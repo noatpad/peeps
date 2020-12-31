@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
+import Cookies from 'universal-cookie';
 import 'tailwindcss/tailwind.css';
 
 const App = ({ Component, pageProps }) => {
-  const [authenticated, setAuthenticated] = useState(false);
+  // If tokens are available in cookies, use that instead of authenticating again
+  const cookies = new Cookies();
+  const [auth, setAuth] = useState(cookies.get('token') !== undefined && cookies.get('secret') !== undefined);
 
-  const signIn = () => {
-    setAuthenticated(true);
-  }
+  const signIn = () => { setAuth(true) }
 
   return (
     <div className="container m-2">
-      <Component {...pageProps} signIn={signIn} auth={authenticated}/>
+      <Component {...pageProps} signIn={signIn} auth={auth}/>
     </div>
   )
 }
