@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/router';
-import { verify } from '../utils/api';
+import { verify, getLists } from '../utils/api';
 
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
@@ -20,6 +20,14 @@ const Home = ({ auth, setAuth }) => {
       router.replace('/hello');
     }
   }, [loading]);
+
+  // Get all owned lists when authenticated
+  useEffect(() => {
+    if (!auth) { return }
+    getLists()
+      .then(data => console.log(data))
+      .catch(err => console.error(err))
+  }, [auth])
 
   return (
     <React.Fragment>

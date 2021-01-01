@@ -7,15 +7,17 @@ const App = ({ Component, pageProps }) => {
   const [auth, setAuth] = useState(false);
 
   return (
-    <div className="container m-2">
+    <div className="min-h-screen">
       <Head>
-        <title>Hello NextJS</title>
+        <title>peeps</title>
       </Head>
-      <Component
-        auth={auth}
-        setAuth={setAuth}
-        {...pageProps}
-      />
+      <div className="container mx-auto px-8">
+        <Component
+          auth={auth}
+          setAuth={setAuth}
+          {...pageProps}
+        />
+      </div>
     </div>
   )
 }

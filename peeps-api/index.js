@@ -67,7 +67,21 @@ app.get('/api/verify', (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send('Error getting user data')
+      res.status(500).send('Error getting user data');
+    })
+})
+
+// Retrieve user-owned lists
+app.get('/api/getLists', (req, res) => {
+  const { token, secret } = req.cookies;
+  get(token, secret, 'lists/ownerships', { count: 1000 })
+    .then(({ data }) => {
+      console.log(data);
+      res.status(200).send(data);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error getting lists');
     })
 })
 

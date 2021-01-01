@@ -11,7 +11,7 @@ export const startAuth = () => (
       sessionStorage.setItem('request_secret', request_secret);
       window.location.href = `https://api.twitter.com/oauth/authenticate?oauth_token=${request_token}`;
     })
-    .catch(err => { console.error(err) })
+    .catch(err => console.error(err))
 )
 
 // Wrap up authentication with an access token
@@ -22,12 +22,19 @@ export const completeAuth = (request_token, verifier) => {
       sessionStorage.removeItem('request_token');
       sessionStorage.removeItem('request_secret');
     })
-    .catch(err => { console.error(err) })
+    .catch(err => console.error(err))
 }
 
 // Verify user info
 export const verify = () => {
   return axios.get('/api/verify')
     .then(({ data }) => data)
-    .catch(err => { console.error(err) })
+    .catch(err => console.error(err))
+}
+
+// Get all lists owned by the user
+export const getLists = () => {
+  return axios.get('/api/getLists')
+    .then(({ data }) => data)
+    .catch(err => console.error(err))
 }
