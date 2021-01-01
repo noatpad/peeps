@@ -1,42 +1,33 @@
 import React, { useState, useEffect } from 'react';
-import Head from 'next/head';
+import Cookies from 'universal-cookie';
 import { useRouter } from 'next/router';
-import { getUser } from '../utils/api';
+import { verify } from '../utils/api';
 
-const Home = ({ auth }) => {
+const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState({});
   const router = useRouter();
+  const cookies = new Cookies();
 
-  // Determine what to do on load
+  // Verify that you can make API calls
   useEffect(() => {
-    if (auth) {   // If authenticated, test the API
-      getUser()
-        .then(user => {
-          console.log(user);
-          setUser(user);
-          setLoading(false);
-        })
-    } else {      // Otherwise, redirect to the landing page
-      router.replace('/hello')
+    const tokenInCookie = cookies.get('token') !== undefined && cookies.get('secret') !== undefined;
+    if (loading && tokenInCookie) {
+      verify()
+        .then(_ => setAuth(true))
+        .catch(err => console.error(err))
+        .finally(() => setLoading(false))
+    } else if (!auth) {
+      router.replace('/hello');
     }
-  }, []);
+  }, [loading]);
 
   return (
     <React.Fragment>
-      <Head>
-        <title>Hello NextJS</title>
-      </Head>
       <main>
         {loading ? (
           <p>Loading...</p>
         ) : (
-          <div>
-            <h1>{user.name} (@{user.screen_name})</h1>
-            <p>{user.statuses_count} tweets</p>
-            <p>{user.followers_count} followers</p>
-            <p>Following {user.friends_count}</p>
-          </div>
+          <p>Authenticated!</p>
         )}
       </main>
     </React.Fragment>

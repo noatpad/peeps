@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { completeAuth } from '../utils/api';
 
-const Callback = ({ signIn }) => {
+const Callback = () => {
   const router = useRouter();
 
   // This page is used as a callback to complete the authentication process
@@ -13,10 +13,7 @@ const Callback = ({ signIn }) => {
 
     // Once done, redirect back to the root
     completeAuth(token, verifier)
-      .then(_ => {
-        signIn();
-        router.replace({ pathname: '/' });
-      })
+      .then(_ => router.replace({ pathname: '/' }))
   }, []);
 
   return (

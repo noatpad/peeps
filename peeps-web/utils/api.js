@@ -26,8 +26,8 @@ export const completeAuth = (request_token, verifier) => {
 }
 
 // Verify user info
-export const getUser = () => {
-  return axios.get('/api/getUser')
+export const verify = () => {
+  return axios.get('/api/verify')
     .then(({ data }) => data)
     .catch(err => { console.error(err) })
 }

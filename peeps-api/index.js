@@ -58,7 +58,7 @@ app.get('/auth/complete', ({ query: { request_token, request_secret, verifier }}
 
 /* API */
 // Retrieve user info
-app.get('/api/getUser', (req, res) => {
+app.get('/api/verify', (req, res) => {
   const { token, secret } = req.cookies;
   get(token, secret, 'account/verify_credentials')
     .then(({ data }) => {
