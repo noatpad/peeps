@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/router';
 import { verify, getLists } from '../utils/api';
+import Title from '../components/Title';
+import SelectorPane from '../components/SelectorPane';
+import ListSelector from '../components/ListSelector';
+import Button from '../components/Button';
 
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
+  const [lists, setLists] = useState([]);
   const router = useRouter();
   const cookies = new Cookies();
 
@@ -25,20 +30,35 @@ const Home = ({ auth, setAuth }) => {
   useEffect(() => {
     if (!auth) { return }
     getLists()
-      .then(data => console.log(data))
+      .then(({ lists }) => setLists(lists))
       .catch(err => console.error(err))
   }, [auth])
 
-  return (
-    <React.Fragment>
-      <main>
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <p>Authenticated!</p>
-        )}
+  if (loading) {
+    return (
+      <main className="text-center">
+        <Title/>
+        <p>Loading...</p>
       </main>
-    </React.Fragment>
+    )
+  }
+
+  return (
+    <main>
+      <Title/>
+      <div className="flex my-12">
+        <SelectorPane title="Your lists" subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}>
+          <ListSelector lists={lists}/>
+        </SelectorPane>
+        <SelectorPane title="List name" subtitle="# of members">
+
+        </SelectorPane>
+      </div>
+      <div className="flex justify-center">
+        <Button text="Apply"/>
+        <Button text="Clear" warning/>
+      </div>
+    </main>
   )
 }
 
