@@ -26,15 +26,22 @@ export const completeAuth = (request_token, verifier) => {
 }
 
 // Verify user info
-export const verify = () => {
-  return axios.get('/api/verify')
+export const verify = () => (
+  axios.get('/api/verify')
     .then(({ data }) => data)
     .catch(err => console.error(err))
-}
+)
 
 // Get all lists owned by the user
-export const getLists = () => {
-  return axios.get('/api/getLists')
+export const getLists = () => (
+  axios.get('/api/getLists')
     .then(({ data }) => data)
     .catch(err => console.error(err))
-}
+)
+
+// Get all members from a given list
+export const getMembersFromList = (list_id) => (
+  axios.get('/api/getMembersFromList', { params: { id: list_id }})
+    .then(({ data }) => data)
+    .catch(err => console.error(err))
+)

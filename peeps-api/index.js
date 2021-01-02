@@ -42,7 +42,8 @@ app.get('/auth', (_, res) => {
 })
 
 // Obtain access token to complete authentication
-app.get('/auth/complete', ({ query: { request_token, request_secret, verifier }}, res) => {
+app.get('/auth/complete', (req, res) => {
+  const { request_token, request_secret, verifier } = req.query;
   auth.getAccessToken(request_token, request_secret, verifier)
     .then(data => {
       console.log(data);
@@ -82,6 +83,21 @@ app.get('/api/getLists', (req, res) => {
     .catch(err => {
       console.error(err);
       res.status(500).send('Error getting lists');
+    })
+})
+
+// Retrieve members from a designated list
+app.get('/api/getMembersFromList', (req, res) => {
+  const { token, secret } = req.cookies;
+  const { id } = req.query;
+  get(token, secret, 'lists/members', { list_id: id, count: 5000 })
+    .then(({ data }) => {
+      console.log(data);
+      res.status(200).send(data);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error getting members for list');
     })
 })
 
