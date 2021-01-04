@@ -45,3 +45,10 @@ export const getMembersFromList = (list_id) => (
     .then(({ data }) => data)
     .catch(err => console.error(err))
 )
+
+// Create a new list
+export const addList = (list) => (
+  axios.post('/api/addList', null, { params: list })
+    .then(({ data }) => data)
+    .catch(err => console.error(err))
+)

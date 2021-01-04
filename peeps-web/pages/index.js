@@ -43,7 +43,7 @@ const Home = ({ auth, setAuth }) => {
     getMembersFromList(activeList)
       .then(({ users }) => setUsers(users))
       .catch(err => console.error(err))
-  }, [activeList])
+  }, [activeList]);
 
   if (loading) {
     return (
@@ -54,14 +54,17 @@ const Home = ({ auth, setAuth }) => {
     )
   }
 
-  console.log(users);
-
   return (
     <main>
       <Title/>
       <div className="flex my-12">
         <SelectorPane title="Your lists" subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}>
-          <ListSelector lists={lists} activeList={activeList} setActiveList={setActiveList}/>
+          <ListSelector
+            lists={lists}
+            setLists={setLists}
+            activeList={activeList}
+            setActiveList={setActiveList}
+          />
         </SelectorPane>
         <SelectorPane title="List name" subtitle="# of members">
           <UserSelector active={activeList} users={users}/>

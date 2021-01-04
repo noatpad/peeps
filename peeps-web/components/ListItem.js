@@ -1,15 +1,10 @@
 import React from 'react';
 
 const ListItem = ({ item: { id_str, name, member_count }, activeList, setActiveList }) => {
-  let listClass = "flex p-3 mt-6 rounded-md shadow cursor-pointer ";
-  if (activeList) {
-    listClass += "ring";
-  }
-
   const handleClick = () => { setActiveList(id_str) }
 
   return (
-    <div className={listClass} onClick={handleClick}>
+    <div className={`flex p-3 mt-6 rounded-md shadow cursor-pointer ${activeList ? 'ring' : ''}`} onClick={handleClick}>
       <div className="flex-initial flex items-center mr-2">
         <button className="p-1">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height={16} width={16}>

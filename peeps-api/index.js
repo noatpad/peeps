@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const auth = require('./auth');
-const { get } = require('./api');
+const { get, post } = require('./api');
 
 /* INITIALIZATION */
 const app = express();
@@ -98,6 +98,21 @@ app.get('/api/getMembersFromList', (req, res) => {
     .catch(err => {
       console.error(err);
       res.status(500).send('Error getting members for list');
+    })
+})
+
+// Create a new list
+app.post('/api/addList', (req, res) => {
+  const { token, secret } = req.cookies;
+  const { name, description, private } = req.query;
+  post(token, secret, 'lists/create', { name, description, mode: private ? 'private' : 'public' })
+    .then(({ data }) => {
+      console.log(data);
+      res.status(200).send(data);
+    })
+    .catch(err => {
+      console.error(err)
+      res.status(500).send('Error creating list');
     })
 })
 

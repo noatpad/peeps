@@ -1,0 +1,41 @@
+import React from 'react';
+import { LIST_NAME_LIMIT } from '../utils/config';
+
+const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => {
+  const handleClickSearch = () => { setSearchActive(true) }
+
+  const handleClickAdd = () => { setSearchActive(false) }
+
+  const validTitle = newList.name.length > 0 && newList.name.length <= LIST_NAME_LIMIT;
+
+  return (
+    <div className="flex-initial flex items-center px-8">
+      <div className={`${searchActive ? 'flex-1' : 'flex-initial'} flex items-center mx-1 border border-gray-300 rounded-full`}>
+        <button className="p-2.5" onClick={handleClickSearch}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height={20} width={20}>
+            <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
+          </svg>
+        </button>
+        <input className={`${searchActive ? 'flex-1 ml-1 mr-3' : 'w-0 ml-0 mr-0'}`} placeholder="Search for a list"/>
+      </div>
+      <div className={`${!searchActive ? 'flex-1' : 'flex-initial'} relative flex items-center mx-1 border border-gray-300 rounded-full`}>
+        <button className="p-2" onClick={handleClickAdd}>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" height={24} width={24}>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </button>
+        <input
+          className={`${!searchActive ? 'flex-1 ml-1 mr-3' : 'w-0 ml-0 mr-0'}`}
+          value={newList.name}
+          placeholder="Add a list"
+          onChange={(e) => setNewList({ ...newList, name: e.target.value })}
+        />
+        <span className={`${searchActive ? 'hidden' : 'initial'} absolute right-0 mr-3 ${validTitle ? 'text-gray-300' : 'text-red-400'}`}>
+          {newList.name.length}/{LIST_NAME_LIMIT}
+        </span>
+      </div>
+    </div>
+  )
+}
+
+export default SearchOrAdd;
