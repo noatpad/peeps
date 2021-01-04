@@ -4,6 +4,7 @@ import Button from './Button';
 import { LIST_DESCRIPTION_LIMIT } from '../utils/config';
 
 const AddListCard = ({ newList, setNewList, validList, handleAddList }) => {
+  // TODO: Add user feedback that a list has been created
   const validDescription = newList.description.length <= LIST_DESCRIPTION_LIMIT;
 
   return (

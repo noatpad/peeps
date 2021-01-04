@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { addList } from '../utils/api';
+import { sortLists } from '../utils/helpers';
 import AddListCard from './AddListCard';
 import ListItem from './ListItem';
 import SearchOrAddList from './SearchOrAddList';
 import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '../utils/config';
-import { addList } from '../utils/api';
 
 const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
   const [searchActive, setSearchActive] = useState(true);
@@ -20,10 +21,7 @@ const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
   const handleAddList = () => {
     if (!validList) { return }
     addList(newList)
-      .then(data => {
-        console.log(data);
-        setLists(lists.concat(data));
-      })
+      .then(data => { setLists(lists.concat(data).sort(sortLists)) })
       .catch(err => console.error(err))
   }
 

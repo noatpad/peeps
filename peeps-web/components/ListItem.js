@@ -1,6 +1,7 @@
 import React from 'react';
 
 const ListItem = ({ item: { id_str, name, member_count }, activeList, setActiveList }) => {
+  // IDEA: Show icon for public and private lists
   const handleClick = () => { setActiveList(id_str) }
 
   return (

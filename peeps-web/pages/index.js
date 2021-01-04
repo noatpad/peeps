@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Cookies from 'universal-cookie';
 import { useRouter } from 'next/router';
 import { verify, getLists, getMembersFromList } from '../utils/api';
+import { sortLists } from '../utils/helpers';
 import Title from '../components/Title';
 import SelectorPane from '../components/SelectorPane';
 import ListSelector from '../components/ListSelector';
@@ -33,7 +34,7 @@ const Home = ({ auth, setAuth }) => {
   useEffect(() => {
     if (!auth) { return }
     getLists()
-      .then(({ lists }) => setLists(lists))
+      .then(({ lists }) => setLists(lists.sort(sortLists)))
       .catch(err => console.error(err))
   }, [auth]);
 
