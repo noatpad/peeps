@@ -22,13 +22,13 @@ const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
     addList(newList)
       .then(data => {
         console.log(data);
-        setLists(lists.push(data));
+        setLists(lists.concat(data));
       })
       .catch(err => console.error(err))
   }
 
   return (
-    <div className="flex flex-col h-full mt-6">
+    <div className="flex flex-col h-full pt-6">
       <SearchOrAddList
         searchActive={searchActive}
         setSearchActive={setSearchActive}

@@ -56,7 +56,9 @@ const Home = ({ auth, setAuth }) => {
 
   return (
     <main>
-      <Title/>
+      <div className="my-40">
+        <Title/>
+      </div>
       <div className="flex my-12">
         <SelectorPane title="Your lists" subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}>
           <ListSelector
