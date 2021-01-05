@@ -5,6 +5,7 @@ import { LIST_DESCRIPTION_LIMIT } from '../utils/config';
 
 const AddListCard = ({ newList, setNewList, validList, handleAddList }) => {
   // TODO: Add user feedback that a list has been created
+  // TODO: Disable button when creating a new list
   const validDescription = newList.description.length <= LIST_DESCRIPTION_LIMIT;
 
   return (

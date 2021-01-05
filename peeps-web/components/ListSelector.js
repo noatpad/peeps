@@ -30,8 +30,9 @@ const ListSelector = ({ fuseListRef, lists, setLists, activeList, setActiveList 
     if (!validList) { return }
     addList(newList)
       .then(data => {
-        setLists(lists.concat(data).sort(sortLists));
         fuseListRef.current.add(data);
+        setLists(lists.concat(data).sort(sortLists));
+        setNewList({ ...newList, name: '', description: '' });
       })
       .catch(err => console.error(err))
   }
@@ -47,10 +48,10 @@ const ListSelector = ({ fuseListRef, lists, setLists, activeList, setActiveList 
   const handleDeleteList = () => {
     deleteList(listToRemove)
       .then(_ => {
+        fuseListRef.current.remove(list => (list.id_str === listToRemove.id_str))
         setLists(lists.filter(list => list.id_str !== listToRemove.id_str));
         setListToRemove({});
         setShowListDeleteModal(false);
-        fuseListRef.current.remove(list => (list.id_str === listToRemove.id_str))
       })
       .catch(err => console.error(err))
   }

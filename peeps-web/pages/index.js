@@ -38,8 +38,8 @@ const Home = ({ auth, setAuth }) => {
     if (!auth) { return }
     getLists()
       .then((lists) => {
-        setLists(lists.sort(sortLists));
         fuseListRef.current.setCollection(lists);
+        setLists(lists.sort(sortLists));
       })
       .catch(err => console.error(err))
   }, [auth]);
