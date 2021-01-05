@@ -43,7 +43,7 @@ const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => 
           className={`${!searchActive ? 'flex-1 ml-1 mr-3' : 'w-0 ml-0 mr-0'}`}
           ref={addInputRef}
           value={newList.name}
-          placeholder="Add a list"
+          placeholder="What's the name of the new list?"
           onChange={(e) => setNewList({ ...newList, name: e.target.value })}
         />
         <span className={`${searchActive ? 'hidden' : 'initial'} absolute right-0 mr-3 ${validTitle ? 'text-gray-300' : 'text-red-400'}`}>
