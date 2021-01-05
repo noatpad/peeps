@@ -1,5 +1,7 @@
 import React from 'react';
 
+// TODO: Improve look of footer
+// TODO: Implement logo links for Twitter and GitHub
 const Footer = () => (
   <footer className="px-4 pt-16 pb-20 mt-10 bg-gray-100 text-center">
     <p>

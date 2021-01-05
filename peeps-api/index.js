@@ -132,6 +132,4 @@ app.post('/api/deleteList', (req, res) => {
 })
 
 /* LISTEN */
-app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}!`);
-})
+app.listen(PORT, () => console.log(`Listening on port ${PORT}!`))

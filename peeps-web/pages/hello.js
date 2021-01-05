@@ -1,6 +1,7 @@
 import React from 'react';
 import { startAuth } from '../utils/api';
 
+// TODO: Implement and style landing page
 const Hello = () => {
   return (
     <div>

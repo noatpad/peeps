@@ -16,6 +16,7 @@ const Callback = () => {
       .then(_ => router.replace({ pathname: '/' }))
   }, []);
 
+  // TODO: Style the callback page better
   return (
     <div>
       <h2>Gimme a sec...</h2>

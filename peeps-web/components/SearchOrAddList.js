@@ -2,8 +2,11 @@ import React from 'react';
 import { LIST_NAME_LIMIT } from '../utils/config';
 
 const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => {
+  // IDEA: Focus respective bars upon clicking button
+  // Handler for clicking the search button
   const handleClickSearch = () => { setSearchActive(true) }
 
+  // Handler for clicking the "add list" button
   const handleClickAdd = () => { setSearchActive(false) }
 
   const validTitle = newList.name.length > 0 && newList.name.length <= LIST_NAME_LIMIT;

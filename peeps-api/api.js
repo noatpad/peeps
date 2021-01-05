@@ -10,6 +10,7 @@ const twitter = (token, secret) => (
   })
 )
 
+// Common GET request through twit
 const get = (token, secret, endpoint, params = {}) => {
   const T = twitter(token, secret);
   return T.get(endpoint, params)
@@ -17,6 +18,7 @@ const get = (token, secret, endpoint, params = {}) => {
     .catch(err => err)
 }
 
+// Common POST request through twit
 const post = (token, secret, endpoint, params = {}) => {
   const T = twitter(token, secret);
   return T.post(endpoint, params)

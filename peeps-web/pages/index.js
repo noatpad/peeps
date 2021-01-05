@@ -46,6 +46,7 @@ const Home = ({ auth, setAuth }) => {
       .catch(err => console.error(err))
   }, [activeList]);
 
+  // TODO: Implement a better loading screen
   if (loading) {
     return (
       <main className="text-center">
@@ -70,7 +71,10 @@ const Home = ({ auth, setAuth }) => {
           />
         </SelectorPane>
         <SelectorPane title="List name" subtitle="# of members">
-          <UserSelector active={activeList} users={users}/>
+          <UserSelector
+            active={activeList}
+            users={users}
+          />
         </SelectorPane>
       </div>
       <div className="flex justify-center">

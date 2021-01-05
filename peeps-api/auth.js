@@ -4,7 +4,6 @@ const qs = require('query-string');
 
 const { API_KEY, API_SECRET, CALLBACK_URL } = require('./config.js');
 const AUTH_URL = 'https://api.twitter.com';
-// const BASE_URL = 'https://api.twitter.com/1.1';
 
 // "Percent encode" a string
 const percentEncode = (str) => encodeURIComponent(str).replace(/[!*()']/g, c => '%' + c.charCodeAt(0).toString(16))

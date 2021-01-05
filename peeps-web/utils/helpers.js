@@ -1,3 +1,4 @@
+// Custom compare function for sorting lists
 export const sortLists = (a, b) => {
   const a_name = a.name.toLowerCase();
   const b_name = b.name.toLowerCase();

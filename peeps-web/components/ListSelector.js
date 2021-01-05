@@ -15,6 +15,7 @@ const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
   const [listToRemove, setListToRemove] = useState({});
   const [showListDeleteModal, setShowListDeleteModal] = useState(false);
 
+  // When readying a new list, check if the data is valid
   useEffect(() => {
     const { name, description } = newList;
     const validTitle = name.length > 0 && name.length <= LIST_NAME_LIMIT;
@@ -22,6 +23,7 @@ const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
     setValidList(validTitle && validDescription);
   }, [newList]);
 
+  // Handler for adding a new list
   const handleAddList = () => {
     if (!validList) { return }
     addList(newList)
@@ -29,16 +31,17 @@ const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
       .catch(err => console.error(err))
   }
 
+  // Handler for opening the "delete list" modal
   const handleDeleteModal = (list, e) => {
     e.stopPropagation();
     setListToRemove(list);
     setShowListDeleteModal(true);
   }
 
+  // Handler for deleting a list
   const handleDeleteList = () => {
     deleteList(listToRemove)
       .then(_ => {
-        console.log(`Deleted list ${listToRemove.name}`);
         setLists(lists.filter(i => i.id_str !== listToRemove.id_str));
         setListToRemove({});
         setShowListDeleteModal(false);

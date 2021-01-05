@@ -2,6 +2,7 @@ import React from 'react';
 
 const ListItem = ({ item, activeList, setActiveList, handleDeleteModal }) => {
   // IDEA: Show icon for public and private lists
+  // TODO: Show better feedback about delete button (hover tooltip?)
   const { id_str, name, member_count } = item;
 
   const handleClick = () => { setActiveList(id_str) }
