@@ -7,7 +7,7 @@ const UserItem = ({ user: { name, screen_name, profile_image_url_https }}) => {
   const handleClick = () => { console.log("Click") }
 
   return (
-    <div className="flex items-center p-3 mt-6 rounded-md shadow cursor-pointer" onClick={handleClick}>
+    <div className="flex items-center p-3 my-6 rounded-md shadow cursor-pointer" onClick={handleClick}>
       <div className="flex-initial flex items-center mr-3">
         <Image
           className="rounded-full"

@@ -116,6 +116,21 @@ app.post('/api/addList', (req, res) => {
     })
 })
 
+// Delete a designated list
+app.post('/api/deleteList', (req, res) => {
+  const { token, secret } = req.cookies;
+  const { list_id } = req.query;
+  post(token, secret, 'lists/destroy', { list_id })
+    .then(({ data }) => {
+      console.log(data);
+      res.status(200).send(data);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('Error deleting list');
+    })
+})
+
 /* LISTEN */
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}!`);

@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import Modal from 'react-modal';
 import 'tailwindcss/tailwind.css';
 import '../global.css';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+
+Modal.setAppElement('#__next');
 
 const App = ({ Component, pageProps }) => {
   // If tokens are available in cookies, use that instead of authenticating again

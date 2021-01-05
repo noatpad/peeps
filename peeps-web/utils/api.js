@@ -52,3 +52,11 @@ export const addList = (list) => (
     .then(({ data }) => data)
     .catch(err => console.error(err))
 )
+
+// Delete a list
+export const deleteList = (list) => {
+  const { id_str } = list;
+  return axios.post('/api/deleteList', null, { params: { list_id: id_str }})
+    .then(({ data }) => data)
+    .catch(err => console.error(err))
+}

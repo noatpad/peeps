@@ -1,13 +1,15 @@
 import React from 'react';
 
-const ListItem = ({ item: { id_str, name, member_count }, activeList, setActiveList }) => {
+const ListItem = ({ item, activeList, setActiveList, handleDeleteModal }) => {
   // IDEA: Show icon for public and private lists
+  const { id_str, name, member_count } = item;
+
   const handleClick = () => { setActiveList(id_str) }
 
   return (
     <div className={`flex p-3 my-6 rounded-md shadow cursor-pointer ${activeList ? 'ring' : ''}`} onClick={handleClick}>
       <div className="flex-initial flex items-center mr-2">
-        <button className="p-1">
+        <button className="p-1 rounded hover:bg-red-200" onClick={(e) => handleDeleteModal(item, e)}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height={16} width={16}>
             <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clipRule="evenodd" />
           </svg>
