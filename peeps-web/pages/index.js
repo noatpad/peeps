@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import Cookies from 'universal-cookie';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import Cookies from 'universal-cookie';
+import Fuse from 'fuse.js';
 import { verify, getLists, getMembersFromList } from '../utils/api';
 import { sortLists } from '../utils/helpers';
+
 import Title from '../components/Title';
 import SelectorPane from '../components/SelectorPane';
 import ListSelector from '../components/ListSelector';
@@ -14,6 +16,7 @@ const Home = ({ auth, setAuth }) => {
   const [lists, setLists] = useState([]);
   const [activeList, setActiveList] = useState(-1);
   const [users, setUsers] = useState([]);
+  const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const router = useRouter();
   const cookies = new Cookies();
 
@@ -34,7 +37,10 @@ const Home = ({ auth, setAuth }) => {
   useEffect(() => {
     if (!auth) { return }
     getLists()
-      .then(({ lists }) => setLists(lists.sort(sortLists)))
+      .then((lists) => {
+        setLists(lists.sort(sortLists));
+        fuseListRef.current.setCollection(lists);
+      })
       .catch(err => console.error(err))
   }, [auth]);
 
@@ -64,6 +70,7 @@ const Home = ({ auth, setAuth }) => {
       <div className="flex my-12">
         <SelectorPane title="Your lists" subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}>
           <ListSelector
+            fuseListRef={fuseListRef}
             lists={lists}
             setLists={setLists}
             activeList={activeList}

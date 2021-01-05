@@ -14,16 +14,28 @@ const twitter = (token, secret) => (
 const get = (token, secret, endpoint, params = {}) => {
   const T = twitter(token, secret);
   return T.get(endpoint, params)
-    .then(resp => resp)
-    .catch(err => err)
+    .then(resp => {
+      console.log(resp);
+      return resp;
+    })
+    .catch(err => {
+      console.error(err);
+      return err;
+    })
 }
 
 // Common POST request through twit
 const post = (token, secret, endpoint, params = {}) => {
   const T = twitter(token, secret);
   return T.post(endpoint, params)
-    .then(resp => resp)
-    .catch(err => err)
+    .then(resp => {
+      console.log(resp);
+      return resp;
+    })
+    .catch(err => {
+      console.error(err);
+      return err;
+    })
 }
 
 module.exports = { get, post }

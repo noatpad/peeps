@@ -1,9 +1,9 @@
 import React, { useRef } from 'react';
 import { LIST_NAME_LIMIT } from '../utils/config';
 
-const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => {
-  const searchInputRef = useRef(null);
-  const addInputRef = useRef(null);
+const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newList, setNewList }) => {
+  const searchInputRef = useRef();
+  const addInputRef = useRef();
 
   // Handler for clicking the search button
   const handleClickSearch = () => {
@@ -30,7 +30,9 @@ const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => 
         <input
           className={`${searchActive ? 'flex-1 ml-1 mr-3' : 'w-0 ml-0 mr-0'}`}
           ref={searchInputRef}
+          value={query}
           placeholder="Search for a list"
+          onChange={e => setQuery(e.target.value)}
         />
       </div>
       <div className={`${!searchActive ? 'flex-1' : 'flex-initial'} relative flex items-center mx-1 border border-gray-300 rounded-full`}>
@@ -44,7 +46,7 @@ const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => 
           ref={addInputRef}
           value={newList.name}
           placeholder="What's the name of the new list?"
-          onChange={(e) => setNewList({ ...newList, name: e.target.value })}
+          onChange={e => setNewList({ ...newList, name: e.target.value })}
         />
         <span className={`${searchActive ? 'hidden' : 'initial'} absolute right-0 mr-3 ${validTitle ? 'text-gray-300' : 'text-red-400'}`}>
           {newList.name.length}/{LIST_NAME_LIMIT}
@@ -54,4 +56,4 @@ const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => 
   )
 }
 
-export default SearchOrAdd;
+export default SearchOrAddList;

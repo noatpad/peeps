@@ -3,13 +3,15 @@ import Modal from 'react-modal';
 import { addList, deleteList } from '../utils/api';
 import { sortLists } from '../utils/helpers';
 import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '../utils/config';
+
 import AddListCard from './AddListCard';
 import ListItem from './ListItem';
 import SearchOrAddList from './SearchOrAddList';
 import Button from './Button';
 
-const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
+const ListSelector = ({ fuseListRef, lists, setLists, activeList, setActiveList }) => {
   const [searchActive, setSearchActive] = useState(true);
+  const [query, setQuery] = useState('');
   const [newList, setNewList] = useState({ name: '', description: '', private: true });
   const [validList, setValidList] = useState(false);
   const [listToRemove, setListToRemove] = useState({});
@@ -27,7 +29,10 @@ const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
   const handleAddList = () => {
     if (!validList) { return }
     addList(newList)
-      .then(data => { setLists(lists.concat(data).sort(sortLists)) })
+      .then(data => {
+        setLists(lists.concat(data).sort(sortLists));
+        fuseListRef.current.add(data);
+      })
       .catch(err => console.error(err))
   }
 
@@ -42,16 +47,22 @@ const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
   const handleDeleteList = () => {
     deleteList(listToRemove)
       .then(_ => {
-        setLists(lists.filter(i => i.id_str !== listToRemove.id_str));
+        setLists(lists.filter(list => list.id_str !== listToRemove.id_str));
         setListToRemove({});
         setShowListDeleteModal(false);
+        fuseListRef.current.remove(list => (list.id_str === listToRemove.id_str))
       })
       .catch(err => console.error(err))
   }
 
+  // Fuzzy search list
+  const searchResults = query ? fuseListRef.current.search(query.toLowerCase()) : lists.map(l => ({ item: l }));
+
   return (
     <div className="relative flex flex-col h-full pt-6" id="lists">
       <SearchOrAddList
+        query={query}
+        setQuery={setQuery}
         searchActive={searchActive}
         setSearchActive={setSearchActive}
         newList={newList}
@@ -66,11 +77,11 @@ const ListSelector = ({ lists, setLists, activeList, setActiveList }) => {
         />
       )}
       <div className="flex-1 px-12 overflow-scroll">
-        {lists.map(l => (
+        {searchResults.map(({ item }) => (
           <ListItem
-            key={l.id_str}
-            item={l}
-            activeList={l.id_str === activeList}
+            key={item.id_str}
+            item={item}
+            activeList={item.id_str === activeList}
             setActiveList={setActiveList}
             handleDeleteModal={handleDeleteModal}
           />

@@ -62,28 +62,16 @@ app.get('/auth/complete', (req, res) => {
 app.get('/api/verify', (req, res) => {
   const { token, secret } = req.cookies;
   get(token, secret, 'account/verify_credentials')
-    .then(({ data }) => {
-      console.log(data);
-      res.status(200).send(data);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error getting user data');
-    })
+    .then(({ data }) => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
 })
 
 // Retrieve user-owned lists
 app.get('/api/getLists', (req, res) => {
   const { token, secret } = req.cookies;
   get(token, secret, 'lists/ownerships', { count: 1000 })
-    .then(({ data }) => {
-      console.log(data);
-      res.status(200).send(data);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error getting lists');
-    })
+    .then(({ data }) => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
 })
 
 // Retrieve members from a designated list
@@ -91,14 +79,8 @@ app.get('/api/getMembersFromList', (req, res) => {
   const { token, secret } = req.cookies;
   const { id } = req.query;
   get(token, secret, 'lists/members', { list_id: id, count: 5000 })
-    .then(({ data }) => {
-      console.log(data);
-      res.status(200).send(data);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error getting members for list');
-    })
+    .then(({ data }) => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
 })
 
 // Create a new list
@@ -106,14 +88,8 @@ app.post('/api/addList', (req, res) => {
   const { token, secret } = req.cookies;
   const { name, description, private } = req.query;
   post(token, secret, 'lists/create', { name, description, mode: private ? 'private' : 'public' })
-    .then(({ data }) => {
-      console.log(data);
-      res.status(200).send(data);
-    })
-    .catch(err => {
-      console.error(err)
-      res.status(500).send('Error creating list');
-    })
+    .then(({ data }) => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
 })
 
 // Delete a designated list
@@ -121,14 +97,8 @@ app.post('/api/deleteList', (req, res) => {
   const { token, secret } = req.cookies;
   const { list_id } = req.query;
   post(token, secret, 'lists/destroy', { list_id })
-    .then(({ data }) => {
-      console.log(data);
-      res.status(200).send(data);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('Error deleting list');
-    })
+    .then(({ data }) => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
 })
 
 /* LISTEN */

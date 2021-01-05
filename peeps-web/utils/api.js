@@ -35,7 +35,7 @@ export const verify = () => (
 // Get all lists owned by the user
 export const getLists = () => (
   axios.get('/api/getLists')
-    .then(({ data }) => data)
+    .then(({ data }) => data.lists.map(i => ({ ...i, lowercase_name: i.name.toLowerCase() })))
     .catch(err => console.error(err))
 )
 
@@ -49,7 +49,7 @@ export const getMembersFromList = (list_id) => (
 // Create a new list
 export const addList = (list) => (
   axios.post('/api/addList', null, { params: list })
-    .then(({ data }) => data)
+    .then(({ data }) => ({ ...data, lowercase_name: data.name.toLowerCase() }))
     .catch(err => console.error(err))
 )
 
