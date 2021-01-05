@@ -1,13 +1,21 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { LIST_NAME_LIMIT } from '../utils/config';
 
 const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => {
-  // IDEA: Focus respective bars upon clicking button
+  const searchInputRef = useRef(null);
+  const addInputRef = useRef(null);
+
   // Handler for clicking the search button
-  const handleClickSearch = () => { setSearchActive(true) }
+  const handleClickSearch = () => {
+    setSearchActive(true);
+    searchInputRef.current.focus();
+  }
 
   // Handler for clicking the "add list" button
-  const handleClickAdd = () => { setSearchActive(false) }
+  const handleClickAdd = () => {
+    setSearchActive(false);
+    addInputRef.current.focus();
+  }
 
   const validTitle = newList.name.length > 0 && newList.name.length <= LIST_NAME_LIMIT;
 
@@ -19,7 +27,11 @@ const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => 
             <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
           </svg>
         </button>
-        <input className={`${searchActive ? 'flex-1 ml-1 mr-3' : 'w-0 ml-0 mr-0'}`} placeholder="Search for a list"/>
+        <input
+          className={`${searchActive ? 'flex-1 ml-1 mr-3' : 'w-0 ml-0 mr-0'}`}
+          ref={searchInputRef}
+          placeholder="Search for a list"
+        />
       </div>
       <div className={`${!searchActive ? 'flex-1' : 'flex-initial'} relative flex items-center mx-1 border border-gray-300 rounded-full`}>
         <button className="p-2" onClick={handleClickAdd}>
@@ -29,6 +41,7 @@ const SearchOrAdd = ({ searchActive, setSearchActive, newList, setNewList }) => 
         </button>
         <input
           className={`${!searchActive ? 'flex-1 ml-1 mr-3' : 'w-0 ml-0 mr-0'}`}
+          ref={addInputRef}
           value={newList.name}
           placeholder="Add a list"
           onChange={(e) => setNewList({ ...newList, name: e.target.value })}
