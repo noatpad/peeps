@@ -33,14 +33,16 @@ const Home = ({ auth, setAuth }) => {
     }
   }, [loading]);
 
+  // Update fuse searching when lists are updated
+  useEffect(() => {
+    fuseListRef.current.setCollection(lists);
+  }, [lists])
+
   // Get all owned lists when authenticated
   useEffect(() => {
     if (!auth) { return }
     getLists()
-      .then((lists) => {
-        fuseListRef.current.setCollection(lists);
-        setLists(lists.sort(sortLists));
-      })
+      .then((lists) => setLists(lists.sort(sortLists)))
       .catch(err => console.error(err))
   }, [auth]);
 
