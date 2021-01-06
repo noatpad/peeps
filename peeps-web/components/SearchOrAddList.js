@@ -42,7 +42,7 @@ const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newLi
           </svg>
         </button>
         <input
-          className={`${!searchActive ? 'flex-1 ml-1 mr-3' : 'w-0 ml-0 mr-0'}`}
+          className={searchActive ? "w-0 ml-0 mr-0" : "flex-1 ml-1 mr-3"}
           ref={addInputRef}
           value={newList.name}
           placeholder="What's the name of the new list?"

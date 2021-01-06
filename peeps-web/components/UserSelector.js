@@ -14,7 +14,6 @@ const UserSelector = ({ fuseRef, users }) => {
 
   // Fuzzy search list and pagination
   const searchResults = query ? fuseRef.current.search(query.toLowerCase()) : users.map(l => ({ item: l }));
-  console.log(searchResults);
   const offset = (page - 1) * RESULTS_PER_PAGE;
   const pageResults = searchResults.slice(offset, offset + RESULTS_PER_PAGE);
 

@@ -101,5 +101,14 @@ app.post('/api/deleteList', (req, res) => {
     .catch(err => res.status(500).send(err))
 })
 
+// Search for a user
+app.get('/api/search', (req, res) => {
+  const { token, secret } = req.cookies;
+  const { q } = req.query;
+  get(token, secret, 'users/search', { q, count: 5 })
+    .then(({ data }) => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
+})
+
 /* LISTEN */
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`))

@@ -61,3 +61,10 @@ export const deleteList = (list) => {
     .then(({ data }) => data)
     .catch(err => console.error(err))
 }
+
+// Search for a user
+export const search = (q) => (
+  axios.get('/api/search', { params: { q }})
+    .then(({ data }) => data)
+    .catch(err => console.error(err))
+)
