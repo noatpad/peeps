@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
 import { verify, getLists, getMembersFromList } from '../utils/api';
-import { sortLists } from '../utils/helpers';
+import { sortLists, sortUsers } from '../utils/helpers';
 
 import Title from '../components/Title';
 import SelectorPane from '../components/SelectorPane';
@@ -14,9 +14,10 @@ import Button from '../components/Button';
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState([]);
-  const [activeList, setActiveList] = useState(-1);
+  const [activeList, setActiveList] = useState(null);
   const [users, setUsers] = useState([]);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
+  const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
   const cookies = new Cookies();
 
@@ -33,10 +34,15 @@ const Home = ({ auth, setAuth }) => {
     }
   }, [loading]);
 
-  // Update fuse searching when lists are updated
+  // Update fuse searching for lists when lists are updated
   useEffect(() => {
     fuseListRef.current.setCollection(lists);
-  }, [lists])
+  }, [lists]);
+
+  // Update fuse searching for users when users are updated
+  useEffect(() => {
+    fuseUserRef.current.setCollection(users);
+  }, [users]);
 
   // Get all owned lists when authenticated
   useEffect(() => {
@@ -48,9 +54,9 @@ const Home = ({ auth, setAuth }) => {
 
   // Get users when selecting a list
   useEffect(() => {
-    if (!auth || activeList === -1) { return }
+    if (!auth || activeList === null) { return }
     getMembersFromList(activeList)
-      .then(({ users }) => setUsers(users))
+      .then((users) => setUsers(users.sort(sortUsers)))
       .catch(err => console.error(err))
   }, [activeList]);
 
@@ -70,18 +76,24 @@ const Home = ({ auth, setAuth }) => {
         <Title/>
       </div>
       <div className="flex my-12">
-        <SelectorPane title="Your lists" subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}>
+        <SelectorPane
+          title="Your lists"
+          subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}
+        >
           <ListSelector
-            fuseListRef={fuseListRef}
+            fuseRef={fuseListRef}
             lists={lists}
             setLists={setLists}
             activeList={activeList}
             setActiveList={setActiveList}
           />
         </SelectorPane>
-        <SelectorPane title="List name" subtitle="# of members">
+        <SelectorPane
+          title={activeList === null ? 'List name...' : activeList.name}
+          subtitle={activeList === null ? 'nothing...' : `${activeList.member_count} member${activeList.member_count !== 1 ? 's' : ''}`}
+        >
           <UserSelector
-            active={activeList}
+            fuseRef={fuseUserRef}
             users={users}
           />
         </SelectorPane>

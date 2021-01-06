@@ -40,11 +40,12 @@ export const getLists = () => (
 )
 
 // Get all members from a given list
-export const getMembersFromList = (list_id) => (
-  axios.get('/api/getMembersFromList', { params: { id: list_id }})
-    .then(({ data }) => data)
+export const getMembersFromList = (list) => {
+  const { id_str } = list;
+  return axios.get('/api/getMembersFromList', { params: { id: id_str }})
+    .then(({ data }) => data.users.map(i => ({ ...i, lowercase_name: i.name.toLowerCase(), lowercase_screen_name: i.screen_name.toLowerCase() })))
     .catch(err => console.error(err))
-)
+}
 
 // Create a new list
 export const addList = (list) => (
