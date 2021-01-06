@@ -1,15 +1,12 @@
 import React from 'react';
 
-const ListItem = ({ item, activeList, setActiveList, handleDeleteModal }) => {
+const ListItem = ({ item, active, handleSelect, handleDeleteModal }) => {
   // IDEA: Show icon for public and private lists
   // TODO: Show better feedback about delete button (hover tooltip?)
-  const { id_str, name, member_count } = item;
-  const active = activeList !== null && activeList.id_str === id_str;
-
-  const handleClick = () => { setActiveList(item) }
+  const { index, name, member_count, add, del } = item;
 
   return (
-    <div className={`flex p-3 my-6 rounded-md shadow cursor-pointer ${active} ? 'ring' : ''}`} onClick={handleClick}>
+    <div className={`flex p-3 my-6 rounded-md shadow cursor-pointer ${active} ? 'ring' : ''}`} onClick={() => handleSelect(index)}>
       <div className="flex-initial flex items-center mr-2">
         <button className="p-1 rounded hover:bg-red-200" onClick={(e) => handleDeleteModal(item, e)}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height={16} width={16}>
@@ -20,6 +17,18 @@ const ListItem = ({ item, activeList, setActiveList, handleDeleteModal }) => {
       <div className="flex-1">
         <p className="text-lg -mb-1">{name}</p>
         <p className="text-sm text-gray-500">{member_count} member{member_count !== 1 ? 's' : ''}</p>
+      </div>
+      <div className="flex-initial flex flex-col items-end justify-center">
+        {add.length > 0 && (
+          <span className="text-sm text-green-600">
+            +{add.length}
+          </span>
+        )}
+        {del.length > 0 && (
+          <span className="text-sm text-red-600">
+            +{del.length}
+          </span>
+        )}
       </div>
       <div className="flex-initial flex items-center">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height={20} width={20}>

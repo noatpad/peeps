@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
 import { verify, getLists, getMembersFromList } from '../utils/api';
-import { sortLists, sortUsers } from '../utils/helpers';
+import { sortLists, sortUsers, usePrevious } from '../utils/helpers';
 
 import Title from '../components/Title';
 import SelectorPane from '../components/SelectorPane';
@@ -14,7 +14,8 @@ import Button from '../components/Button';
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState([]);
-  const [activeList, setActiveList] = useState(null);
+  const prevLists = usePrevious(lists);
+  const [activeListIndex, setActiveListIndex] = useState(-1);
   const [users, setUsers] = useState([]);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
@@ -36,6 +37,7 @@ const Home = ({ auth, setAuth }) => {
 
   // Update fuse searching for lists when lists are updated
   useEffect(() => {
+    if (prevLists === undefined || prevLists.count === lists.count) { return }
     fuseListRef.current.setCollection(lists);
   }, [lists]);
 
@@ -48,17 +50,18 @@ const Home = ({ auth, setAuth }) => {
   useEffect(() => {
     if (!auth) { return }
     getLists()
-      .then((lists) => setLists(lists.sort(sortLists)))
+      .then((lists) => setLists(sortLists(lists)))
       .catch(err => console.error(err))
   }, [auth]);
 
   // Get users when selecting a list
   useEffect(() => {
-    if (!auth || activeList === null) { return }
+    if (!auth || activeListIndex === -1) { return }
+    const activeList = lists[activeListIndex];
     getMembersFromList(activeList)
-      .then((users) => setUsers(users.sort(sortUsers)))
+      .then((users) => setUsers(sortUsers(users)))
       .catch(err => console.error(err))
-  }, [activeList]);
+  }, [activeListIndex]);
 
   // TODO: Implement a better loading screen
   if (loading) {
@@ -70,6 +73,12 @@ const Home = ({ auth, setAuth }) => {
     )
   }
 
+  const listPaneSub = (`${lists.length} list${lists.length !== 1 ? 's' : ''}`);
+  const userPaneTitle = (activeListIndex === -1 ? 'List name...' : lists[activeListIndex].name);
+  const userPaneSub = (activeListIndex === -1 ? 'nothing...' : `${lists[activeListIndex].member_count} member${lists[activeListIndex].member_count !== 1 ? 's' : ''}`);
+  const activeListAdditions = (activeListIndex === -1 ? 0 : lists[activeListIndex].add.length);
+  const activeListDeletions = (activeListIndex === -1 ? 0 : lists[activeListIndex].del.length);
+
   return (
     <main>
       <div className="my-40">
@@ -78,24 +87,31 @@ const Home = ({ auth, setAuth }) => {
       <div className="flex my-12">
         <SelectorPane
           title="Your lists"
-          subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}
+          subtitle={listPaneSub}
         >
           <ListSelector
             fuseRef={fuseListRef}
             lists={lists}
             setLists={setLists}
-            activeList={activeList}
-            setActiveList={setActiveList}
+            activeListIndex={activeListIndex}
+            setActiveListIndex={setActiveListIndex}
           />
         </SelectorPane>
         <SelectorPane
-          title={activeList === null ? 'List name...' : activeList.name}
-          subtitle={activeList === null ? 'nothing...' : `${activeList.member_count} member${activeList.member_count !== 1 ? 's' : ''}`}
+          title={userPaneTitle}
+          subtitle={userPaneSub}
+          adds={activeListAdditions}
+          dels={activeListDeletions}
         >
-          <UserSelector
-            fuseRef={fuseUserRef}
-            users={users}
-          />
+          {users.length > 0 && (
+            <UserSelector
+              fuseRef={fuseUserRef}
+              users={users}
+              lists={lists}
+              setLists={setLists}
+              activeListIndex={activeListIndex}
+            />
+          )}
         </SelectorPane>
       </div>
       <div className="flex justify-center">

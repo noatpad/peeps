@@ -13,7 +13,7 @@ import { Prev, Next } from './Chevrons';
 
 const RESULTS_PER_PAGE = 10;
 
-const ListSelector = ({ fuseRef, lists, setLists, activeList, setActiveList }) => {
+const ListSelector = ({ fuseRef, lists, setLists, activeListIndex, setActiveListIndex }) => {
   // IDEA: Scroll to new list upon creation
   // TODO: Add message when no lists are found
   const [searchActive, setSearchActive] = useState(true);
@@ -50,12 +50,17 @@ const ListSelector = ({ fuseRef, lists, setLists, activeList, setActiveList }) =
     setValidList(validTitle && validDescription);
   }, [newList]);
 
+  // Handler for selecting a list
+  const handleSelect = (index) => {
+    setActiveListIndex(index);
+  }
+
   // Handler for adding a new list
   const handleAddList = () => {
     if (!validList) { return }
     addList(newList)
       .then(data => {
-        setLists(lists.concat(data).sort(sortLists));
+        setLists(sortLists(lists.concat(data)));
         setNewList({ ...newList, name: '', description: '' });
       })
       .catch(err => console.error(err))
@@ -102,8 +107,8 @@ const ListSelector = ({ fuseRef, lists, setLists, activeList, setActiveList }) =
           <ListItem
             key={item.id_str}
             item={item}
-            activeList={activeList}
-            setActiveList={setActiveList}
+            active={activeListIndex === item.index}
+            handleSelect={handleSelect}
             handleDeleteModal={handleDeleteModal}
           />
         ))}

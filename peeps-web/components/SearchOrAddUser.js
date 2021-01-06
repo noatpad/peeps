@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
@@ -23,7 +23,7 @@ const renderSuggestion = ({ name, screen_name, profile_image_url_https }) => (
   </div>
 )
 
-const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive }) => {
+const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepareToAddUser }) => {
   const [addQuery, setAddQuery] = useState('');
   const [addResults, setAddResults] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
@@ -49,12 +49,17 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive }) => 
       setLoadingSearch(true);
       search(value)
         .then(data => {
-          console.log(data);
           setAddResults(data);
           setLoadingSearch(false);
         })
     }, 400)
   , []);
+
+  // Handler for selecting a suggestion
+  const handleSelected = (e, { suggestion }) => {
+    prepareToAddUser(suggestion);
+    setAddQuery('');
+  }
 
   return (
     <div className="flex-initial flex items-center px-8">
@@ -83,6 +88,7 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive }) => 
           inputProps={{ value: addQuery, ref: addInputRef, placeholder: 'Who do you wanna add?', onChange: (e, { newValue }) => setAddQuery(newValue) }}
           onSuggestionsFetchRequested={({ value }) => debounceFetchSuggestions(value)}
           onSuggestionsClearRequested={() => setAddResults([])}
+          onSuggestionSelected={handleSelected}
           getSuggestionValue={(item) => item.name}
           shouldRenderSuggestions={(val) => val.trim().length >= 2}
           renderSuggestion={renderSuggestion}

@@ -1,13 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
 
-const UserItem = ({ user: { name, screen_name, profile_image_url_https }}) => {
-  const pfp = profile_image_url_https.replace(/_normal.jpg/, '_bigger.jpg');
-
+const UserItem = ({ user: { name, screen_name, profile_image_url_https }, add }) => {
   const handleClick = () => { console.log("Click") }
 
+  const pfp = profile_image_url_https.replace(/_normal.jpg/, '_bigger.jpg');
+  let itemClass = "flex items-center p-3 my-6 rounded-md shadow cursor-pointer";
+  if (add) {
+    itemClass += " bg-green-100";
+  }
+
   return (
-    <div className="flex items-center p-3 my-6 rounded-md shadow cursor-pointer" onClick={handleClick}>
+    <div className={itemClass} onClick={handleClick}>
       <div className="flex-initial flex items-center mr-3">
         <Image
           className="rounded-full"

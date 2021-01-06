@@ -35,7 +35,12 @@ export const verify = () => (
 // Get all lists owned by the user
 export const getLists = () => (
   axios.get('/api/getLists')
-    .then(({ data }) => data.lists.map(i => ({ ...i, lowercase_name: i.name.toLowerCase() })))
+    .then(({ data }) => data.lists.map(i => ({
+      ...i,
+      lowercase_name: i.name.toLowerCase(),
+      add: [],
+      del: []
+    })))
     .catch(err => console.error(err))
 )
 
@@ -43,14 +48,23 @@ export const getLists = () => (
 export const getMembersFromList = (list) => {
   const { id_str } = list;
   return axios.get('/api/getMembersFromList', { params: { id: id_str }})
-    .then(({ data }) => data.users.map(i => ({ ...i, lowercase_name: i.name.toLowerCase(), lowercase_screen_name: i.screen_name.toLowerCase() })))
+    .then(({ data }) => data.users.map(i => ({
+      ...i,
+      lowercase_name: i.name.toLowerCase(),
+      lowercase_screen_name: i.screen_name.toLowerCase()
+    })))
     .catch(err => console.error(err))
 }
 
 // Create a new list
 export const addList = (list) => (
   axios.post('/api/addList', null, { params: list })
-    .then(({ data }) => ({ ...data, lowercase_name: data.name.toLowerCase() }))
+    .then(({ data }) => ({
+      ...data,
+      lowercase_name: data.name.toLowerCase(),
+      add: [],
+      del: []
+    }))
     .catch(err => console.error(err))
 )
 
