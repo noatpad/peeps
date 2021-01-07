@@ -17,6 +17,7 @@ const Home = ({ auth, setAuth }) => {
   const prevLists = usePrevious(lists);
   const [activeListIndex, setActiveListIndex] = useState(-1);
   const [users, setUsers] = useState([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
@@ -57,9 +58,13 @@ const Home = ({ auth, setAuth }) => {
   // Get users when selecting a list
   useEffect(() => {
     if (!auth || activeListIndex === -1) { return }
+    setLoadingUsers(true);
     const activeList = lists[activeListIndex];
     getMembersFromList(activeList)
-      .then((users) => setUsers(sortUsers(users)))
+      .then((users) => {
+        setUsers(sortUsers(users));
+        setLoadingUsers(false);
+      })
       .catch(err => console.error(err))
   }, [activeListIndex]);
 
@@ -103,7 +108,7 @@ const Home = ({ auth, setAuth }) => {
           adds={activeListAdditions}
           dels={activeListDeletions}
         >
-          {users.length > 0 && (
+          {activeListIndex !== -1 && !loadingUsers && (
             <UserSelector
               fuseRef={fuseUserRef}
               users={users}
@@ -111,6 +116,9 @@ const Home = ({ auth, setAuth }) => {
               setLists={setLists}
               activeListIndex={activeListIndex}
             />
+          )}
+          {loadingUsers && (
+            <p>Loading...</p>
           )}
         </SelectorPane>
       </div>
