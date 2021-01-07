@@ -51,8 +51,8 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListIndex, setActiveList
   }, [newList]);
 
   // Handler for selecting a list
-  const handleSelect = (index) => {
-    setActiveListIndex(index);
+  const handleSelect = (id_str) => {
+    setActiveListIndex(lists.findIndex(l => l.id_str === id_str));
   }
 
   // Handler for adding a new list

@@ -1,5 +1,3 @@
-import { useEffect, useRef } from 'react';
-
 // Custom compare function for sorting lists
 const listSortCompare = (a, b) => {
   const a_name = a.name.toLowerCase();
@@ -19,14 +17,7 @@ const userSortCompare = (a, b) => {
 }
 
 // Sort lists by their name in alphabetical order
-export const sortLists = (lists) => lists.sort(listSortCompare).map((l, i) => ({ ...l, index: i }))
+export const sortLists = (lists) => lists.sort(listSortCompare);
 
 // Sort users by their Twitter handle in alphabetical order
 export const sortUsers = (users) => users.sort(userSortCompare);
-
-// Custom hook to get a `useState`'s previous value in useEffect()
-export const usePrevious = (val) => {
-  const ref = useRef();
-  useEffect(() => ref.current = val);
-  return ref.current;
-}

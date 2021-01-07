@@ -1,13 +1,26 @@
 import React from 'react';
 import Image from 'next/image';
 
-const UserItem = ({ user: { name, screen_name, profile_image_url_https }, add }) => {
-  const handleClick = () => { console.log("Click") }
+const UserItem = ({ user, add, del, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
+  const { id_str, name, screen_name, profile_image_url_https } = user;
+
+  // Pick the appropriate action upon clicking an item
+  const handleClick = () => {
+    if (add) {
+      unprepareToAddUser(id_str);
+    } else if (del) {
+      unprepareToDelUser(id_str);
+    } else {
+      prepareToDelUser(user);
+    }
+  }
 
   const pfp = profile_image_url_https.replace(/_normal.jpg/, '_bigger.jpg');
   let itemClass = "flex items-center p-3 my-6 rounded-md shadow cursor-pointer";
   if (add) {
     itemClass += " bg-green-100";
+  } else if (del) {
+    itemClass += " bg-red-100";
   }
 
   return (

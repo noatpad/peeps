@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
 import { verify, getLists, getMembersFromList } from '../utils/api';
-import { sortLists, sortUsers, usePrevious } from '../utils/helpers';
+import { sortLists, sortUsers } from '../utils/helpers';
 
 import Title from '../components/Title';
 import SelectorPane from '../components/SelectorPane';
@@ -14,7 +14,6 @@ import Button from '../components/Button';
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
   const [lists, setLists] = useState([]);
-  const prevLists = usePrevious(lists);
   const [activeListIndex, setActiveListIndex] = useState(-1);
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
@@ -22,6 +21,8 @@ const Home = ({ auth, setAuth }) => {
   const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
   const cookies = new Cookies();
+
+  const activeList = activeListIndex === -1 ? null : lists[activeListIndex];
 
   // Verify that you can make API calls
   useEffect(() => {
@@ -36,9 +37,8 @@ const Home = ({ auth, setAuth }) => {
     }
   }, [loading]);
 
-  // Update fuse searching for lists when lists are updated
+  // Update fuse searching for lists when lists are updated (also reset selected list)
   useEffect(() => {
-    if (prevLists === undefined || prevLists.count === lists.count) { return }
     fuseListRef.current.setCollection(lists);
   }, [lists]);
 
@@ -59,7 +59,6 @@ const Home = ({ auth, setAuth }) => {
   useEffect(() => {
     if (!auth || activeListIndex === -1) { return }
     setLoadingUsers(true);
-    const activeList = lists[activeListIndex];
     getMembersFromList(activeList)
       .then((users) => {
         setUsers(sortUsers(users));
@@ -79,10 +78,10 @@ const Home = ({ auth, setAuth }) => {
   }
 
   const listPaneSub = (`${lists.length} list${lists.length !== 1 ? 's' : ''}`);
-  const userPaneTitle = (activeListIndex === -1 ? 'List name...' : lists[activeListIndex].name);
-  const userPaneSub = (activeListIndex === -1 ? 'nothing...' : `${lists[activeListIndex].member_count} member${lists[activeListIndex].member_count !== 1 ? 's' : ''}`);
-  const activeListAdditions = (activeListIndex === -1 ? 0 : lists[activeListIndex].add.length);
-  const activeListDeletions = (activeListIndex === -1 ? 0 : lists[activeListIndex].del.length);
+  const userPaneTitle = (activeListIndex === -1 ? 'List name...' : activeList.name);
+  const userPaneSub = (activeListIndex === -1 ? 'nothing...' : `${activeList.member_count} member${activeList.member_count !== 1 ? 's' : ''}`);
+  const activeListAdditions = (activeListIndex === -1 ? 0 : activeList.add.length);
+  const activeListDeletions = (activeListIndex === -1 ? 0 : activeList.del.length);
 
   return (
     <main>
