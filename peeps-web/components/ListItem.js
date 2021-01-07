@@ -1,9 +1,9 @@
 import React from 'react';
 
-const ListItem = ({ item, active, handleSelect, handleDeleteModal }) => {
+const ListItem = ({ item, active, add, del, handleSelect, handleDeleteModal }) => {
   // IDEA: Show icon for public and private lists
   // TODO: Show better feedback about delete button (hover tooltip?)
-  const { id_str, name, member_count, add, del } = item;
+  const { id_str, name, member_count } = item;
 
   return (
     <div className={`flex p-3 my-6 rounded-md shadow cursor-pointer ${active} ? 'ring' : ''}`} onClick={() => handleSelect(id_str)}>
@@ -19,14 +19,14 @@ const ListItem = ({ item, active, handleSelect, handleDeleteModal }) => {
         <p className="text-sm text-gray-500">{member_count} member{member_count !== 1 ? 's' : ''}</p>
       </div>
       <div className="flex-initial flex flex-col items-end justify-center">
-        {add.length > 0 && (
+        {add > 0 && (
           <span className="text-sm text-green-600">
-            +{add.length}
+            +{add}
           </span>
         )}
-        {del.length > 0 && (
+        {del > 0 && (
           <span className="text-sm text-red-600">
-            -{del.length}
+            -{del}
           </span>
         )}
       </div>

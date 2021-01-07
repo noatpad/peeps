@@ -13,7 +13,7 @@ import { Prev, Next } from './Chevrons';
 
 const RESULTS_PER_PAGE = 10;
 
-const ListSelector = ({ fuseRef, lists, setLists, activeListIndex, setActiveListIndex }) => {
+const ListSelector = ({ fuseRef, lists, setLists, activeListID, setActiveListID, add, del }) => {
   // IDEA: Scroll to new list upon creation
   // TODO: Add message when no lists are found
   const [searchActive, setSearchActive] = useState(true);
@@ -52,7 +52,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListIndex, setActiveList
 
   // Handler for selecting a list
   const handleSelect = (id_str) => {
-    setActiveListIndex(lists.findIndex(l => l.id_str === id_str));
+    setActiveListID(id_str);
   }
 
   // Handler for adding a new list
@@ -84,6 +84,16 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListIndex, setActiveList
       .catch(err => console.error(err))
   }
 
+  const countAdditions = (listID) => {
+    const changes = add.find(a => a.id === listID);
+    return changes !== undefined ? changes.users.length : 0;
+  }
+
+  const countDeletions = (listID) => {
+    const changes = del.find(d => d.id === listID);
+    return changes !== undefined ? changes.users.length : 0;
+  }
+
   return (
     <div className="relative flex flex-col h-full pt-6" id="lists">
       <SearchOrAddList
@@ -107,7 +117,9 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListIndex, setActiveList
           <ListItem
             key={item.id_str}
             item={item}
-            active={activeListIndex === item.index}
+            active={activeListID === item.id_str}
+            add={countAdditions(item.id_str)}
+            del={countDeletions(item.id_str)}
             handleSelect={handleSelect}
             handleDeleteModal={handleDeleteModal}
           />
