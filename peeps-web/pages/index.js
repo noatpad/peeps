@@ -17,6 +17,7 @@ const Home = ({ auth, setAuth }) => {
   const [activeListIndex, setActiveListIndex] = useState(-1);
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
@@ -37,9 +38,10 @@ const Home = ({ auth, setAuth }) => {
     }
   }, [loading]);
 
-  // Update fuse searching for lists when lists are updated (also reset selected list)
+  // Update fuse searching for lists when lists are updated
   useEffect(() => {
     fuseListRef.current.setCollection(lists);
+    setHasChanges(lists.some(l => l.add.length > 0 || l.del.length > 0));
   }, [lists]);
 
   // Update fuse searching for users when users are updated
@@ -122,7 +124,7 @@ const Home = ({ auth, setAuth }) => {
         </SelectorPane>
       </div>
       <div className="flex justify-center">
-        <Button text="Apply"/>
+        <Button text="Apply" disabled={!hasChanges}/>
         <Button text="Clear" warning/>
       </div>
     </main>
