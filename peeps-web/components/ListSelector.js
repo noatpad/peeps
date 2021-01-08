@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Modal from 'react-modal';
 import Pagination from 'react-js-pagination';
 import { addList, deleteList } from '../utils/api';
 import { sortLists } from '../utils/helpers';
@@ -8,12 +7,12 @@ import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '../utils/config';
 import SearchOrAddList from './SearchOrAddList';
 import AddListCard from './AddListCard';
 import ListItem from './ListItem';
-import Button from './Button';
 import { Prev, Next } from './Chevrons';
+import DeleteListModal from './DeleteListModal';
 
 const RESULTS_PER_PAGE = 10;
 
-const ListSelector = ({ fuseRef, lists, setLists, activeListID, setActiveListID, add, del }) => {
+const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, selectList }) => {
   // IDEA: Scroll to new list upon creation
   // TODO: Add message when no lists are found
   const [searchActive, setSearchActive] = useState(true);
@@ -21,7 +20,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, setActiveListID,
   const [newList, setNewList] = useState({ name: '', description: '', private: true });
   const [validList, setValidList] = useState(false);
   const [listToRemove, setListToRemove] = useState({});
-  const [showListDeleteModal, setShowListDeleteModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [page, setPage] = useState(1);
 
   // Fuzzy search list and pagination
@@ -50,11 +49,6 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, setActiveListID,
     setValidList(validTitle && validDescription);
   }, [newList]);
 
-  // Handler for selecting a list
-  const handleSelect = (id_str) => {
-    setActiveListID(id_str);
-  }
-
   // Handler for adding a new list
   const handleAddList = () => {
     if (!validList) { return }
@@ -70,7 +64,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, setActiveListID,
   const handleDeleteModal = (list, e) => {
     e.stopPropagation();
     setListToRemove(list);
-    setShowListDeleteModal(true);
+    setShowDeleteModal(true);
   }
 
   // Handler for deleting a list
@@ -79,7 +73,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, setActiveListID,
       .then(_ => {
         setLists(lists.filter(list => list.id_str !== listToRemove.id_str));
         setListToRemove({});
-        setShowListDeleteModal(false);
+        setShowDeleteModal(false);
       })
       .catch(err => console.error(err))
   }
@@ -120,7 +114,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, setActiveListID,
             active={activeListID === item.id_str}
             add={countAdditions(item.id_str)}
             del={countDeletions(item.id_str)}
-            handleSelect={handleSelect}
+            selectList={selectList}
             handleDeleteModal={handleDeleteModal}
           />
         ))}
@@ -144,22 +138,12 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, setActiveListID,
           />
         </div>
       )}
-      {/* Delete list Modal */}
-      <Modal
-        isOpen={showListDeleteModal}
-        parentSelector={() => document.querySelector('#lists')}
-        overlayClassName="absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-black bg-opacity-70"
-        className="px-8 py-6 rounded-xl bg-white"
-        shouldCloseOnEsc={true}
-        shouldCloseOnOverlayClick={true}
-        onRequestClose={() => setShowListDeleteModal(false)}
-      >
-        <p className="text-center">You sure you wanna delete the list <b>{listToRemove.name}</b>?</p>
-        <div className="flex justify-center items-center">
-          <Button text="No, don't" run={() => setShowListDeleteModal(false)} small/>
-          <Button text="Yes, delete" run={handleDeleteList} warning small/>
-        </div>
-      </Modal>
+      <DeleteListModal
+        showDeleteModal={showDeleteModal}
+        setShowDeleteModal={setShowDeleteModal}
+        listName={listToRemove.name}
+        handleDeleteList={handleDeleteList}
+      />
     </div>
   )
 }

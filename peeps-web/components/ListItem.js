@@ -1,12 +1,12 @@
 import React from 'react';
 
-const ListItem = ({ item, active, add, del, handleSelect, handleDeleteModal }) => {
+const ListItem = ({ item, active, add, del, selectList, handleDeleteModal }) => {
   // IDEA: Show icon for public and private lists
   // TODO: Show better feedback about delete button (hover tooltip?)
   const { id_str, name, member_count } = item;
 
   return (
-    <div className={`flex p-3 my-6 rounded-md shadow cursor-pointer ${active} ? 'ring' : ''}`} onClick={() => handleSelect(id_str)}>
+    <div className={`flex p-3 my-6 rounded-md shadow cursor-pointer ${active} ? 'ring' : ''}`} onClick={() => selectList(id_str)}>
       <div className="flex-initial flex items-center mr-2">
         <button className="p-1 rounded hover:bg-red-200" onClick={(e) => handleDeleteModal(item, e)}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" height={16} width={16}>

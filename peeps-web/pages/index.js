@@ -75,6 +75,11 @@ const Home = ({ auth, setAuth }) => {
     console.log(add, del);
   }, [add, del]);
 
+  // Select a list
+  const selectList = (id_str) => {
+    setActiveListID(id_str);
+  }
+
   // Prepare a user to be added to a list
   const prepareToAddUser = ({ id_str, name, screen_name, profile_image_url_https }) => {
     const userToAdd = { id_str, name, screen_name, profile_image_url_https };
@@ -159,9 +164,9 @@ const Home = ({ auth, setAuth }) => {
             lists={lists}
             setLists={setLists}
             activeListID={activeListID}
-            setActiveListID={setActiveListID}
             add={add}
             del={del}
+            selectList={selectList}
           />
         </SelectorPane>
         <SelectorPane
