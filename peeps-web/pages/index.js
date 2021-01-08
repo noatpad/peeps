@@ -10,6 +10,7 @@ import SelectorPane from '../components/SelectorPane';
 import ListSelector from '../components/ListSelector';
 import UserSelector from '../components/UserSelector';
 import Button from '../components/Button';
+import ChangesModal from '../components/ChangesModal';
 
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
@@ -19,6 +20,7 @@ const Home = ({ auth, setAuth }) => {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [add, setAdd] = useState([]);
   const [del, setDel] = useState([]);
+  const [showChangesModal, setShowChangesModal] = useState(false);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
@@ -139,6 +141,12 @@ const Home = ({ auth, setAuth }) => {
     setDel(newDel);
   }
 
+  // Clear changes
+  const clearChanges = () => {
+    setAdd([]);
+    setDel([]);
+  }
+
   // TODO: Implement a better loading screen
   if (loading) {
     return (
@@ -193,9 +201,15 @@ const Home = ({ auth, setAuth }) => {
         </SelectorPane>
       </div>
       <div className="flex justify-center">
-        <Button text="Apply" disabled={!add.length && !del.length}/>
-        <Button text="Clear" warning/>
+        <Button text="Apply" run={() => setShowChangesModal(true)} disabled={!add.length && !del.length}/>
+        <Button text="Clear" run={clearChanges} warning/>
       </div>
+      <ChangesModal
+        showModal={showChangesModal}
+        closeModal={() => setShowChangesModal(false)}
+        add={add}
+        del={del}
+      />
     </main>
   )
 }
