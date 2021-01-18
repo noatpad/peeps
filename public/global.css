@@ -1,0 +1,36 @@
+
+@font-face {
+  font-family: "SF Compact";
+  src: url('./fonts/SF-Compact-Text-Regular.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SF Compact";
+  src: url('./fonts/SF-Compact-Text-RegularItalic.otf');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "SF Compact";
+  src: url('./fonts/SF-Compact-Text-Semibold.otf');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SF Compact";
+  src: url('./fonts/SF-Compact-Text-SemiboldItalic.otf');
+  font-weight: bold;
+  font-style: italic;
+}
+
+body {
+  font-family: "SF Compact", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+textarea:focus, input:focus {
+  outline: none;
+}

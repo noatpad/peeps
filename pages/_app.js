@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Head from 'next/head';
 import Modal from 'react-modal';
 import 'tailwindcss/tailwind.css';
-import '../global.css';
+import '@public/global.css';
 
 import Header from '../components/Header';
 import Footer from '../components/Footer';

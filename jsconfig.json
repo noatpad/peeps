@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@api-utils/*": ["utils/api/*"],
-      "@web-utils/*": ["utils/web/*"]
+      "@web-utils/*": ["utils/web/*"],
+      "@public/*": ["public/*"]
     }
   }
 }
