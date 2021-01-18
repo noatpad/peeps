@@ -1,3 +1,5 @@
+import nc from 'next-connect';
+import morgan from 'morgan';
 import { get } from '@api-utils/twitter';
 
 const verify = (token, secret) => (
@@ -15,19 +17,19 @@ const getFollowing = (token, secret, cursor = -1, following = []) => (
     })
 )
 
-const user = (req, res) => {
-  if (req.method !== 'GET') { return res.status(404).send('Wrong method') }
-
-  const { token, secret } = req.cookies;
-  return Promise.all([verify(token, secret), getFollowing(token, secret)])
-    .then(([user, following]) => {
-      console.log(`Got user data of ${user.name} (@${user.screen_name})`);
-      return res.status(200).send({ user, following })
-    })
-    .catch(errors => {
-      console.error('Error getting user data', res.status(500).send(errors));
-      return res.status(500).send(errors)
-    });
-}
+const user = nc()
+  .use(morgan('dev'))
+  .get((req, res) => {
+    const { token, secret } = req.cookies;
+    return Promise.all([verify(token, secret), getFollowing(token, secret)])
+      .then(([user, following]) => {
+        console.log(`Got user data of ${user.name} (@${user.screen_name})`);
+        return res.status(200).send({ user, following })
+      })
+      .catch(errors => {
+        console.error('Error getting user data', res.status(500).send(errors));
+        return res.status(500).send(errors)
+      });
+  })
 
 export default user;
