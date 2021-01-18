@@ -1,5 +1,5 @@
 import React from 'react';
-import { startAuth } from '../utils/api';
+import { startAuth } from '@web-utils/api';
 
 // TODO: Implement and style landing page
 const Hello = () => {

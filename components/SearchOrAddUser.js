@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
-import { search } from '../utils/api';
+import { search } from '@web-utils/api';
 
 // Component for suggestion rendering
 const renderSuggestion = ({ name, screen_name, profile_image_url_https }) => (

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from 'react-js-pagination';
-import { addList, deleteList } from '../utils/api';
-import { sortLists } from '../utils/helpers';
-import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '../utils/config';
+import { addList, deleteList } from '@web-utils/api';
+import { sortLists } from '@web-utils/helpers';
+import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
 import SearchOrAddList from './SearchOrAddList';
 import AddListCard from './AddListCard';
@@ -17,7 +17,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
   // TODO: Add message when no lists are found
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
-  const [newList, setNewList] = useState({ name: '', description: '', private: true });
+  const [newList, setNewList] = useState({ name: '', description: '', mode_private: true });
   const [validList, setValidList] = useState(false);
   const [listToRemove, setListToRemove] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);

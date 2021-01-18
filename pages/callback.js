@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { completeAuth } from '../utils/api';
+import { completeAuth } from '@web-utils/api';
 
 const Callback = () => {
   const router = useRouter();

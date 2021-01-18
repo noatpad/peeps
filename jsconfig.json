@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@api-utils/*": ["utils/api/*"],
+      "@web-utils/*": ["utils/web/*"]
+    }
+  }
+}

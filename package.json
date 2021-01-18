@@ -10,10 +10,14 @@
   "dependencies": {
     "autoprefixer": "^10.1.0",
     "axios": "^0.21.1",
+    "cookie": "^0.4.1",
+    "cors": "^2.8.5",
     "fuse.js": "^6.4.5",
+    "jssha": "^3.2.0",
     "lodash": "^4.17.20",
     "next": "10.0.4",
     "postcss": "^8.2.1",
+    "query-string": "^6.13.8",
     "react": "17.0.1",
     "react-autosuggest": "^10.0.4",
     "react-dom": "17.0.1",
@@ -21,6 +25,7 @@
     "react-modal": "^3.12.1",
     "react-switch": "^5.0.1",
     "tailwindcss": "^2.0.2",
+    "twit": "^2.2.11",
     "universal-cookie": "^4.0.4"
   },
   "devDependencies": {

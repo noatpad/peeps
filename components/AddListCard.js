@@ -1,7 +1,7 @@
 import React from 'react';
 import Switch from 'react-switch';
 import Button from './Button';
-import { LIST_DESCRIPTION_LIMIT } from '../utils/config';
+import { LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
 const AddListCard = ({ newList, setNewList, validList, handleAddList }) => {
   // TODO: Add user feedback that a list has been created
@@ -29,8 +29,8 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList }) => {
           <span className="absolute top-1/2 right-full mx-2 transform -translate-y-1/2">Public</span>
           <Switch
             className={`react-switch`}
-            checked={newList.private}
-            onChange={(checked) => setNewList({ ...newList, private: checked })}
+            checked={newList.mode_private}
+            onChange={(checked) => setNewList({ ...newList, mode_private: checked })}
             uncheckedIcon={false}
             checkedIcon={false}
           />

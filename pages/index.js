@@ -2,8 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
-import { getUserData, getLists, getMembersFromList } from '../utils/api';
-import { sortLists, sortUsers, userSortCompare, changeObj } from '../utils/helpers';
+import { getUser, getLists, getMembersFromList } from '@web-utils/api';
+import { sortLists, sortUsers, userSortCompare, changeObj } from '@web-utils/helpers';
 
 import Title from '../components/Title';
 import SelectorPane from '../components/SelectorPane';
@@ -35,7 +35,7 @@ const Home = ({ auth, setAuth }) => {
   useEffect(() => {
     const tokenInCookie = cookies.get('token') !== undefined && cookies.get('secret') !== undefined;
     if (loading && tokenInCookie) {
-      getUserData()
+      getUser()
         .then(data => {
           setUserData(data);
           setAuth(true);
@@ -73,6 +73,7 @@ const Home = ({ auth, setAuth }) => {
   useEffect(() => {
     if (!auth || activeListID === -1) { return }
     setLoadingUsers(true);
+    console.log(activeList);
     getMembersFromList(activeList)
       .then((users) => {
         setUsers(sortUsers(users));

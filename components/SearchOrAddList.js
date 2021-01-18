@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { LIST_NAME_LIMIT } from '../utils/config';
+import { LIST_NAME_LIMIT } from '@web-utils/config';
 
 const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newList, setNewList }) => {
   const searchInputRef = useRef();

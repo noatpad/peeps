@@ -3,16 +3,6 @@ import axios from 'axios';
 axios.defaults.baseURL = API_URL;
 axios.defaults.withCredentials = true;
 
-// Recursive helper to get every user in user's following list
-const getFollowing = (cursor = -1, following = []) => (
-  axios.get('/api/getFollowing', { params: { cursor }})
-    .then(({ data }) => {
-      following.push(...data.ids);
-      if (data.next_cursor_str === '0') { return following }
-      return getFollowing(data.next_cursor_str, following);
-    })
-)
-
 // Start authentication with a request token
 export const startAuth = () => (
   axios.get('/auth')
@@ -27,7 +17,7 @@ export const startAuth = () => (
 // Wrap up authentication with an access token
 export const completeAuth = (request_token, verifier) => {
   const request_secret = sessionStorage.getItem('request_secret');
-  return axios.get('/auth/complete', { params: { request_token, request_secret, verifier }})
+  return axios.get('/auth/done', { params: { request_token, request_secret, verifier }})
     .then(_ => {
       sessionStorage.removeItem('request_token');
       sessionStorage.removeItem('request_secret');
@@ -35,17 +25,17 @@ export const completeAuth = (request_token, verifier) => {
     .catch(err => console.error(err))
 }
 
-// Verify user info
-export const getUserData = () => (
-  Promise.all([axios.get('/api/verify'), getFollowing()])
-    .then(([{ data: user }, following]) => ({ user, following }))
-    .catch(errors => console.error(errors))
+// Get user data and his following list
+export const getUser = () => (
+  axios.get('/user')
+    .then(({ data }) => data)
+    .catch(err => err)
 )
 
 // Get all lists owned by the user
 export const getLists = () => (
-  axios.get('/api/getLists')
-    .then(({ data }) => data.lists.map(i => ({
+  axios.get('/lists')
+    .then(({ data }) => data.map(i => ({
       ...i,
       lowercase_name: i.name.toLowerCase(),
       add: [],
@@ -55,20 +45,19 @@ export const getLists = () => (
 )
 
 // Get all members from a given list
-export const getMembersFromList = (list) => {
-  const { id_str } = list;
-  return axios.get('/api/getMembersFromList', { params: { id: id_str }})
-    .then(({ data }) => data.users.map(i => ({
+export const getMembersFromList = ({ id_str }) => (
+  axios.get(`/lists/${id_str}/members`)
+    .then(({ data }) => data.map(i => ({
       ...i,
       lowercase_name: i.name.toLowerCase(),
       lowercase_screen_name: i.screen_name.toLowerCase()
     })))
     .catch(err => console.error(err))
-}
+)
 
 // Create a new list
 export const addList = (list) => (
-  axios.post('/api/addList', null, { params: list })
+  axios.post('/lists/add', { ...list })
     .then(({ data }) => ({
       ...data,
       lowercase_name: data.name.toLowerCase(),
@@ -79,16 +68,15 @@ export const addList = (list) => (
 )
 
 // Delete a list
-export const deleteList = (list) => {
-  const { id_str } = list;
-  return axios.post('/api/deleteList', null, { params: { list_id: id_str }})
+export const deleteList = ({ id_str }) => (
+  axios.post(`/lists/${id_str}/delete`)
     .then(({ data }) => data)
     .catch(err => console.error(err))
-}
+)
 
 // Search for a user
 export const search = (q) => (
-  axios.get('/api/search', { params: { q }})
+  axios.get('/search', { params: { q }})
     .then(({ data }) => data)
     .catch(err => console.error(err))
 )

@@ -1,8 +1,8 @@
-const axios = require('axios');
-const jsSHA = require('jssha');
-const qs = require('query-string');
+import axios from 'axios';
+import jsSHA from 'jssha';
+import qs from 'query-string';
 
-const { API_KEY, API_SECRET, CALLBACK_URL } = require('./config.js');
+import { API_KEY, API_SECRET, CALLBACK_URL } from './config';
 const AUTH_URL = 'https://api.twitter.com';
 
 // "Percent encode" a string
@@ -57,7 +57,7 @@ const getAuthHeader = (method, url, access_token = null, access_secret = null, p
 }
 
 // Obtain a request token
-const getRequestToken = () => {
+export const getRequestToken = () => {
   const url = `${AUTH_URL}/oauth/request_token`;
   return axios.post(url, null, { headers: { 'Authorization': getAuthHeader('POST', url) }})
     .then(({ data }) => qs.parse(data))
@@ -65,12 +65,10 @@ const getRequestToken = () => {
 }
 
 // Obtain an access token
-const getAccessToken = (request_token, request_secret, verifier) => {
+export const getAccessToken = (request_token, request_secret, verifier) => {
   const url = `${AUTH_URL}/oauth/access_token`;
   const params = { oauth_token: request_token, oauth_verifier: verifier };
   return axios.post(url, null, { params, headers: { 'Authorization': getAuthHeader('POST', url, request_token, request_secret, params) }})
     .then(({ data }) => qs.parse(data))
     .catch(err => err)
 }
-
-module.exports = { getRequestToken, getAccessToken }
