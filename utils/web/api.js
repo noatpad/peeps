@@ -45,8 +45,8 @@ export const getLists = () => (
 )
 
 // Get all members from a given list
-export const getMembersFromList = ({ id_str }) => (
-  axios.get(`/lists/${id_str}/members`)
+export const getMembersFromList = (id) => (
+  axios.get(`/lists/${id}/members`)
     .then(({ data }) => data.map(i => ({
       ...i,
       lowercase_name: i.name.toLowerCase(),
@@ -68,11 +68,19 @@ export const addList = (list) => (
 )
 
 // Delete a list
-export const deleteList = ({ id_str }) => (
-  axios.post(`/lists/${id_str}/delete`)
+export const deleteList = (id) => (
+  axios.post(`/lists/${id}/delete`)
     .then(({ data }) => data)
     .catch(err => console.error(err))
 )
+
+export const applyChanges = (add, del) => {
+  const min_add = add.map((a) => ({ id: a.id, users: a.users.map(u => u.id_str) }));
+  const min_del = del.map((d) => ({ id: d.id, users: d.users.map(u => u.id_str) }));
+  return axios.post('/lists/apply', { add: min_add, del: min_del })
+    .then(({ data }) => data)
+    .catch(err => console.error(err));
+}
 
 // Search for a user
 export const search = (q) => (

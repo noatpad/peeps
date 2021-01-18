@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
-import { getUser, getLists, getMembersFromList } from '@web-utils/api';
+import { getUser, getLists, getMembersFromList, applyChanges } from '@web-utils/api';
 import { sortLists, sortUsers, userSortCompare, changeObj } from '@web-utils/helpers';
 
 import Title from '../components/Title';
@@ -31,6 +31,13 @@ const Home = ({ auth, setAuth }) => {
   const activeAdds = activeListID === -1 ? undefined : add.find(a => a.id === activeListID);
   const activeDels = activeListID === -1 ? undefined : del.find(d => d.id === activeListID);
 
+  // Helper-to-hook function to get and set lists
+  const helperGetLists = () => {
+    getLists()
+      .then((lists) => setLists(sortLists(lists)))
+      .catch(err => console.error(err))
+  }
+
   // Verify that you can make API calls
   useEffect(() => {
     const tokenInCookie = cookies.get('token') !== undefined && cookies.get('secret') !== undefined;
@@ -47,10 +54,6 @@ const Home = ({ auth, setAuth }) => {
     }
   }, [loading]);
 
-  useEffect(() => {
-    console.log(userData);
-  }, [userData]);
-
   // Update fuse searching for lists when lists are updated
   useEffect(() => {
     fuseListRef.current.setCollection(lists);
@@ -64,17 +67,14 @@ const Home = ({ auth, setAuth }) => {
   // Get all owned lists when authenticated
   useEffect(() => {
     if (!auth) { return }
-    getLists()
-      .then((lists) => setLists(sortLists(lists)))
-      .catch(err => console.error(err))
+    helperGetLists();
   }, [auth]);
 
   // Get users when selecting a list
   useEffect(() => {
     if (!auth || activeListID === -1) { return }
     setLoadingUsers(true);
-    console.log(activeList);
-    getMembersFromList(activeList)
+    getMembersFromList(activeListID)
       .then((users) => {
         setUsers(sortUsers(users));
         setLoadingUsers(false);
@@ -152,6 +152,25 @@ const Home = ({ auth, setAuth }) => {
     setDel([]);
   }
 
+  // Apply all changes
+  const handleApplyChanges = () => {
+    applyChanges(add, del)
+      .then(_ => {
+        setActiveListID(-1);
+        setUsers([]);
+        clearChanges();
+        console.log('Changes applied!');
+      })
+      .then(_ => {
+        setTimeout(() => {
+          helperGetLists();
+          setShowChangesModal(false);
+          console.log('Refreshed lists!');
+        }, 5000);
+      })
+      .catch(err => console.error(err))
+  }
+
   // TODO: Implement a better loading screen
   if (loading) {
     return (
@@ -212,6 +231,7 @@ const Home = ({ auth, setAuth }) => {
       <ChangesModal
         showModal={showChangesModal}
         closeModal={() => setShowChangesModal(false)}
+        applyChanges={handleApplyChanges}
         add={add}
         del={del}
       />

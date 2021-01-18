@@ -3,7 +3,7 @@ import Modal from 'react-modal';
 
 import Button from './Button';
 
-const ChangesModal = ({ showModal, closeModal, add, del }) => (
+const ChangesModal = ({ showModal, closeModal, applyChanges, add, del }) => (
   <Modal
     isOpen={showModal}
     overlayClassName="fixed top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-black bg-opacity-70"
@@ -22,7 +22,8 @@ const ChangesModal = ({ showModal, closeModal, add, del }) => (
       ))}
     </ul>
     <div className="flex justify-center items-center">
-      <Button text="Close modal" run={closeModal}/>
+      <Button text="Yes" run={applyChanges} small/>
+      <Button text="No" run={closeModal} small warning/>
     </div>
   </Modal>
 )

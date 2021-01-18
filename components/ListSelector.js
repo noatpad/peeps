@@ -69,7 +69,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
 
   // Handler for deleting a list
   const handleDeleteList = () => {
-    deleteList(listToRemove)
+    deleteList(listToRemove.id_str)
       .then(_ => {
         setLists(lists.filter(list => list.id_str !== listToRemove.id_str));
         setListToRemove({});
