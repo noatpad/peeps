@@ -66,6 +66,15 @@ app.get('/api/verify', (req, res) => {
     .catch(err => res.status(500).send(err))
 })
 
+// Retrieve user's following list
+app.get('/api/getFollowing', (req, res) => {
+  const { token, secret } = req.cookies;
+  const { cursor = -1 } = req.query;
+  get(token, secret, '/friends/ids', { cursor, stringify_ids: true })
+    .then(({ data }) => res.status(200).send(data))
+    .catch(err => res.status(500).send(err))
+})
+
 // Retrieve user-owned lists
 app.get('/api/getLists', (req, res) => {
   const { token, secret } = req.cookies;

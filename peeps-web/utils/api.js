@@ -3,6 +3,16 @@ import axios from 'axios';
 axios.defaults.baseURL = API_URL;
 axios.defaults.withCredentials = true;
 
+// Recursive helper to get every user in user's following list
+const getFollowing = (cursor = -1, following = []) => (
+  axios.get('/api/getFollowing', { params: { cursor }})
+    .then(({ data }) => {
+      following.push(...data.ids);
+      if (data.next_cursor_str === '0') { return following }
+      return getFollowing(data.next_cursor_str, following);
+    })
+)
+
 // Start authentication with a request token
 export const startAuth = () => (
   axios.get('/auth')
@@ -26,10 +36,10 @@ export const completeAuth = (request_token, verifier) => {
 }
 
 // Verify user info
-export const verify = () => (
-  axios.get('/api/verify')
-    .then(({ data }) => data)
-    .catch(err => console.error(err))
+export const getUserData = () => (
+  Promise.all([axios.get('/api/verify'), getFollowing()])
+    .then(([{ data: user }, following]) => ({ user, following }))
+    .catch(errors => console.error(errors))
 )
 
 // Get all lists owned by the user

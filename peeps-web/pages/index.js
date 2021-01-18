@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
-import { verify, getLists, getMembersFromList } from '../utils/api';
+import { getUserData, getLists, getMembersFromList } from '../utils/api';
 import { sortLists, sortUsers, userSortCompare, changeObj } from '../utils/helpers';
 
 import Title from '../components/Title';
@@ -14,6 +14,7 @@ import ChangesModal from '../components/ChangesModal';
 
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState({});
   const [lists, setLists] = useState([]);
   const [activeListID, setActiveListID] = useState(-1);
   const [users, setUsers] = useState([]);
@@ -34,14 +35,21 @@ const Home = ({ auth, setAuth }) => {
   useEffect(() => {
     const tokenInCookie = cookies.get('token') !== undefined && cookies.get('secret') !== undefined;
     if (loading && tokenInCookie) {
-      verify()
-        .then(_ => setAuth(true))
-        .catch(err => console.error(err))
+      getUserData()
+        .then(data => {
+          setUserData(data);
+          setAuth(true);
+        })
+        .catch(err => console.log(err))
         .finally(() => setLoading(false))
     } else if (!auth) {
       router.replace('/hello');
     }
   }, [loading]);
+
+  useEffect(() => {
+    console.log(userData);
+  }, [userData]);
 
   // Update fuse searching for lists when lists are updated
   useEffect(() => {
@@ -72,10 +80,6 @@ const Home = ({ auth, setAuth }) => {
       })
       .catch(err => console.error(err))
   }, [activeListID]);
-
-  useEffect(() => {
-    console.log(add, del);
-  }, [add, del]);
 
   // Select a list
   const selectList = (id_str) => {
