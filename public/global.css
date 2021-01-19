@@ -34,3 +34,15 @@ body {
 textarea:focus, input:focus {
   outline: none;
 }
+
+.scrollGradient {
+  background:
+    linear-gradient(white 40%, rgba(255, 255, 255, 0)),
+    linear-gradient(rgba(255, 255, 255, 0), white 60%) 0 100%,
+    radial-gradient(farthest-side at 50% 0, rgba(34,34,34, 0.2), rgba(0,0,0,0)),
+    radial-gradient(farthest-side at 50% 100%, rgba(34,34,34, 0.2), rgba(0,0,0,0)) 0 100%;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-attachment: local, local, scroll, scroll;
+  background-size: 100% 63px, 100% 63px, 100% 21px, 100% 21px;
+}

@@ -110,7 +110,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
           />
         )}
       </AnimatePresence>
-      <div className="flex-1 px-12 overflow-scroll">
+      <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
         {pageResults.map(({ item }) => (
           <ListItem
             key={item.id_str}
