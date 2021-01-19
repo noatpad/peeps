@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
+import { motion } from 'framer-motion';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
 import { getUser, getLists, getMembersFromList, applyChanges } from '@web-utils/api';
@@ -190,7 +191,12 @@ const Home = ({ auth, setAuth }) => {
       <div className="py-40">
         <Title user={userData.user}/>
       </div>
-      <div className="flex my-12">
+      <motion.div
+        className="flex my-12"
+        initial={{ opacity: 0, y: -100 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, type: 'tween', duration: 0.45, ease: 'easeOut' }}
+      >
         <SelectorPane
           title="Your lists"
           subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}
@@ -227,7 +233,7 @@ const Home = ({ auth, setAuth }) => {
             <p>Loading...</p>
           )}
         </SelectorPane>
-      </div>
+      </motion.div>
       <div className="flex justify-center">
         <Button text="Apply" run={() => setShowChangesModal(true)} disabled={!add.length && !del.length}/>
         <Button text="Clear" run={clearChanges} warning/>
