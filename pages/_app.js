@@ -14,10 +14,11 @@ const App = ({ Component, pageProps }) => {
   const [auth, setAuth] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-blue-200 to-transparent">
+    <div className="relative min-h-screen">
       <Head>
         <title>peeps</title>
       </Head>
+      <div className="absolute top-0 left-0 right-0 h-screen bg-gradient-to-b from-blue-200 to-transparent" style={{ zIndex: -10 }}/>
       <Header/>
       <div className="container mx-auto px-8">
         <Component

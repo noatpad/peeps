@@ -32,7 +32,7 @@ const Home = ({ auth, setAuth }) => {
   const activeDels = activeListID === -1 ? undefined : del.find(d => d.id === activeListID);
 
   // Helper-to-hook function to get and set lists
-  const helperGetLists = () => {
+  const handleGetLists = () => {
     getLists()
       .then((lists) => setLists(sortLists(lists)))
       .catch(err => console.error(err))
@@ -67,7 +67,7 @@ const Home = ({ auth, setAuth }) => {
   // Get all owned lists when authenticated
   useEffect(() => {
     if (!auth) { return }
-    helperGetLists();
+    handleGetLists();
   }, [auth]);
 
   // Get users when selecting a list
@@ -163,7 +163,7 @@ const Home = ({ auth, setAuth }) => {
       })
       .then(_ => {
         setTimeout(() => {
-          helperGetLists();
+          handleGetLists();
           setShowChangesModal(false);
           console.log('Refreshed lists!');
         }, 5000);
@@ -174,9 +174,11 @@ const Home = ({ auth, setAuth }) => {
   // TODO: Implement a better loading screen
   if (loading) {
     return (
-      <main className="text-center">
-        <Title/>
-        <p>Loading...</p>
+      <main>
+        <div className="my-40">
+          <Title/>
+        </div>
+        <p className="text-center">Loading...</p>
       </main>
     )
   }
@@ -184,7 +186,7 @@ const Home = ({ auth, setAuth }) => {
   return (
     <main>
       <div className="my-40">
-        <Title/>
+        <Title user={userData.user}/>
       </div>
       <div className="flex my-12">
         <SelectorPane
