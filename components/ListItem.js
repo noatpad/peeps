@@ -1,10 +1,10 @@
 import React from 'react';
-import { Next } from './Icons';
+import { Next, Lock } from './Icons';
 
 const ListItem = ({ item, active, add, del, selectList, handleDeleteModal }) => {
-  // IDEA: Show icon for public and private lists
   // TODO: Show better feedback about delete button (hover tooltip?)
-  const { id_str, name, member_count } = item;
+  // TODO: Edit list info
+  const { id_str, name, member_count, mode } = item;
 
   return (
     <div className={`flex p-3 my-6 rounded-md shadow cursor-pointer ${active} ? 'ring' : ''}`} onClick={() => selectList(id_str)}>
@@ -16,8 +16,11 @@ const ListItem = ({ item, active, add, del, selectList, handleDeleteModal }) => 
         </button>
       </div>
       <div className="flex-1">
-        <p className="text-lg -mb-1">{name}</p>
-        <p className="text-sm text-gray-500">{member_count} member{member_count !== 1 ? 's' : ''}</p>
+        <div className="flex items-center">
+          {mode === 'private' && <div className="mr-1"><Lock size={16}/></div>}
+          <p className="text-lg">{name}</p>
+        </div>
+        <p className="text-sm text-gray-500 -mt-1">{member_count} member{member_count !== 1 ? 's' : ''}</p>
       </div>
       <div className="flex-initial flex flex-col items-end justify-center">
         {add > 0 && (
