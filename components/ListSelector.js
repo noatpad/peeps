@@ -14,8 +14,6 @@ import DeleteListModal from './DeleteListModal';
 const RESULTS_PER_PAGE = 10;
 
 const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, selectList }) => {
-  // IDEA: Scroll to new list upon creation
-  // TODO: Add message when no lists are found
   // TODO: Restrict adding a list if reaching the max number of lists (1,000)
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
@@ -80,14 +78,50 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
       .catch(err => console.error(err))
   }
 
+  // Count all user additions for a given list
   const countAdditions = (listID) => {
     const changes = add.find(a => a.id === listID);
     return changes !== undefined ? changes.users.length : 0;
   }
 
+  // Count all user deletions for a given list
   const countDeletions = (listID) => {
     const changes = del.find(d => d.id === listID);
     return changes !== undefined ? changes.users.length : 0;
+  }
+
+  // Sub-component for results
+  const results = () => {
+    if (!lists.length) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-gray-400 italic">
+          <h4 className="text-2xl">You have no lists!</h4>
+          <p>Why not make one?</p>
+        </div>
+      )
+    }
+
+    if (!searchResults.length) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-gray-400 italic">
+          <h4 className="text-2xl">Couldn&apos;t find any lists!</h4>
+          <p>Maybe a typo?</p>
+        </div>
+      )
+    }
+    return (
+      pageResults.map(({ item }) => (
+        <ListItem
+          key={item.id_str}
+          item={item}
+          active={activeListID === item.id_str}
+          add={countAdditions(item.id_str)}
+          del={countDeletions(item.id_str)}
+          selectList={selectList}
+          handleDeleteModal={handleDeleteModal}
+        />
+      ))
+    )
   }
 
   return (
@@ -111,20 +145,10 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
         )}
       </AnimatePresence>
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
-        {pageResults.map(({ item }) => (
-          <ListItem
-            key={item.id_str}
-            item={item}
-            active={activeListID === item.id_str}
-            add={countAdditions(item.id_str)}
-            del={countDeletions(item.id_str)}
-            selectList={selectList}
-            handleDeleteModal={handleDeleteModal}
-          />
-        ))}
+        {results()}
       </div>
       {searchResults.length > RESULTS_PER_PAGE && (
-        <div className="flex-initial flex justify-center items-center my-2">
+        <div className="flex-initial flex justify-center items-center mb-4">
           <Pagination
             totalItemsCount={searchResults.length}
             itemsCountPerPage={RESULTS_PER_PAGE}
