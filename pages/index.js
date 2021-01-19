@@ -180,7 +180,7 @@ const Home = ({ auth, setAuth }) => {
           <Title/>
         </div>
         <div className="text-center">
-          <Loading/>
+          <Loading size={100}/>
         </div>
       </main>
     )

@@ -1,9 +1,9 @@
 import React from 'react';
 import HashLoader from 'react-spinners/HashLoader';
 
-const Loading = () => (
-  <div className="inline-block transform -rotate-12">
-    <HashLoader size={100} color="4586d9"/>
+const Loading = ({ size, color = '4586d9' }) => (
+  <div className="transform -rotate-12">
+    <HashLoader size={size} color={color} css="display: inline-block"/>
   </div>
 )
 

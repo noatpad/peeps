@@ -16,6 +16,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
   const [query, setQuery] = useState('');
   const [newList, setNewList] = useState({ name: '', description: '', mode_private: true });
   const [validList, setValidList] = useState(false);
+  const [addStatus, setAddStatus] = useState(0);
   const [listToRemove, setListToRemove] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [page, setPage] = useState(1);
@@ -47,13 +48,22 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
     setValidList(validTitle && validDescription && underLimit);
   }, [newList]);
 
+  // Reset `addStatus` to its initial state after reaching 2 and a pause
+  useEffect(() => {
+    if (addStatus === 2) {
+      setTimeout(() => setAddStatus(0), 2500);
+    }
+  }, [addStatus])
+
   // Handler for adding a new list
   const handleAddList = () => {
     if (!validList) { return }
+    setAddStatus(1);
     addList(newList)
       .then(data => {
         setLists(sortLists(lists.concat(data)));
         setNewList({ ...newList, name: '', description: '' });
+        setAddStatus(2);
       })
       .catch(err => console.error(err))
   }
@@ -139,6 +149,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
             setNewList={setNewList}
             validList={validList}
             handleAddList={handleAddList}
+            addStatus={addStatus}
             tooManyLists={lists.length >= LIST_COUNT_LIMIT}
           />
         )}

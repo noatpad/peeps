@@ -5,10 +5,14 @@ import { LIST_COUNT_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
 import Button from './Button';
 
-const AddListCard = ({ newList, setNewList, validList, handleAddList, tooManyLists }) => {
-  // TODO: Add user feedback that a list has been created
-  // TODO: Disable button when creating a new list
+const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus, tooManyLists }) => {
   const validDescription = newList.description.length <= LIST_DESCRIPTION_LIMIT;
+  let buttonText;
+  switch (addStatus) {
+    case 0: buttonText = 'Add list'; break;
+    case 1: buttonText = 'Adding...'; break;
+    case 2: buttonText = 'Done!'; break;
+  }
 
   return (
     <motion.div className="p-4 mx-16 mt-4 mb-2 rounded-lg shadow-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -40,7 +44,7 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, tooManyLis
         </label>
       </div>
       <div className="flex justify-center mt-2">
-        <Button run={handleAddList} small disabled={!validList}>Add list</Button>
+        <Button run={handleAddList} small disabled={!validList} loading={addStatus === 1} done={addStatus === 2}>{buttonText}</Button>
       </div>
       {tooManyLists && (
         <p className="text-center text-sm text-red-400">You can&apos;t create a new list, since you can only have up to {LIST_COUNT_LIMIT} lists!</p>
