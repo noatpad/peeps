@@ -39,14 +39,15 @@ const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newLi
 
   return (
     <div className="flex-initial flex items-center px-8">
-      <motion.div className={`flex items-center mx-1 border border-gray-300 rounded-full`} variants={barVariants} animate={searchActive ? 'active' : 'inactive'}>
+      <motion.div className={`flex items-center mx-1 border border-gray-300 rounded-full`} variants={barVariants} animate={searchActive ? 'active' : 'inactive'} initial={false}>
         <button className="p-2.5" onClick={handleClickSearch}>
           <Search size={20}/>
         </button>
-        <motion.div variants={inputWrapperVariants} animate={searchActive ? 'active' : 'inactive'}>
+        <motion.div variants={inputWrapperVariants} animate={searchActive ? 'active' : 'inactive'} initial={false}>
           <motion.input
             variants={inputVariants}
             animate={searchActive ? 'active' : 'inactive'}
+            initial={false}
             ref={searchInputRef}
             value={query}
             placeholder="Search for a list"
@@ -54,14 +55,15 @@ const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newLi
           />
         </motion.div>
       </motion.div>
-      <motion.div className={`relative flex items-center mx-1 border border-gray-300 rounded-full`} variants={barVariants} animate={!searchActive ? 'active' : 'inactive'}>
+      <motion.div className={`relative flex items-center mx-1 border border-gray-300 rounded-full`} variants={barVariants} animate={!searchActive ? 'active' : 'inactive'} initial={false}>
         <button className="p-2" onClick={handleClickAdd}>
           <Add size={24}/>
         </button>
-        <motion.div variants={inputWrapperVariants} animate={!searchActive ? 'active' : 'inactive'}>
+        <motion.div variants={inputWrapperVariants} animate={!searchActive ? 'active' : 'inactive'} initial={false}>
           <motion.input
             variants={inputVariants}
             animate={!searchActive ? 'active' : 'inactive'}
+            initial={false}
             ref={addInputRef}
             value={newList.name}
             placeholder="What's the name of the new list?"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from 'react-js-pagination';
+import { AnimatePresence } from 'framer-motion';
 import { addList, deleteList } from '@web-utils/api';
 import { sortLists } from '@web-utils/helpers';
 import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
@@ -99,14 +100,16 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
         newList={newList}
         setNewList={setNewList}
       />
-      {!searchActive && (
-        <AddListCard
-          newList={newList}
-          setNewList={setNewList}
-          validList={validList}
-          handleAddList={handleAddList}
-        />
-      )}
+      <AnimatePresence>
+        {!searchActive && (
+          <AddListCard
+            newList={newList}
+            setNewList={setNewList}
+            validList={validList}
+            handleAddList={handleAddList}
+          />
+        )}
+      </AnimatePresence>
       <div className="flex-1 px-12 overflow-scroll">
         {pageResults.map(({ item }) => (
           <ListItem
