@@ -40,7 +40,7 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList }) => {
         </label>
       </div>
       <div className="flex justify-center mt-2">
-        <Button run={handleAddList} text="Add list" small disabled={!validList}/>
+        <Button run={handleAddList} small disabled={!validList}>Add list</Button>
       </div>
     </motion.div>
   )

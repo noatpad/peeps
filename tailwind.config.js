@@ -9,7 +9,8 @@ module.exports = {
   variants: {
     extend: {
       cursor: ['disabled'],
-      opacity: ['disabled']
+      opacity: ['disabled'],
+      textOpacity: ['disabled']
     },
   },
   plugins: [],

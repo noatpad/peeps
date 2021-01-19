@@ -22,8 +22,8 @@ const ChangesModal = ({ showModal, closeModal, applyChanges, add, del }) => (
       ))}
     </ul>
     <div className="flex justify-center items-center">
-      <Button text="Yes" run={applyChanges} small/>
-      <Button text="No" run={closeModal} small warning/>
+      <Button run={applyChanges} small>Yes</Button>
+      <Button run={closeModal} small warning>No</Button>
     </div>
   </Modal>
 )

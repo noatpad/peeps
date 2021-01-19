@@ -15,8 +15,8 @@ const DeleteListModal = ({ showDeleteModal, setShowDeleteModal, listName, handle
   >
     <p className="text-center">You sure you wanna delete the list <b>{listName}</b>?</p>
     <div className="flex justify-center items-center">
-      <Button text="No, don't" run={() => setShowDeleteModal(false)} small/>
-      <Button text="Yes, delete" run={handleDeleteList} warning small/>
+      <Button run={() => setShowDeleteModal(false)} small>No, don't</Button>
+      <Button run={handleDeleteList} warning small>Yes, delete</Button>
     </div>
   </Modal>
 );
