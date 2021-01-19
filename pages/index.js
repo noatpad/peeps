@@ -6,6 +6,7 @@ import { getUser, getLists, getMembersFromList, applyChanges } from '@web-utils/
 import { sortLists, sortUsers, userSortCompare, changeObj } from '@web-utils/helpers';
 
 import Title from '../components/Title';
+import Loading from '../components/Loading';
 import SelectorPane from '../components/SelectorPane';
 import ListSelector from '../components/ListSelector';
 import UserSelector from '../components/UserSelector';
@@ -171,21 +172,22 @@ const Home = ({ auth, setAuth }) => {
       .catch(err => console.error(err))
   }
 
-  // TODO: Implement a better loading screen
   if (loading) {
     return (
       <main>
-        <div className="my-40">
+        <div className="py-40">
           <Title/>
         </div>
-        <p className="text-center">Loading...</p>
+        <div className="text-center">
+          <Loading/>
+        </div>
       </main>
     )
   }
 
   return (
     <main>
-      <div className="my-40">
+      <div className="py-40">
         <Title user={userData.user}/>
       </div>
       <div className="flex my-12">

@@ -15,6 +15,7 @@ const RESULTS_PER_PAGE = 10;
 const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, selectList }) => {
   // IDEA: Scroll to new list upon creation
   // TODO: Add message when no lists are found
+  // TODO: Restrict adding a list if reaching the max number of lists (1,000)
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [newList, setNewList] = useState({ name: '', description: '', mode_private: true });

@@ -26,6 +26,7 @@
     "react-dom": "17.0.1",
     "react-js-pagination": "^3.0.3",
     "react-modal": "^3.12.1",
+    "react-spinners": "^0.10.4",
     "react-switch": "^5.0.1",
     "tailwindcss": "^2.0.2",
     "twit": "^2.2.11",

@@ -8,6 +8,7 @@ import { Prev, Next } from './Chevrons';
 const RESULTS_PER_PAGE = 20;
 
 const UserSelector = ({ fuseRef, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
+  // TODO: Restrict adding user if reaching the maximum number of users per list (5,000)
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
