@@ -3,7 +3,7 @@ import Pagination from 'react-js-pagination';
 import { AnimatePresence } from 'framer-motion';
 import { addList, deleteList } from '@web-utils/api';
 import { sortLists } from '@web-utils/helpers';
-import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
+import { LIST_COUNT_LIMIT, LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT, RESULTS_PER_PAGE } from '@web-utils/config';
 
 import SearchOrAddList from './SearchOrAddList';
 import AddListCard from './AddListCard';
@@ -11,10 +11,7 @@ import ListItem from './ListItem';
 import { Prev, Next } from './Icons';
 import DeleteListModal from './DeleteListModal';
 
-const RESULTS_PER_PAGE = 10;
-
 const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, selectList }) => {
-  // TODO: Restrict adding a list if reaching the max number of lists (1,000)
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [newList, setNewList] = useState({ name: '', description: '', mode_private: true });
@@ -46,7 +43,8 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
     const { name, description } = newList;
     const validTitle = name.length > 0 && name.length <= LIST_NAME_LIMIT;
     const validDescription = description.length <= LIST_DESCRIPTION_LIMIT;
-    setValidList(validTitle && validDescription);
+    const underLimit = lists.length < LIST_COUNT_LIMIT;
+    setValidList(validTitle && validDescription && underLimit);
   }, [newList]);
 
   // Handler for adding a new list
@@ -141,6 +139,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
             setNewList={setNewList}
             validList={validList}
             handleAddList={handleAddList}
+            tooManyLists={lists.length >= LIST_COUNT_LIMIT}
           />
         )}
       </AnimatePresence>

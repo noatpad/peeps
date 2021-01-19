@@ -1,11 +1,11 @@
 import React from 'react';
 import Switch from 'react-switch';
 import { motion } from 'framer-motion';
-import { LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
+import { LIST_COUNT_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
 import Button from './Button';
 
-const AddListCard = ({ newList, setNewList, validList, handleAddList }) => {
+const AddListCard = ({ newList, setNewList, validList, handleAddList, tooManyLists }) => {
   // TODO: Add user feedback that a list has been created
   // TODO: Disable button when creating a new list
   const validDescription = newList.description.length <= LIST_DESCRIPTION_LIMIT;
@@ -42,6 +42,9 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList }) => {
       <div className="flex justify-center mt-2">
         <Button run={handleAddList} small disabled={!validList}>Add list</Button>
       </div>
+      {tooManyLists && (
+        <p className="text-center text-sm text-red-400">You can&apos;t create a new list, since you can only have up to {LIST_COUNT_LIMIT} lists!</p>
+      )}
     </motion.div>
   )
 }
