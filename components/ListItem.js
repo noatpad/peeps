@@ -4,12 +4,11 @@ import { Next, Lock, Remove } from './Icons';
 import ItemButton from './ItemButton';
 
 const ListItem = ({ item, active, add, del, selectList, handleDeleteModal }) => {
-  // TODO: Add better indicator when selected
   // TODO: Edit list info
   const { id_str, name, member_count, mode } = item;
 
   return (
-    <div className={`flex relative p-3 my-6 rounded-md shadow cursor-pointer ${active ? 'ring' : ''}`} onClick={() => selectList(id_str)}>
+    <div className={`flex relative p-3 my-6 rounded-md shadow cursor-pointer ${active ? 'ring-2 bg-blue-50' : ''}`} onClick={() => selectList(id_str)}>
       <div className="absolute top-0 left-0 bottom-0 ml-3 flex items-center z-10">
         <ItemButton
           onClick={(e) => handleDeleteModal(item, e)}

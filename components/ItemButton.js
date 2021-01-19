@@ -9,7 +9,7 @@ const ItemButton = ({ onClick, icon, text }) => {
 
   return (
     <motion.button
-      className="flex items-center p-1 rounded group text-red-400 bg-white hover:shadow-md transition-all"
+      className="flex items-center p-1 rounded group text-red-400 hover:bg-white hover:shadow-md transition-all"
       onClick={onClick}
       initial={false}
       whileHover="hover"
