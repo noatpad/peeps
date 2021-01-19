@@ -7,7 +7,7 @@ import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 import SearchOrAddList from './SearchOrAddList';
 import AddListCard from './AddListCard';
 import ListItem from './ListItem';
-import { Prev, Next } from './Chevrons';
+import { Prev, Next } from './Icons';
 import DeleteListModal from './DeleteListModal';
 
 const RESULTS_PER_PAGE = 10;
@@ -128,8 +128,8 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
             onChange={(selected) => setPage(selected)}
             activePage={page}
             pageRangeDisplayed={5}
-            prevPageText={Prev}
-            nextPageText={Next}
+            prevPageText={<Prev size={20}/>}
+            nextPageText={<Next size={20}/>}
             innerClass="inline-flex justify-center items-center p-2 rounded-lg shadow"
             itemClass="h-8 w-8 mx-1.5 rounded-lg"
             linkClass="flex justify-center items-center h-full w-full"

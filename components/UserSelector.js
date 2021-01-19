@@ -3,7 +3,7 @@ import Pagination from 'react-js-pagination';
 
 import SearchOrAddUser from './SearchOrAddUser';
 import UserItem from './UserItem';
-import { Prev, Next } from './Chevrons';
+import { Prev, Next } from './Icons';
 
 const RESULTS_PER_PAGE = 20;
 
@@ -60,8 +60,8 @@ const UserSelector = ({ fuseRef, users, adds, dels, prepareToAddUser, unprepareT
             onChange={(selected) => setPage(selected)}
             activePage={page}
             pageRangeDisplayed={5}
-            prevPageText={Prev}
-            nextPageText={Next}
+            prevPageText={<Prev size={20}/>}
+            nextPageText={<Next size={20}/>}
             innerClass="inline-flex justify-center items-center p-2 rounded-lg shadow"
             itemClass="h-8 w-8 mx-1.5 rounded-lg"
             linkClass="flex justify-center items-center h-full w-full"

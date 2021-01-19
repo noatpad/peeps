@@ -4,8 +4,8 @@ import Modal from 'react-modal';
 import 'tailwindcss/tailwind.css';
 import '@public/global.css';
 
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '@components/Header';
+import Footer from '@components/Footer';
 
 Modal.setAppElement('#__next');
 

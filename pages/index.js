@@ -6,13 +6,13 @@ import Fuse from 'fuse.js';
 import { getUser, getLists, getMembersFromList, applyChanges } from '@web-utils/api';
 import { sortLists, sortUsers, userSortCompare, changeObj } from '@web-utils/helpers';
 
-import Title from '../components/Title';
-import Loading from '../components/Loading';
-import SelectorPane from '../components/SelectorPane';
-import ListSelector from '../components/ListSelector';
-import UserSelector from '../components/UserSelector';
-import Button from '../components/Button';
-import ChangesModal from '../components/ChangesModal';
+import Title from '@components/Title';
+import Loading from '@components/Loading';
+import SelectorPane from '@components/SelectorPane';
+import ListSelector from '@components/ListSelector';
+import UserSelector from '@components/UserSelector';
+import Button from '@components/Button';
+import ChangesModal from '@components/ChangesModal';
 
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
