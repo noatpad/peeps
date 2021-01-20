@@ -1,6 +1,5 @@
-import { API_URL } from './config';
 import axios from 'axios';
-axios.defaults.baseURL = API_URL;
+axios.defaults.baseURL = '/api';
 axios.defaults.withCredentials = true;
 
 // Start authentication with a request token
