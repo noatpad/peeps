@@ -18,6 +18,7 @@ const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({});
   const [lists, setLists] = useState([]);
+  const [loadingLists, setLoadingLists] = useState(false);
   const [activeListID, setActiveListID] = useState(-1);
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
@@ -35,8 +36,12 @@ const Home = ({ auth, setAuth }) => {
 
   // Helper-to-hook function to get and set lists
   const handleGetLists = () => {
+    setLoadingLists(true);
     getLists()
-      .then((lists) => setLists(sortLists(lists)))
+      .then((lists) => {
+        setLists(sortLists(lists));
+        setLoadingLists(false);
+      })
       .catch(err => console.error(err))
   }
 
@@ -203,6 +208,7 @@ const Home = ({ auth, setAuth }) => {
         >
           <ListSelector
             fuseRef={fuseListRef}
+            loading={loadingLists}
             lists={lists}
             setLists={setLists}
             activeListID={activeListID}

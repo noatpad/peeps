@@ -9,9 +9,10 @@ import SearchOrAddList from './SearchOrAddList';
 import AddListCard from './AddListCard';
 import ListItem from './ListItem';
 import { Prev, Next } from './Icons';
+import Loading from './Loading';
 import DeleteListModal from './DeleteListModal';
 
-const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, selectList }) => {
+const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, del, selectList }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [newList, setNewList] = useState({ name: '', description: '', mode_private: true });
@@ -137,6 +138,15 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
           handleDeleteModal={handleDeleteModal}
         />
       ))
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-full text-gray-400 italic">
+        <Loading size={50}/>
+        <p>Loading your lists...</p>
+      </div>
     )
   }
 
