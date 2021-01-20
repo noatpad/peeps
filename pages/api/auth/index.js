@@ -7,7 +7,6 @@ const auth = nc()
   .post((req, res) => {
     return getRequestToken()
       .then(data => {
-        // console.log(data);
         console.log('Got request token. Redirecting to authentication page...');
         res.status(200).send(data);
       })
