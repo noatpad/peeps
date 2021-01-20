@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const ItemButton = ({ onClick, icon, text }) => {
+const ItemButton = ({ onClick, icon, color = 'text-gray-700', text }) => {
   const textVariants = {
     rest: { width: 0, opacity: 0, transitionEnd: { marginLeft: '0px' }},
     hover: { width: 100, opacity: 1, marginLeft: '0.5rem' }
@@ -9,7 +9,7 @@ const ItemButton = ({ onClick, icon, text }) => {
 
   return (
     <motion.button
-      className="flex items-center p-1 rounded group text-red-400 hover:bg-white hover:shadow-md transition-all"
+      className={`flex items-center p-1 rounded group ${color} hover:bg-white hover:shadow-md transition-all`}
       onClick={onClick}
       initial={false}
       whileHover="hover"

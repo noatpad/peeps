@@ -19,14 +19,14 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus,
       <label className="block ml-2" htmlFor="list-description">Description <span className="text-gray-400 italic">(optional)</span></label>
       <div className="relative">
         <textarea
-          className="w-full p-2 border border-gray-300 resize-none"
+          className="w-full p-2 border border-gray-300 rounded-md resize-none"
           name="list-description"
-          placeholder="Write a description for your list..."
           value={newList.description}
+          placeholder="Say something about your list..."
           rows={2}
           onChange={(e) => setNewList({ ...newList, description: e.target.value })}
         />
-        <span className={`absolute right-0 bottom-0 m-2 ${validDescription ? 'text-gray-300' : 'text-red-400'}`}>
+        <span className={`absolute right-0 bottom-0 m-2 ${validDescription ? 'text-gray-300' : 'text-red-400'} transition-colors`}>
           {newList.description.length}/{LIST_DESCRIPTION_LIMIT}
         </span>
       </div>
@@ -44,7 +44,15 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus,
         </label>
       </div>
       <div className="flex justify-center mt-2">
-        <Button run={handleAddList} small disabled={!validList} loading={addStatus === 1} done={addStatus === 2}>{buttonText}</Button>
+        <Button
+          run={handleAddList}
+          disabled={!validList}
+          loading={addStatus === 1}
+          done={addStatus === 2}
+          small
+        >
+          {buttonText}
+        </Button>
       </div>
       {tooManyLists && (
         <p className="text-center text-sm text-red-400">You can&apos;t create a new list, since you can only have up to {LIST_COUNT_LIMIT} lists!</p>

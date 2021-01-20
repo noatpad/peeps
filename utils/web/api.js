@@ -74,13 +74,12 @@ export const deleteList = (id) => (
     .catch(err => console.error(err))
 )
 
-export const applyChanges = (add, del) => {
-  const min_add = add.map((a) => ({ id: a.id, users: a.users.map(u => u.id_str) }));
-  const min_del = del.map((d) => ({ id: d.id, users: d.users.map(u => u.id_str) }));
-  return axios.post('/lists/apply', { add: min_add, del: min_del })
+// Update a list's info
+export const updateList = ({ id, ...rest }) => (
+  axios.post(`lists/${id}/update`, { ...rest })
     .then(({ data }) => data)
-    .catch(err => console.error(err));
-}
+    .catch(err => console.error(err))
+)
 
 // Search for a user
 export const search = (q) => (
@@ -88,3 +87,12 @@ export const search = (q) => (
     .then(({ data }) => data)
     .catch(err => console.error(err))
 )
+
+// Apply all changes
+export const applyChanges = (add, del) => {
+  const min_add = add.map((a) => ({ id: a.id, users: a.users.map(u => u.id_str) }));
+  const min_del = del.map((d) => ({ id: d.id, users: d.users.map(u => u.id_str) }));
+  return axios.post('/lists/apply', { add: min_add, del: min_del })
+    .then(({ data }) => data)
+    .catch(err => console.error(err));
+}

@@ -69,8 +69,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
   }
 
   // Handler for opening the "delete list" modal
-  const handleDeleteModal = (list, e) => {
-    e.stopPropagation();
+  const handleDeleteModal = (list) => {
     setListToRemove(list);
     setShowDeleteModal(true);
   }
@@ -96,6 +95,14 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
   const countDeletions = (listID) => {
     const changes = del.find(d => d.id === listID);
     return changes !== undefined ? changes.users.length : 0;
+  }
+
+  // Update a single list in the state data
+  const updateSingleList = (updatedList) => {
+    const newLists = [...lists]
+    const index = newLists.findIndex(l => l.id_str === updatedList.id_str);
+    newLists[index] = updatedList;
+    setLists(newLists);
   }
 
   // Sub-component for results
@@ -126,6 +133,7 @@ const ListSelector = ({ fuseRef, lists, setLists, activeListID, add, del, select
           add={countAdditions(item.id_str)}
           del={countDeletions(item.id_str)}
           selectList={selectList}
+          updateSingleList={updateSingleList}
           handleDeleteModal={handleDeleteModal}
         />
       ))

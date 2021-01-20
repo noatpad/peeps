@@ -1,18 +1,33 @@
 import React from 'react';
 
-import { Next, Lock, Remove } from './Icons';
-import ItemButton from './ItemButton';
+import ItemButton from '@components/ItemButton';
+import { Remove, Edit, Lock, Next } from '@components/Icons';
 
-const ListItem = ({ item, active, add, del, selectList, handleDeleteModal }) => {
-  // TODO: Edit list info
-  const { id_str, name, member_count, mode } = item;
+const NormalView = ({ item, add, del, setEditMode, handleDeleteModal }) => {
+  const { name, member_count, mode } = item;
+
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    setEditMode(true);
+  }
+
+  const handleDeleteClick = (e) => {
+    e.stopPropagation();
+    handleDeleteModal(item);
+  }
 
   return (
-    <div className={`flex relative p-3 my-6 rounded-md shadow cursor-pointer ${active ? 'ring-2 bg-blue-50' : ''}`} onClick={() => selectList(id_str)}>
-      <div className="absolute top-0 left-0 bottom-0 ml-3 flex items-center z-10">
+    <React.Fragment>
+      <div className="absolute top-0 left-0 bottom-0 ml-3 flex flex-col justify-center z-10">
         <ItemButton
-          onClick={(e) => handleDeleteModal(item, e)}
+          onClick={handleEditClick}
+          icon={<Edit size={16}/>}
+          text="Edit list info"
+        />
+        <ItemButton
+          onClick={handleDeleteClick}
           icon={<Remove size={16}/>}
+          color="text-red-400"
           text="Remove list"
         />
       </div>
@@ -38,8 +53,8 @@ const ListItem = ({ item, active, add, del, selectList, handleDeleteModal }) => 
       <div className="flex-initial flex items-center">
         <Next size={20}/>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 
-export default ListItem;
+export default NormalView;
