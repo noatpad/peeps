@@ -1,6 +1,5 @@
 // Serverless API URL
-const WEB_URL = process.env.WEB_URL || 'http://localhost:3000';
-export const API_URL = `${WEB_URL}/api`
+export const API_URL = `${process.env.WEB_URL}/api`
 
 // Limits for list creation & display
 export const LIST_COUNT_LIMIT = 1000;
