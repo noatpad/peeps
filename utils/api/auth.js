@@ -29,6 +29,7 @@ const getSignature = (method, url, sig_params, secret) => {
 
 // Generate authorization header
 const getAuthHeader = (method, url, access_token = null, access_secret = null, params = {}) => {
+  console.log(CALLBACK_URL);
   const oauth_callback = CALLBACK_URL;
   const oauth_consumer_key = API_KEY;
   const oauth_timestamp = Math.round(Date.now() / 1000);

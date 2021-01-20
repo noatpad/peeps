@@ -4,9 +4,10 @@ import { getRequestToken } from '@api-utils/auth';
 
 const auth = nc()
   .use(morgan('dev'))
-  .get((req, res) => {
+  .post((req, res) => {
     return getRequestToken()
       .then(data => {
+        // console.log(data);
         console.log('Got request token. Redirecting to authentication page...');
         res.status(200).send(data);
       })

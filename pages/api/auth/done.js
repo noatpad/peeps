@@ -5,8 +5,10 @@ import { getAccessToken } from '@api-utils/auth';
 
 const done = nc()
   .use(morgan('dev'))
-  .get((req, res) => {
-    const { request_token, request_secret, verifier } = req.query;
+  .post((req, res) => {
+    if (!req.body) { return res.status(400).send('Expected body') }
+
+    const { request_token, request_secret, verifier } = req.body;
     return getAccessToken(request_token, request_secret, verifier)
       .then(data => {
         console.log('Authenticated!');
