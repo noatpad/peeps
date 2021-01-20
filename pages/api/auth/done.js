@@ -12,7 +12,10 @@ const done = nc()
     return getAccessToken(request_token, request_secret, verifier)
       .then(data => {
         console.log('Authenticated!');
-        res.setHeader('Set-Cookie', [serialize('token', data.oauth_token), serialize('secret', data.oauth_token_secret)])
+        res.setHeader('Set-Cookie', [
+          serialize('token', data.oauth_token, { path: '/' }),
+          serialize('secret', data.oauth_token_secret, { path: '/' })
+        ]);
         return res.status(200).send(data);
       })
       .catch(err => {
