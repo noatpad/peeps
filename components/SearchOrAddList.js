@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { LIST_NAME_LIMIT } from '@web-utils/config';
 
@@ -20,6 +20,8 @@ const inputVariants = {
 };
 
 const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newList, setNewList }) => {
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [addFocused, setAddFocused] = useState(false);
   const searchInputRef = useRef();
   const addInputRef = useRef();
 
@@ -39,7 +41,7 @@ const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newLi
 
   return (
     <div className="flex-initial flex items-center px-8">
-      <motion.div className={`flex items-center mx-1 border border-gray-300 rounded-full`} variants={barVariants} animate={searchActive ? 'active' : 'inactive'} initial={false}>
+      <motion.div className={`flex items-center mx-1 border ${searchFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`} variants={barVariants} animate={searchActive ? 'active' : 'inactive'} initial={false}>
         <button className="p-2.5" onClick={handleClickSearch}>
           <Search size={20}/>
         </button>
@@ -52,10 +54,12 @@ const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newLi
             value={query}
             placeholder="Search for a list"
             onChange={e => setQuery(e.target.value)}
+            onFocus={() => setSearchFocused(true)}
+            onBlur={() => setSearchFocused(false)}
           />
         </motion.div>
       </motion.div>
-      <motion.div className={`relative flex items-center mx-1 border border-gray-300 rounded-full`} variants={barVariants} animate={!searchActive ? 'active' : 'inactive'} initial={false}>
+      <motion.div className={`relative flex items-center mx-1 border ${addFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`} variants={barVariants} animate={!searchActive ? 'active' : 'inactive'} initial={false}>
         <button className="p-2" onClick={handleClickAdd}>
           <Add size={24}/>
         </button>
@@ -68,6 +72,8 @@ const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newLi
             value={newList.name}
             placeholder="What's the name of the new list?"
             onChange={e => setNewList({ ...newList, name: e.target.value })}
+            onFocus={() => setAddFocused(true)}
+            onBlur={() => setAddFocused(false)}
           />
         </motion.div>
         <span className={`${!searchActive ? 'initial' : 'hidden'} absolute right-0 mr-3 ${validTitle ? 'text-gray-300' : 'text-red-400'} transition-colors`}>

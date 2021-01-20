@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Switch from 'react-switch';
 import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
@@ -9,10 +9,17 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
   const [description, setDescription] = useState(item.description);
   const [mode, setMode] = useState(item.mode === 'private');
   const [valid, setValid] = useState(false);
+  const nameInputRef = useRef();
 
   const validTitle = name.length > 0 && name.length <= LIST_NAME_LIMIT;
   const validDescription = description.length <= LIST_DESCRIPTION_LIMIT;
 
+  // Focus on the name input upon entering this view
+  useEffect(() => {
+    nameInputRef.current.focus();
+  }, []);
+
+  // Check if the list data is valid for updating
   useEffect(() => {
     setValid(validTitle && validDescription);
   }, [name, description]);
@@ -23,7 +30,8 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
         <label className="ml-2 text-sm text-gray-500">Name</label>
         <div className="relative">
           <input
-            className="w-full p-2 border border-gray-300 rounded-md"
+            className="w-full p-2 border border-gray-300 rounded-md focus:border-blue-400 transition-colors"
+            ref={nameInputRef}
             value={name}
             placeholder="The name of your list"
             onChange={e => setName(e.target.value)}
@@ -34,10 +42,10 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
         </div>
       </div>
       <div className="flex flex-col mt-4">
-        <label className="ml-2 text-sm text-gray-500">Description</label>
+        <label className="ml-2 text-sm text-gray-500">Description <span className="text-gray-400 italic">(optional)</span></label>
         <div className="relative">
           <textarea
-            className="w-full p-2 border border-gray-300 rounded-md resize-none"
+            className="w-full p-2 border border-gray-300 rounded-md resize-none focus:border-blue-400 transition-colors"
             value={description}
             placeholder="Say something about your list..."
             rows={3}

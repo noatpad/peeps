@@ -26,7 +26,7 @@ const ListItem = ({ item, active, add, del, selectList, updateSingleList, handle
   }
 
   return (
-    <div className={`flex relative p-3 my-6 rounded-md shadow ${!editMode ? 'cursor-pointer' : ''} ${active ? 'ring-2 bg-blue-50' : ''}`} onClick={handleClick}>
+    <div className={`flex relative p-3 my-6 rounded-md shadow ${!editMode ? 'bg-gradient-to-r from-transparent cursor-pointer' : ''} ${active ? 'ring-2 bg-blue-50' : 'hover:to-blue-50'} transition-all`} onClick={handleClick}>
       {editMode ? (
         <EditView item={item} updatePending={updatePending} setEditMode={setEditMode} handleUpdate={handleUpdate}/>
       ) : (

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Switch from 'react-switch';
 import { motion } from 'framer-motion';
 import { LIST_COUNT_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
@@ -6,6 +6,8 @@ import { LIST_COUNT_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 import Button from './Button';
 
 const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus, tooManyLists }) => {
+  const [descriptionFocused, setDescriptionFocused] = useState(false);
+
   const validDescription = newList.description.length <= LIST_DESCRIPTION_LIMIT;
   let buttonText;
   switch (addStatus) {
@@ -19,12 +21,14 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus,
       <label className="block ml-2" htmlFor="list-description">Description <span className="text-gray-400 italic">(optional)</span></label>
       <div className="relative">
         <textarea
-          className="w-full p-2 border border-gray-300 rounded-md resize-none"
+          className={`w-full p-2 border ${descriptionFocused ? 'border-blue-400' : 'border-gray-300'} rounded-md resize-none transition-colors`}
           name="list-description"
           value={newList.description}
           placeholder="Say something about your list..."
           rows={2}
           onChange={(e) => setNewList({ ...newList, description: e.target.value })}
+          onFocus={() => setDescriptionFocused(true)}
+          onBlur={() => setDescriptionFocused(false)}
         />
         <span className={`absolute right-0 bottom-0 m-2 ${validDescription ? 'text-gray-300' : 'text-red-400'} transition-colors`}>
           {newList.description.length}/{LIST_DESCRIPTION_LIMIT}

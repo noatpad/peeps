@@ -11,7 +11,7 @@ const Button = ({ run, small, warning, disabled, loading, done, children }) => {
   } else {
     buttonClass += ' from-blue-400 to-blue-500';
   }
-  buttonClass += ' disabled:opacity-50 disabled:text-opacity-50 disabled:cursor-not-allowed transform hover:scale-105 transition-all';
+  buttonClass += ' disabled:opacity-50 disabled:text-opacity-50 disabled:cursor-not-allowed transform hover:scale-105 focus:ring transition-all';
 
   return (
     <button className={buttonClass} onClick={run} disabled={loading || disabled}>

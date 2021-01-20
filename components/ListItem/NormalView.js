@@ -6,11 +6,13 @@ import { Remove, Edit, Lock, Next } from '@components/Icons';
 const NormalView = ({ item, add, del, setEditMode, handleDeleteModal }) => {
   const { name, member_count, mode } = item;
 
+  // Handle clicking the edit button
   const handleEditClick = (e) => {
     e.stopPropagation();
     setEditMode(true);
   }
 
+  // Handle clicking the delete button
   const handleDeleteClick = (e) => {
     e.stopPropagation();
     handleDeleteModal(item);
@@ -50,9 +52,9 @@ const NormalView = ({ item, add, del, setEditMode, handleDeleteModal }) => {
           </span>
         )}
       </div>
-      <div className="flex-initial flex items-center">
+      <button className="flex-initial flex items-center">
         <Next size={20}/>
-      </div>
+      </button>
     </React.Fragment>
   )
 }
