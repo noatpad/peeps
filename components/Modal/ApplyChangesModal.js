@@ -1,18 +1,10 @@
 import React from 'react';
-import Modal from 'react-modal';
+import Modal from './index';
 
-import Button from './Button';
+import Button from '../Button';
 
-const ChangesModal = ({ showModal, closeModal, applyChanges, add, del }) => (
-  <Modal
-    isOpen={showModal}
-    overlayClassName="fixed top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-black bg-opacity-70 z-30"
-    className="px-8 py-6 rounded-xl bg-white"
-    shouldCloseOnEsc={true}
-    shouldCloseOnOverlayClick={true}
-    onRequestClose={closeModal}
-    closeTimeoutMS={250}
-  >
+const ApplyChangesModal = ({ show, close, applyChanges, add, del }) => (
+  <Modal show={show} close={close}>
     <h3 className="text-3xl text-center font-bold mb-4 mx-4">Are you sure you wanna apply these changes?</h3>
     <ul>
       {add.map(({ id, name, users }) => (
@@ -24,9 +16,9 @@ const ChangesModal = ({ showModal, closeModal, applyChanges, add, del }) => (
     </ul>
     <div className="flex justify-center items-center">
       <Button run={applyChanges} primary small>Yes</Button>
-      <Button run={closeModal} warning small>No</Button>
+      <Button run={close} warning small>No</Button>
     </div>
   </Modal>
 )
 
-export default ChangesModal;
+export default ApplyChangesModal;

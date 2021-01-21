@@ -12,7 +12,7 @@ import SelectorPane from '@components/SelectorPane';
 import ListSelector from '@components/ListSelector';
 import UserSelector from '@components/UserSelector';
 import Button from '@components/Button';
-import ChangesModal from '@components/ChangesModal';
+import ApplyChangesModal from '@components/Modal/ApplyChangesModal';
 
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
@@ -244,9 +244,9 @@ const Home = ({ auth, setAuth }) => {
         <Button run={() => setShowChangesModal(true)} disabled={!add.length && !del.length} primary>Apply</Button>
         <Button run={clearChanges} warning>Clear</Button>
       </div>
-      <ChangesModal
-        showModal={showChangesModal}
-        closeModal={() => setShowChangesModal(false)}
+      <ApplyChangesModal
+        show={showChangesModal}
+        close={() => setShowChangesModal(false)}
         applyChanges={handleApplyChanges}
         add={add}
         del={del}

@@ -10,7 +10,7 @@ import AddListCard from './AddListCard';
 import ListItem from './ListItem';
 import { Prev, Next } from './Icons';
 import Loading from './Loading';
-import DeleteListModal from './DeleteListModal';
+import DeleteListModal from './Modal/DeleteListModal';
 
 const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, del, selectList }) => {
   const [searchActive, setSearchActive] = useState(true);
@@ -195,8 +195,8 @@ const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, de
         </div>
       )}
       <DeleteListModal
-        showDeleteModal={showDeleteModal}
-        setShowDeleteModal={setShowDeleteModal}
+        show={showDeleteModal}
+        close={() => setShowDeleteModal(false)}
         listName={listToRemove.name}
         handleDeleteList={handleDeleteList}
       />
