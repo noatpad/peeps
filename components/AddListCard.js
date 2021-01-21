@@ -53,6 +53,7 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus,
           disabled={!validList}
           loading={addStatus === 1}
           done={addStatus === 2}
+          primary
           small
         >
           {buttonText}

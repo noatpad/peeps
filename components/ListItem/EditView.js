@@ -74,6 +74,7 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
           run={() => handleUpdate(item.id_str, name, description, mode)}
           disabled={!valid}
           loading={updatePending}
+          primary
           small
         >
           Update
@@ -81,8 +82,8 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
         <Button
           run={() => setEditMode(false)}
           disabled={updatePending}
-          small
           warning
+          small
         >
           Cancel
         </Button>
