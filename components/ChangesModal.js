@@ -6,11 +6,12 @@ import Button from './Button';
 const ChangesModal = ({ showModal, closeModal, applyChanges, add, del }) => (
   <Modal
     isOpen={showModal}
-    overlayClassName="fixed top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-black bg-opacity-70"
+    overlayClassName="fixed top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-black bg-opacity-70 z-30"
     className="px-8 py-6 rounded-xl bg-white"
     shouldCloseOnEsc={true}
     shouldCloseOnOverlayClick={true}
     onRequestClose={closeModal}
+    closeTimeoutMS={250}
   >
     <h3 className="text-3xl text-center font-bold mb-4 mx-4">Are you sure you wanna apply these changes?</h3>
     <ul>

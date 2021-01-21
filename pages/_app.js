@@ -10,6 +10,7 @@ import Footer from '@components/Footer';
 Modal.setAppElement('#__next');
 
 const App = ({ Component, pageProps }) => {
+  // TODO: Use next-seo for SEO
   // If tokens are available in cookies, use that instead of authenticating again
   const [auth, setAuth] = useState(false);
 
@@ -18,7 +19,7 @@ const App = ({ Component, pageProps }) => {
       <Head>
         <title>peeps</title>
       </Head>
-      <div className="absolute top-0 left-0 right-0 h-screen bg-gradient-to-b from-blue-200 to-transparent" style={{ zIndex: -10 }}/>
+      <div className="absolute top-0 left-0 right-0 h-screen bg-gradient-to-b from-blue-200 to-transparent -z-10"/>
       <Header/>
       <div className="container min-h-screen mx-auto px-8">
         <Component

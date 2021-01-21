@@ -7,12 +7,12 @@ const DeleteListModal = ({ showDeleteModal, setShowDeleteModal, listName, handle
   <Modal
     isOpen={showDeleteModal}
     parentSelector={() => document.querySelector('#lists')}
-    portalClassName="z-30"
-    overlayClassName="absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-black bg-opacity-70"
+    overlayClassName="absolute top-0 left-0 bottom-0 right-0 flex justify-center items-center bg-black bg-opacity-70 z-30"
     className="px-8 py-6 rounded-xl bg-white"
     shouldCloseOnEsc={true}
     shouldCloseOnOverlayClick={true}
     onRequestClose={() => setShowDeleteModal(false)}
+    closeTimeoutMS={250}
   >
     <p className="text-center">You sure you wanna delete the list <b>{listName}</b>?</p>
     <div className="flex justify-center items-center">
