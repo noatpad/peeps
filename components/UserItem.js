@@ -19,41 +19,37 @@ const UserItem = ({ user, add, del, onClick }) => {
   }
 
   const button = () => {
+    let icon, bg, color, hoverColor, text;
+
     if (add) {
-      return (
-        <ItemButton
-          onClick={onClick}
-          icon={<Add2 size={16}/>}
-          width={125}
-          bg="bg-green-400"
-          color="text-green-500"
-          hoverColor="text-white"
-          text="Cancel addition"
-          reverse
-        />
-      )
+      icon = <Add2 size={16}/>;
+      bg = "bg-green-400";
+      color = "text-green-500";
+      hoverColor = "text-white";
+      text = "Cancel addition";
+    } else if (del) {
+      icon = <Remove size={16}/>;
+      bg = "bg-red-400";
+      color = "text-red-500";
+      hoverColor = "text-white";
+      text = "Cancel removal";
+    } else {
+      icon = <Ellipsis size={16}/>;
+      bg = "bg-white";
+      color = false;
+      hoverColor = "text-red-400";
+      text = "Remove member";
     }
-    if (del) {
-      return (
-        <ItemButton
-          onClick={onClick}
-          icon={<Remove size={16}/>}
-          width={125}
-          bg="bg-red-400"
-          color="text-red-500"
-          hoverColor="text-white"
-          text="Cancel removal"
-          reverse
-        />
-      )
-    }
+
     return (
       <ItemButton
         onClick={onClick}
-        icon={<Ellipsis size={16}/>}
+        icon={icon}
         width={125}
-        text="Remove member"
-        hoverColor="text-red-400"
+        bg={bg}
+        color={color}
+        hoverColor={hoverColor}
+        text={text}
         reverse
       />
     )
@@ -70,7 +66,7 @@ const UserItem = ({ user, add, del, onClick }) => {
           width={48}
         />
       </div>
-      <div className="flex-1">
+      <div className="flex-1 mr-8">
         <p className="text-lg -mb-1">{name}</p>
         <p className="text-sm text-gray-500">@{screen_name}</p>
       </div>
