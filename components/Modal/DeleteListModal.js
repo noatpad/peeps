@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Modal from './index';
 
-import Button from '../Button';
+import Modal from './index';
+import Button from '@components/Button';
 
 const DeleteListModal = ({ show, close, listName, handleDeleteList }) => {
   const [disableDeleteButton, setDisableDeleteButton] = useState(true);

@@ -13,6 +13,7 @@ import ListSelector from '@components/ListSelector';
 import UserSelector from '@components/UserSelector';
 import Button from '@components/Button';
 import ApplyChangesModal from '@components/Modal/ApplyChangesModal';
+import ClearChangesModal from '@components/Modal/ClearChangesModal';
 
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
@@ -24,7 +25,8 @@ const Home = ({ auth, setAuth }) => {
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [add, setAdd] = useState([]);
   const [del, setDel] = useState([]);
-  const [showChangesModal, setShowChangesModal] = useState(false);
+  const [showApplyChangesModal, setShowApplyChangesModal] = useState(false);
+  const [showClearChangesModal, setShowClearChangesModal] = useState(false);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
@@ -153,31 +155,35 @@ const Home = ({ auth, setAuth }) => {
     setDel(newDel);
   }
 
-  // Clear changes
-  const clearChanges = () => {
-    setAdd([]);
-    setDel([]);
-  }
-
   // Apply all changes
   const handleApplyChanges = () => {
     applyChanges(add, del)
       .then(_ => {
         setActiveListID(-1);
         setUsers([]);
-        clearChanges();
+        setAdd([]);
+        setDel([]);
         console.log('Changes applied!');
       })
       .then(_ => {
         setTimeout(() => {
           handleGetLists();
-          setShowChangesModal(false);
+          setShowApplyChangesModal(false);
           console.log('Refreshed lists!');
         }, 5000);
       })
       .catch(err => console.error(err))
   }
 
+  // Clear all changes
+  const handleClearChanges = () => {
+    setAdd([]);
+    setDel([]);
+    setShowClearChangesModal(false);
+    console.log('Clear changes!');
+  }
+
+  // Loading screen
   if (loading) {
     return (
       <main>
@@ -241,15 +247,20 @@ const Home = ({ auth, setAuth }) => {
         </SelectorPane>
       </motion.div>
       <div className="flex justify-center">
-        <Button run={() => setShowChangesModal(true)} disabled={!add.length && !del.length} primary>Apply</Button>
-        <Button run={clearChanges} warning>Clear</Button>
+        <Button run={() => setShowApplyChangesModal(true)} disabled={!add.length && !del.length} primary>Apply</Button>
+        <Button run={() => setShowClearChangesModal(true)} disabled={!add.length && !del.length} warning>Clear</Button>
       </div>
       <ApplyChangesModal
-        show={showChangesModal}
-        close={() => setShowChangesModal(false)}
+        show={showApplyChangesModal}
+        close={() => setShowApplyChangesModal(false)}
         applyChanges={handleApplyChanges}
         add={add}
         del={del}
+      />
+      <ClearChangesModal
+        show={showClearChangesModal}
+        close={() => setShowClearChangesModal(false)}
+        clearChanges={handleClearChanges}
       />
     </main>
   )

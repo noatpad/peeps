@@ -1,7 +1,7 @@
 import React from 'react';
-import Modal from './index';
 
-import Button from '../Button';
+import Modal from './index';
+import Button from '@components/Button';
 
 const ApplyChangesModal = ({ show, close, applyChanges, add, del }) => (
   <Modal show={show} close={close}>
