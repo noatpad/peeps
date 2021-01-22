@@ -247,8 +247,8 @@ const Home = ({ auth, setAuth }) => {
         </SelectorPane>
       </motion.div>
       <div className="flex justify-center">
-        <Button run={() => setShowApplyChangesModal(true)} disabled={!add.length && !del.length} primary>Apply</Button>
         <Button run={() => setShowClearChangesModal(true)} disabled={!add.length && !del.length} warning>Clear</Button>
+        <Button run={() => setShowApplyChangesModal(true)} disabled={!add.length && !del.length} primary>Apply</Button>
       </div>
       <ApplyChangesModal
         show={showApplyChangesModal}

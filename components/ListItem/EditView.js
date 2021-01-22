@@ -71,6 +71,14 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
       </div>
       <div className="flex justify-center mt-2">
         <Button
+          run={() => setEditMode(false)}
+          disabled={updatePending}
+          warning
+          small
+        >
+          Cancel
+        </Button>
+        <Button
           run={() => handleUpdate(item.id_str, name, description, mode)}
           disabled={!valid}
           loading={updatePending}
@@ -78,14 +86,6 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
           small
         >
           Update
-        </Button>
-        <Button
-          run={() => setEditMode(false)}
-          disabled={updatePending}
-          warning
-          small
-        >
-          Cancel
         </Button>
       </div>
     </div>
