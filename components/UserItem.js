@@ -1,13 +1,11 @@
 import React from 'react';
-import Image from 'next/image';
 
 import ItemButton from './ItemButton';
 import { Add2, Remove, Ellipsis } from './Icons';
+import ProfilePicture from './ProfilePicture';
 
 const UserItem = ({ onClick, user, add, del, limitReached }) => {
-  const { name, screen_name, profile_image_url_https } = user;
-
-  const pfp = profile_image_url_https.replace(/_normal.jpg/, '_bigger.jpg');
+  const { name, screen_name } = user;
 
   let itemClass = "flex relative items-center p-3 my-6 rounded-md shadow bg-gradient-to-r from-transparent transition-all";
   if (add) {
@@ -60,17 +58,15 @@ const UserItem = ({ onClick, user, add, del, limitReached }) => {
   return (
     <div className={itemClass}>
       <div className="flex-initial flex items-center mr-3">
-        <Image
-          className="rounded-full"
-          src={pfp}
-          alt={`${name}'s profile picture`}
-          height={48}
-          width={48}
+        <ProfilePicture
+          user={user}
+          size={48}
+          bigger
         />
       </div>
       <div className="flex-1 mr-8">
-        <p className="text-lg -mb-1">{name}</p>
-        <p className="text-sm text-gray-500">@{screen_name}</p>
+        <p className="text-lg -mb-2">{name}</p>
+        <a className="text-sm text-gray-600 underline hover:text-gray-900" href={`https://twitter.com/${screen_name}`} target="_blank" rel="noopener noreferrer">@{screen_name}</a>
       </div>
       <div className="absolute top-0 right-0 bottom-0 mr-3 flex flex-col justify-center z-10">
         {button()}

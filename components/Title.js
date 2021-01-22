@@ -1,6 +1,7 @@
 import React from 'react';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
+
+import ProfilePicture from './ProfilePicture';
 
 const Title = ({ user }) => (
   <div className="text-center">
@@ -11,12 +12,9 @@ const Title = ({ user }) => (
         animate={{ opacity: 1, height: 40 }}
       >
         <div className="mr-2 h-10">
-          <Image
-            className="rounded-full"
-            src={user.profile_image_url_https}
-            alt={`${user.name}'s profile picture`}
-            height={40}
-            width={40}
+          <ProfilePicture
+            user={user}
+            size={40}
           />
         </div>
         <p className="text-2xl text-gray-700">{user.name}&apos;s</p>

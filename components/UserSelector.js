@@ -8,7 +8,6 @@ import UserItem from './UserItem';
 import { Prev, Next } from './Icons';
 
 const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
-  // IDEA: Add a common ProfilePicture component that links to their profile
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
