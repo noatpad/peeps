@@ -79,6 +79,9 @@ const ListSelector = ({ fuse, loading, lists, setLists, activeListID, add, del, 
   const handleDeleteList = () => {
     deleteList(listToRemove.id_str)
       .then(_ => {
+        if (listToRemove.id_str === activeListID) {
+          selectList(-1);
+        }
         setLists(lists.filter(list => list.id_str !== listToRemove.id_str));
         setListToRemove({});
         setShowDeleteModal(false);

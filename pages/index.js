@@ -82,14 +82,18 @@ const Home = ({ auth, setAuth }) => {
 
   // Get users when selecting a list
   useEffect(() => {
-    if (!auth || activeListID === -1) { return }
-    setLoadingUsers(true);
-    getMembersFromList(activeListID)
-      .then((users) => {
-        setUsers(sortUsers(users));
-        setLoadingUsers(false);
-      })
-      .catch(err => console.error(err))
+    if (!auth) { return }
+    if (activeListID === -1) {
+      setUsers([]);
+    } else {
+      setLoadingUsers(true);
+      getMembersFromList(activeListID)
+        .then((users) => {
+          setUsers(sortUsers(users));
+          setLoadingUsers(false);
+        })
+        .catch(err => console.error(err))
+    }
   }, [activeListID]);
 
   // Select a list
