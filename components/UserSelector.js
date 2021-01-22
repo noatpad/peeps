@@ -66,7 +66,7 @@ const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, u
         prepareToAddUser={prepareToAddUser}
         limitReached={limitReached}
       />
-      <div className="flex-1 px-12 overflow-scroll">
+      <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
         {pageResults.map(({ item: user, add, del }) => (
           <UserItem
             key={user.id_str}
@@ -79,7 +79,7 @@ const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, u
         ))}
       </div>
       {searchResults.length > MEMBERS_PER_PAGE && (
-        <div className="flex-initial flex justify-center items-center my-2">
+        <div className="flex-initial flex justify-center items-center mb-4">
           <Pagination
             totalItemsCount={searchResults.length}
             itemsCountPerPage={MEMBERS_PER_PAGE}
