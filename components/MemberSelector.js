@@ -3,11 +3,11 @@ import Pagination from 'react-js-pagination';
 import { MEMBERS_PER_PAGE, MEMBER_COUNT_LIMIT } from '@web-utils/config';
 
 import Loading from './Loading';
-import SearchOrAddUser from './SearchOrAddUser';
-import UserItem from './UserItem';
+import SearchOrAddMember from './SearchOrAddMember';
+import MemberItem from './MemberItem';
 import { Prev, Next } from './Icons';
 
-const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
+const MemberSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -57,7 +57,7 @@ const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, u
 
   return (
     <div className="flex flex-col h-full pt-6">
-      <SearchOrAddUser
+      <SearchOrAddMember
         query={query}
         setQuery={setQuery}
         searchActive={searchActive}
@@ -67,7 +67,7 @@ const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, u
       />
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
         {pageResults.map(({ item: user, add, del }) => (
-          <UserItem
+          <MemberItem
             key={user.id_str}
             onClick={() => handleClick(user, add, del)}
             user={user}
@@ -100,4 +100,4 @@ const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, u
   )
 }
 
-export default UserSelector;
+export default MemberSelector;

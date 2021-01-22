@@ -4,7 +4,7 @@ import ItemButton from './ItemButton';
 import { Add2, Remove, Ellipsis } from './Icons';
 import ProfilePicture from './ProfilePicture';
 
-const UserItem = ({ onClick, user, add, del, limitReached }) => {
+const MemberItem = ({ onClick, user, add, del, limitReached }) => {
   const { name, screen_name } = user;
 
   let itemClass = "flex relative items-center p-3 my-6 rounded-md shadow bg-gradient-to-r from-transparent transition-all";
@@ -75,4 +75,4 @@ const UserItem = ({ onClick, user, add, del, limitReached }) => {
   )
 }
 
-export default UserItem;
+export default MemberItem;

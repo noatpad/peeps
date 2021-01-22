@@ -49,7 +49,7 @@ const renderSuggestion = ({ name, screen_name, profile_image_url_https }) => (
   </div>
 )
 
-const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepareToAddUser, limitReached }) => {
+const SearchOrAddMember = ({ query, setQuery, searchActive, setSearchActive, prepareToAddUser, limitReached }) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
   const [addQuery, setAddQuery] = useState('');
@@ -113,7 +113,7 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepa
           <motion.input
             ref={searchInputRef}
             value={query}
-            placeholder="Search for a user in your list..."
+            placeholder="Search for a member in your list..."
             variants={inputVariants}
             animate={searchActive ? 'active' : 'inactive'}
             initial={false}
@@ -194,4 +194,4 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepa
   )
 }
 
-export default SearchOrAddUser;
+export default SearchOrAddMember;

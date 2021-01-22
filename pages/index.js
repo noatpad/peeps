@@ -10,7 +10,7 @@ import Title from '@components/Title';
 import Loading from '@components/Loading';
 import SelectorPane from '@components/SelectorPane';
 import ListSelector from '@components/ListSelector';
-import UserSelector from '@components/UserSelector';
+import MemberSelector from '@components/MemberSelector';
 import Button from '@components/Button';
 import ApplyChangesModal from '@components/Modal/ApplyChangesModal';
 import ClearChangesModal from '@components/Modal/ClearChangesModal';
@@ -230,7 +230,7 @@ const Home = ({ auth, setAuth }) => {
           dels={activeDels !== undefined ? activeDels.users.length : 0}
           italic={activeListID === -1}
         >
-          <UserSelector
+          <MemberSelector
             fuseRef={fuseUserRef}
             loading={loadingUsers}
             users={users}
