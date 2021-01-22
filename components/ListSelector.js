@@ -12,7 +12,7 @@ import { Prev, Next } from './Icons';
 import Loading from './Loading';
 import DeleteListModal from './Modal/DeleteListModal';
 
-const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, del, selectList }) => {
+const ListSelector = ({ fuse, loading, lists, setLists, activeListID, add, del, selectList }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [newList, setNewList] = useState({ name: '', description: '', mode_private: true });
@@ -23,7 +23,7 @@ const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, de
   const [page, setPage] = useState(1);
 
   // Fuzzy search list and pagination
-  const searchResults = query ? fuseRef.current.search(query.toLowerCase()) : lists.map(l => ({ item: l }));
+  const searchResults = query ? fuse.search(query.toLowerCase()) : lists.map(l => ({ item: l }));
   const offset = (page - 1) * LISTS_PER_PAGE;
   const pageResults = searchResults.slice(offset, offset + LISTS_PER_PAGE);
 

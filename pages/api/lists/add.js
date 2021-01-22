@@ -11,8 +11,14 @@ const add = nc()
     const { name, description, mode_private } = req.body;
     return post(token, secret, 'lists/create', { name, description, mode: mode_private ? 'private' : 'public' })
       .then(({ data }) => {
-        console.log(`Created list ${data.name} (${data.id_str})`);
-        return res.status(200).send(data);
+        const list = {
+          ...data,
+          lowercase_name: data.name.toLowerCase(),
+          add: [],
+          del: []
+        }
+        console.log(`Created list ${list.name} (${list.id_str})`);
+        return res.status(200).send(list);
       })
       .catch(err => {
         console.error(`Error creating list ${name}`, err);

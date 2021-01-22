@@ -7,14 +7,14 @@ import SearchOrAddMember from './SearchOrAddMember';
 import MemberItem from './MemberItem';
 import { Prev, Next } from './Icons';
 
-const MemberSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
+const MemberSelector = ({ fuse, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [limitReached, setLimitReached] = useState(false);
 
   // Fuzzy search list and pagination
-  let searchResults = query ? fuseRef.current.search(query.toLowerCase()) : users.map(l => ({ item: l }));
+  let searchResults = query ? fuse.search(query.toLowerCase()) : users.map(l => ({ item: l }));
   dels.forEach(d => {
     const delIndex = searchResults.findIndex(s => s.item.id_str === d.id_str);
     if (delIndex === -1) { return }

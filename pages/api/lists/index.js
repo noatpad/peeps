@@ -8,7 +8,12 @@ const lists = nc()
     const { token, secret } = req.cookies;
     return get(token, secret, 'lists/ownerships', { count: 1000 })
       .then(({ data }) => {
-        const { lists } = data;
+        const lists = data.lists.map(l => ({
+          ...l,
+          lowercase_name: l.name.toLowerCase(),
+          add: [],
+          del: []
+        }))
         console.log(`Got ${lists.length} lists from user`);
         return res.status(200).send(lists);
       })

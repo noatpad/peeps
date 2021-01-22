@@ -9,7 +9,11 @@ const members = nc()
     const { id } = req.query;
     return get(token, secret, 'lists/members', { list_id: id, count: 5000 })
       .then(({ data }) => {
-        const { users } = data;
+        const users = data.users.map(u => ({
+          ...u,
+          lowercase_name: u.name.toLowerCase(),
+          lowercase_screen_name: u.screen_name.toLowerCase()
+        }))
         console.log(`Got ${users.length} members from list ${id}`);
         return res.status(200).send(users);
       })

@@ -35,35 +35,21 @@ export const getUser = () => (
 // Get all lists owned by the user
 export const getLists = () => (
   axios.get('/lists')
-    .then(({ data }) => data.map(i => ({
-      ...i,
-      lowercase_name: i.name.toLowerCase(),
-      add: [],
-      del: []
-    })))
+    .then(({ data }) => data)
     .catch(err => console.error(err))
 )
 
 // Get all members from a given list
 export const getMembersFromList = (id) => (
   axios.get(`/lists/${id}/members`)
-    .then(({ data }) => data.map(i => ({
-      ...i,
-      lowercase_name: i.name.toLowerCase(),
-      lowercase_screen_name: i.screen_name.toLowerCase()
-    })))
+    .then(({ data }) => data)
     .catch(err => console.error(err))
 )
 
 // Create a new list
 export const addList = (list) => (
   axios.post('/lists/add', { ...list })
-    .then(({ data }) => ({
-      ...data,
-      lowercase_name: data.name.toLowerCase(),
-      add: [],
-      del: []
-    }))
+    .then(({ data }) => data)
     .catch(err => console.error(err))
 )
 

@@ -29,6 +29,7 @@ const Home = ({ auth, setAuth }) => {
   const [showClearChangesModal, setShowClearChangesModal] = useState(false);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
+  const fuseFollowingRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
   const cookies = new Cookies();
 
@@ -206,14 +207,14 @@ const Home = ({ auth, setAuth }) => {
         className="flex my-12"
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, type: 'tween', duration: 0.45, ease: 'easeOut' }}
+        transition={{ type: 'tween', ease: 'easeOut', duration: 0.45, delay: 0.3 }}
       >
         <SelectorPane
           title="Your lists"
           subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}
         >
           <ListSelector
-            fuseRef={fuseListRef}
+            fuse={fuseListRef.current}
             loading={loadingLists}
             lists={lists}
             setLists={setLists}
@@ -231,7 +232,7 @@ const Home = ({ auth, setAuth }) => {
           italic={activeListID === -1}
         >
           <MemberSelector
-            fuseRef={fuseUserRef}
+            fuse={fuseUserRef.current}
             loading={loadingUsers}
             users={users}
             adds={activeAdds !== undefined ? activeAdds.users : []}
