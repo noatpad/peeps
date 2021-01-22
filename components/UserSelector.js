@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from 'react-js-pagination';
 
+import Loading from './Loading';
 import SearchOrAddUser from './SearchOrAddUser';
 import UserItem from './UserItem';
 import { Prev, Next } from './Icons';
 
 const RESULTS_PER_PAGE = 20;
 
-const UserSelector = ({ fuseRef, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
+const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
   // TODO: Restrict adding user if reaching the maximum number of users per list (5,000)
+  // IDEA: Add a common ProfilePicture component that links to their profile
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -30,6 +32,26 @@ const UserSelector = ({ fuseRef, users, adds, dels, prepareToAddUser, unprepareT
     setPage(1);
   }, [query]);
 
+  // Helper function to pick the right click handler
+  const handleClick = (user, add, del) => {
+    if (add) {
+      unprepareToAddUser(user.id_str);
+    } else if (del) {
+      unprepareToDelUser(user.id_str);
+    } else {
+      prepareToDelUser(user);
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-full text-gray-400 italic">
+        <Loading size={50}/>
+        <p>Loading members of your list...</p>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col h-full pt-6">
       <SearchOrAddUser
@@ -40,15 +62,13 @@ const UserSelector = ({ fuseRef, users, adds, dels, prepareToAddUser, unprepareT
         prepareToAddUser={prepareToAddUser}
       />
       <div className="flex-1 px-12 overflow-scroll">
-        {pageResults.map(({ item, add, del }) => (
+        {pageResults.map(({ item: user, add, del }) => (
           <UserItem
-            key={item.id_str}
-            user={item}
+            key={user.id_str}
+            user={user}
             add={add}
             del={del}
-            unprepareToAddUser={unprepareToAddUser}
-            prepareToDelUser={prepareToDelUser}
-            unprepareToDelUser={unprepareToDelUser}
+            onClick={() => handleClick(user, add, del)}
           />
         ))}
       </div>

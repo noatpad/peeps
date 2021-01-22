@@ -1,30 +1,66 @@
 import React from 'react';
 import Image from 'next/image';
 
-const UserItem = ({ user, add, del, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
-  const { id_str, name, screen_name, profile_image_url_https } = user;
+import ItemButton from './ItemButton';
+import { Add2, Remove, Ellipsis } from './Icons';
 
-  // Pick the appropriate action upon clicking an item
-  const handleClick = () => {
-    if (add) {
-      unprepareToAddUser(id_str);
-    } else if (del) {
-      unprepareToDelUser(id_str);
-    } else {
-      prepareToDelUser(user);
-    }
-  }
+const UserItem = ({ user, add, del, onClick }) => {
+  const { name, screen_name, profile_image_url_https } = user;
 
   const pfp = profile_image_url_https.replace(/_normal.jpg/, '_bigger.jpg');
-  let itemClass = "flex items-center p-3 my-6 rounded-md shadow cursor-pointer";
+
+  let itemClass = "flex relative items-center p-3 my-6 rounded-md shadow bg-gradient-to-r from-transparent transition-all";
   if (add) {
-    itemClass += " bg-green-100";
+    itemClass += " bg-green-100 hover:to-green-200";
   } else if (del) {
-    itemClass += " bg-red-100";
+    itemClass += " bg-red-200 hover:to-red-300";
+  } else {
+    itemClass += " hover:to-red-50"
+  }
+
+  const button = () => {
+    if (add) {
+      return (
+        <ItemButton
+          onClick={onClick}
+          icon={<Add2 size={16}/>}
+          width={125}
+          bg="bg-green-400"
+          color="text-green-500"
+          hoverColor="text-white"
+          text="Cancel addition"
+          reverse
+        />
+      )
+    }
+    if (del) {
+      return (
+        <ItemButton
+          onClick={onClick}
+          icon={<Remove size={16}/>}
+          width={125}
+          bg="bg-red-400"
+          color="text-red-500"
+          hoverColor="text-white"
+          text="Cancel removal"
+          reverse
+        />
+      )
+    }
+    return (
+      <ItemButton
+        onClick={onClick}
+        icon={<Ellipsis size={16}/>}
+        width={125}
+        text="Remove member"
+        hoverColor="text-red-400"
+        reverse
+      />
+    )
   }
 
   return (
-    <div className={itemClass} onClick={handleClick}>
+    <div className={itemClass}>
       <div className="flex-initial flex items-center mr-3">
         <Image
           className="rounded-full"
@@ -37,6 +73,9 @@ const UserItem = ({ user, add, del, unprepareToAddUser, prepareToDelUser, unprep
       <div className="flex-1">
         <p className="text-lg -mb-1">{name}</p>
         <p className="text-sm text-gray-500">@{screen_name}</p>
+      </div>
+      <div className="absolute top-0 right-0 bottom-0 mr-3 flex flex-col justify-center z-10">
+        {button()}
       </div>
     </div>
   )

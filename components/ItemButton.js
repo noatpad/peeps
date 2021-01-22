@@ -1,15 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const ItemButton = ({ onClick, icon, color = 'text-gray-700', text }) => {
+const ItemButton = ({ onClick, icon, width = 100, bg = "bg-white", color = 'text-gray-700', hoverColor, text, reverse }) => {
   const textVariants = {
-    rest: { width: 0, opacity: 0, transitionEnd: { marginLeft: '0px' }},
-    hover: { width: 100, opacity: 1, marginLeft: '0.5rem' }
+    rest: { width: 0, opacity: 0, transitionEnd: { marginLeft: '0px', marginRight: '0px' }},
+    hover: { width: width, opacity: 1, marginLeft: !reverse ? '0.5rem' : '0px', marginRight: reverse ? '0.5rem' : '0px' }
   };
 
   return (
     <motion.button
-      className={`flex items-center p-1 rounded group ${color} hover:bg-white hover:shadow-md transition-all`}
+      className={`flex ${reverse ? 'flex-row-reverse' : 'flex-row'} items-center p-1 rounded group ${color} hover:${bg} hover:shadow-md ${hoverColor ? `hover:${hoverColor}` : ''} transition-all`}
       onClick={onClick}
       initial={false}
       whileHover="hover"

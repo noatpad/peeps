@@ -224,26 +224,23 @@ const Home = ({ auth, setAuth }) => {
           />
         </SelectorPane>
         <SelectorPane
-          title={activeListID === -1 ? 'List name...' : activeList.name}
-          subtitle={activeListID === -1 ? 'nothing...' : `${activeList.member_count} member${activeList.member_count !== 1 ? 's' : ''}`}
+          title={activeListID === -1 ? 'Select a list!' : activeList.name}
+          subtitle={activeListID === -1 ? 'The list members will be displayed here...' : `${activeList.member_count} member${activeList.member_count !== 1 ? 's' : ''}`}
           adds={activeAdds !== undefined ? activeAdds.users.length : 0}
           dels={activeDels !== undefined ? activeDels.users.length : 0}
+          italic={activeListID === -1}
         >
-          {activeListID !== -1 && !loadingUsers && (
-            <UserSelector
-              fuseRef={fuseUserRef}
-              users={users}
-              adds={activeAdds !== undefined ? activeAdds.users : []}
-              dels={activeDels !== undefined ? activeDels.users : []}
-              prepareToAddUser={prepareToAddUser}
-              unprepareToAddUser={unprepareToAddUser}
-              prepareToDelUser={prepareToDelUser}
-              unprepareToDelUser={unprepareToDelUser}
-            />
-          )}
-          {loadingUsers && (
-            <p>Loading...</p>
-          )}
+          <UserSelector
+            fuseRef={fuseUserRef}
+            loading={loadingUsers}
+            users={users}
+            adds={activeAdds !== undefined ? activeAdds.users : []}
+            dels={activeDels !== undefined ? activeDels.users : []}
+            prepareToAddUser={prepareToAddUser}
+            unprepareToAddUser={unprepareToAddUser}
+            prepareToDelUser={prepareToDelUser}
+            unprepareToDelUser={unprepareToDelUser}
+          />
         </SelectorPane>
       </motion.div>
       <div className="flex justify-center">

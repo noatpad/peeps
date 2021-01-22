@@ -4,6 +4,7 @@ import { LIST_NAME_LIMIT } from '@web-utils/config';
 
 import { Search, Add } from './Icons';
 
+// FM Variants
 const barVariants = {
   active: { flex: 1 },
   inactive: { flex: 0 }
@@ -41,29 +42,47 @@ const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newLi
 
   return (
     <div className="flex-initial flex items-center px-8">
-      <motion.div className={`flex items-center mx-1 border ${searchFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`} variants={barVariants} animate={searchActive ? 'active' : 'inactive'} initial={false}>
+      <motion.div
+        className={`flex items-center mx-1 border ${searchFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
+        variants={barVariants}
+        animate={searchActive ? 'active' : 'inactive'}
+        initial={false}
+      >
         <button className="p-2.5" onClick={handleClickSearch}>
           <Search size={20}/>
         </button>
-        <motion.div variants={inputWrapperVariants} animate={searchActive ? 'active' : 'inactive'} initial={false}>
+        <motion.div
+          variants={inputWrapperVariants}
+          animate={searchActive ? 'active' : 'inactive'}
+          initial={false}
+        >
           <motion.input
+            ref={searchInputRef}
+            value={query}
+            placeholder="Search for a list..."
             variants={inputVariants}
             animate={searchActive ? 'active' : 'inactive'}
             initial={false}
-            ref={searchInputRef}
-            value={query}
-            placeholder="Search for a list"
             onChange={e => setQuery(e.target.value)}
             onFocus={() => setSearchFocused(true)}
             onBlur={() => setSearchFocused(false)}
           />
         </motion.div>
       </motion.div>
-      <motion.div className={`relative flex items-center mx-1 border ${addFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`} variants={barVariants} animate={!searchActive ? 'active' : 'inactive'} initial={false}>
+      <motion.div
+        className={`relative flex items-center mx-1 border ${addFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
+        variants={barVariants}
+        animate={!searchActive ? 'active' : 'inactive'}
+        initial={false}
+      >
         <button className="p-2" onClick={handleClickAdd}>
           <Add size={24}/>
         </button>
-        <motion.div variants={inputWrapperVariants} animate={!searchActive ? 'active' : 'inactive'} initial={false}>
+        <motion.div
+          variants={inputWrapperVariants}
+          animate={!searchActive ? 'active' : 'inactive'}
+          initial={false}
+        >
           <motion.input
             variants={inputVariants}
             animate={!searchActive ? 'active' : 'inactive'}

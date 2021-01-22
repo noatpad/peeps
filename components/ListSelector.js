@@ -141,6 +141,7 @@ const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, de
     )
   }
 
+  // Loading screen
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-full text-gray-400 italic">
