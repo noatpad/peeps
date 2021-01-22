@@ -1,9 +1,10 @@
-import React, { useState, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 import { search } from '@web-utils/api';
+import { MEMBER_COUNT_LIMIT } from '@web-utils/config';
 
 import { Search, Add } from './Icons';
 import Loading from './Loading';
@@ -24,9 +25,14 @@ const inputVariants = {
   inactive: { width: 0 }
 };
 
+const warningVariants = {
+  active: { opacity: 1, transition: { opacity: { delay: 0.3 }}},
+  inactive: { opacity: 0 }
+}
+
 // Component for suggestion rendering
 const renderSuggestion = ({ name, screen_name, profile_image_url_https }) => (
-  <div className="flex items-center p-2 mx-2">
+  <div className="flex items-center p-2 mx-2 cursor-pointer">
     <div className="flex-initial flex items-center mr-3">
       <Image
         className="rounded-full"
@@ -43,7 +49,7 @@ const renderSuggestion = ({ name, screen_name, profile_image_url_https }) => (
   </div>
 )
 
-const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepareToAddUser }) => {
+const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepareToAddUser, limitReached }) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
   const [addQuery, setAddQuery] = useState('');
@@ -51,6 +57,12 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepa
   const [loadingSearch, setLoadingSearch] = useState(false);
   const searchInputRef = useRef();
   const addInputRef = useRef();
+
+  // Unfocus from input when reaching the member limit
+  useEffect(() => {
+    if (!limitReached) { return }
+    setAddFocused(false);
+  }, [limitReached]);
 
   // Handler for clicking the search button
   const handleClickSearch = () => {
@@ -112,7 +124,7 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepa
         </motion.div>
       </motion.div>
       <motion.div
-        className={`relative flex items-center mx-1 border ${addFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
+        className={`relative flex items-center border ${addFocused ? 'border-blue-400' : 'border-gray-300'} mx-1 ${limitReached ? 'bg-gray-100' : ''} rounded-full transition-colors`}
         variants={barVariants}
         animate={!searchActive ? 'active' : 'inactive'}
         initial={false}
@@ -130,7 +142,8 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepa
             inputProps={{
               value: addQuery,
               ref: addInputRef,
-              placeholder: 'Who do you wanna add?',
+              placeholder: 'Who do you wanna add to the list?',
+              disabled: limitReached,
               variants: inputVariants,
               animate: !searchActive ? 'active' : 'inactive',
               initial: false,
@@ -155,14 +168,27 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepa
             )}
             renderSuggestion={renderSuggestion}
             theme={{
-              container: "relative flex flex-1",
-              input: searchActive ? "w-0" : "flex-1 mr-3",
-              suggestionsContainer: "absolute top-full left-0 right-0 mt-2 mr-4 rounded-b-lg bg-white shadow-md z-20",
+              container: "flex flex-1",
+              input: `${searchActive ? "w-0" : "flex-1 mr-3"} disabled:bg-transparent`,
+              suggestionsContainer: "absolute top-full left-0 right-0 ml-8 mr-4 rounded-b-lg bg-white shadow-md z-20",
               suggestionsList: "divide-y divide-gray-300",
               suggestionHighlighted: "bg-green-100"
             }}
           />
         </motion.div>
+        <AnimatePresence>
+          {limitReached && !searchActive && (
+            <motion.p
+              className="absolute top-full left-0 right-0 text-center text-sm text-red-400"
+              variants={warningVariants}
+              initial='inactive'
+              animate='active'
+              exit='inactive'
+            >
+              You&apos;ve reached your limit of {MEMBER_COUNT_LIMIT} members!
+            </motion.p>
+          )}
+        </AnimatePresence>
       </motion.div>
     </div>
   )

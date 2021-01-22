@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from 'react-js-pagination';
+import { MEMBERS_PER_PAGE, MEMBER_COUNT_LIMIT } from '@web-utils/config';
 
 import Loading from './Loading';
 import SearchOrAddUser from './SearchOrAddUser';
 import UserItem from './UserItem';
 import { Prev, Next } from './Icons';
 
-const RESULTS_PER_PAGE = 20;
-
 const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
-  // TODO: Restrict adding user if reaching the maximum number of users per list (5,000)
   // IDEA: Add a common ProfilePicture component that links to their profile
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
+  const [limitReached, setLimitReached] = useState(false);
 
   // Fuzzy search list and pagination
   let searchResults = query ? fuseRef.current.search(query.toLowerCase()) : users.map(l => ({ item: l }));
@@ -23,14 +22,19 @@ const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, u
     searchResults[delIndex].del = true;
   })
   searchResults = [...adds.map(a => ({ item: a, add: true })), ...searchResults];
-  const offset = (page - 1) * RESULTS_PER_PAGE;
-  const pageResults = searchResults.slice(offset, offset + RESULTS_PER_PAGE);
+  const offset = (page - 1) * MEMBERS_PER_PAGE;
+  const pageResults = searchResults.slice(offset, offset + MEMBERS_PER_PAGE);
 
   // Go back to the start page when searching
   useEffect(() => {
     if (page === 1) { return }
     setPage(1);
   }, [query]);
+
+  // Check if member count limit has been reached for a given list
+  useEffect(() => {
+    setLimitReached((users.length + adds.length - dels.length) >= MEMBER_COUNT_LIMIT);
+  }, [adds.length, dels.length]);
 
   // Helper function to pick the right click handler
   const handleClick = (user, add, del) => {
@@ -60,23 +64,25 @@ const UserSelector = ({ fuseRef, loading, users, adds, dels, prepareToAddUser, u
         searchActive={searchActive}
         setSearchActive={setSearchActive}
         prepareToAddUser={prepareToAddUser}
+        limitReached={limitReached}
       />
       <div className="flex-1 px-12 overflow-scroll">
         {pageResults.map(({ item: user, add, del }) => (
           <UserItem
             key={user.id_str}
+            onClick={() => handleClick(user, add, del)}
             user={user}
             add={add}
             del={del}
-            onClick={() => handleClick(user, add, del)}
+            limitReached={limitReached}
           />
         ))}
       </div>
-      {searchResults.length > RESULTS_PER_PAGE && (
+      {searchResults.length > MEMBERS_PER_PAGE && (
         <div className="flex-initial flex justify-center items-center my-2">
           <Pagination
             totalItemsCount={searchResults.length}
-            itemsCountPerPage={RESULTS_PER_PAGE}
+            itemsCountPerPage={MEMBERS_PER_PAGE}
             onChange={(selected) => setPage(selected)}
             activePage={page}
             pageRangeDisplayed={5}

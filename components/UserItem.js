@@ -4,7 +4,7 @@ import Image from 'next/image';
 import ItemButton from './ItemButton';
 import { Add2, Remove, Ellipsis } from './Icons';
 
-const UserItem = ({ user, add, del, onClick }) => {
+const UserItem = ({ onClick, user, add, del, limitReached }) => {
   const { name, screen_name, profile_image_url_https } = user;
 
   const pfp = profile_image_url_https.replace(/_normal.jpg/, '_bigger.jpg');
@@ -19,7 +19,7 @@ const UserItem = ({ user, add, del, onClick }) => {
   }
 
   const button = () => {
-    let icon, bg, color, hoverColor, text;
+    let icon, bg, color, hoverColor, text, disabled = false;
 
     if (add) {
       icon = <Add2 size={16}/>;
@@ -33,6 +33,7 @@ const UserItem = ({ user, add, del, onClick }) => {
       color = "text-red-500";
       hoverColor = "text-white";
       text = "Cancel removal";
+      disabled = limitReached;
     } else {
       icon = <Ellipsis size={16}/>;
       bg = "bg-white";
@@ -50,6 +51,7 @@ const UserItem = ({ user, add, del, onClick }) => {
         color={color}
         hoverColor={hoverColor}
         text={text}
+        disabled={disabled}
         reverse
       />
     )

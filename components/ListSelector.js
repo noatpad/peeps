@@ -3,7 +3,7 @@ import Pagination from 'react-js-pagination';
 import { AnimatePresence } from 'framer-motion';
 import { addList, deleteList } from '@web-utils/api';
 import { sortLists } from '@web-utils/helpers';
-import { LIST_COUNT_LIMIT, LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT, RESULTS_PER_PAGE } from '@web-utils/config';
+import { LIST_COUNT_LIMIT, LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT, LISTS_PER_PAGE } from '@web-utils/config';
 
 import SearchOrAddList from './SearchOrAddList';
 import AddListCard from './AddListCard';
@@ -24,8 +24,8 @@ const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, de
 
   // Fuzzy search list and pagination
   const searchResults = query ? fuseRef.current.search(query.toLowerCase()) : lists.map(l => ({ item: l }));
-  const offset = (page - 1) * RESULTS_PER_PAGE;
-  const pageResults = searchResults.slice(offset, offset + RESULTS_PER_PAGE);
+  const offset = (page - 1) * LISTS_PER_PAGE;
+  const pageResults = searchResults.slice(offset, offset + LISTS_PER_PAGE);
 
   // Go back to the start page when searching
   useEffect(() => {
@@ -35,7 +35,7 @@ const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, de
 
   // Go back a page if you delete a list and are stuck in an empty page
   useEffect(() => {
-    if (page > 1 && page * RESULTS_PER_PAGE > searchResults.length) {
+    if (page > 1 && page * LISTS_PER_PAGE > searchResults.length) {
       setPage(page - 1);
     }
   }, [lists]);
@@ -176,11 +176,11 @@ const ListSelector = ({ fuseRef, loading, lists, setLists, activeListID, add, de
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
         {results()}
       </div>
-      {searchResults.length > RESULTS_PER_PAGE && (
+      {searchResults.length > LISTS_PER_PAGE && (
         <div className="flex-initial flex justify-center items-center mb-4">
           <Pagination
             totalItemsCount={searchResults.length}
-            itemsCountPerPage={RESULTS_PER_PAGE}
+            itemsCountPerPage={LISTS_PER_PAGE}
             onChange={(selected) => setPage(selected)}
             activePage={page}
             pageRangeDisplayed={5}

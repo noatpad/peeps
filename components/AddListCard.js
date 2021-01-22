@@ -60,7 +60,7 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus,
         </Button>
       </div>
       {tooManyLists && (
-        <p className="text-center text-sm text-red-400">You can&apos;t create a new list, since you can only have up to {LIST_COUNT_LIMIT} lists!</p>
+        <p className="text-center text-sm text-red-400">You&apos;ve reached your limit of {LIST_COUNT_LIMIT} lists!</p>
       )}
     </motion.div>
   )
