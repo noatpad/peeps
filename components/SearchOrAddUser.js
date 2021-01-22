@@ -6,6 +6,7 @@ import debounce from 'lodash/debounce';
 import { search } from '@web-utils/api';
 
 import { Search, Add } from './Icons';
+import Loading from './Loading';
 
 // FM Variants
 const barVariants = {
@@ -140,16 +141,25 @@ const SearchOrAddUser = ({ query, setQuery, searchActive, setSearchActive, prepa
             onSuggestionsFetchRequested={({ value }) => debounceFetchSuggestions(value)}
             onSuggestionsClearRequested={() => setAddResults([])}
             onSuggestionSelected={handleSelected}
-            getSuggestionValue={(item) => item.name}
+            getSuggestionValue={() => addQuery}
             shouldRenderSuggestions={(val) => val.trim().length >= 2}
-            renderInputComponent={(props) => <motion.input {...props}/>}
+            renderInputComponent={(props) => (
+              <div className={`relative w-full ${searchActive ? '' : 'pr-8'}`}>
+                <motion.input {...props}/>
+                {loadingSearch && (
+                  <div className="absolute top-0 right-0 bottom-0">
+                    <Loading size={24}/>
+                  </div>
+                )}
+              </div>
+            )}
             renderSuggestion={renderSuggestion}
             theme={{
               container: "relative flex flex-1",
-              input: searchActive ? "w-0 ml-0 mr-0" : "flex-1 ml-1 mr-3",
-              suggestionsContainer: "absolute top-full left-0 right-0 mt-2 mr-4 rounded-b-lg bg-white shadow",
+              input: searchActive ? "w-0" : "flex-1 mr-3",
+              suggestionsContainer: "absolute top-full left-0 right-0 mt-2 mr-4 rounded-b-lg bg-white shadow-md z-20",
               suggestionsList: "divide-y divide-gray-300",
-              suggestionHighlighted: "bg-blue-100"
+              suggestionHighlighted: "bg-green-100"
             }}
           />
         </motion.div>
