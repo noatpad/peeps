@@ -33,7 +33,7 @@ const MemberItem = ({ onClick, user, add, del, limitReached }) => {
     } else {
       icon = <Ellipsis size={16}/>;
       bg = "bg-white";
-      color = false;
+      color = "text-gray-600"
       hoverColor = "text-red-400";
       text = "Remove member";
     }

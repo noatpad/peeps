@@ -25,6 +25,7 @@ const NormalView = ({ item, add, del, setEditMode, handleDeleteModal }) => {
         <ItemButton
           onClick={handleEditClick}
           icon={<Edit size={16}/>}
+          color="text-gray-600"
           text="Edit list info"
         />
         <ItemButton
