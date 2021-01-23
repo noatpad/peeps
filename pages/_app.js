@@ -10,6 +10,7 @@ import Footer from '@components/Footer';
 Modal.setAppElement('#__next');
 
 const App = ({ Component, pageProps }) => {
+  // TODO: Responsive design
   // TODO: Code cleanup
   // TODO: Optimization with useMemo() and shortened API requests/responses
   // TODO: Use next-seo for SEO

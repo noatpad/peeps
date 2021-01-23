@@ -9,11 +9,9 @@ const MemberItem = ({ onClick, user, add, del, limitReached }) => {
 
   let itemClass = "flex relative items-center p-3 my-6 rounded-md shadow bg-gradient-to-r from-transparent transition-all";
   if (add) {
-    itemClass += " bg-green-100 hover:to-green-200";
+    itemClass += " bg-green-100";
   } else if (del) {
-    itemClass += " bg-red-200 hover:to-red-300";
-  } else {
-    itemClass += " hover:to-red-50"
+    itemClass += " bg-red-200";
   }
 
   const button = () => {
