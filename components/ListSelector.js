@@ -111,6 +111,7 @@ const ListSelector = ({ fuse, loading, lists, setLists, activeListID, add, del, 
 
   // Sub-component for results
   const results = () => {
+    // When user has no lists
     if (!lists.length) {
       return (
         <div className="flex flex-col items-center justify-center h-full text-gray-400 italic">
@@ -120,6 +121,7 @@ const ListSelector = ({ fuse, loading, lists, setLists, activeListID, add, del, 
       )
     }
 
+    // When no list could be found through a search query
     if (!searchResults.length) {
       return (
         <div className="flex flex-col items-center justify-center h-full text-gray-400 italic">
@@ -128,20 +130,20 @@ const ListSelector = ({ fuse, loading, lists, setLists, activeListID, add, del, 
         </div>
       )
     }
-    return (
-      pageResults.map(({ item }) => (
-        <ListItem
-          key={item.id_str}
-          item={item}
-          active={activeListID === item.id_str}
-          add={countAdditions(item.id_str)}
-          del={countDeletions(item.id_str)}
-          selectList={selectList}
-          updateSingleList={updateSingleList}
-          handleDeleteModal={handleDeleteModal}
-        />
-      ))
-    )
+
+    // Display all of the user's lists
+    return pageResults.map(({ item }) => (
+      <ListItem
+        key={item.id_str}
+        item={item}
+        active={activeListID === item.id_str}
+        add={countAdditions(item.id_str)}
+        del={countDeletions(item.id_str)}
+        selectList={selectList}
+        updateSingleList={updateSingleList}
+        handleDeleteModal={handleDeleteModal}
+      />
+    ))
   }
 
   // Loading screen

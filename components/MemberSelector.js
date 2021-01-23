@@ -7,7 +7,7 @@ import SearchOrAddMember from './SearchOrAddMember';
 import MemberItem from './MemberItem';
 import { Prev, Next } from './Icons';
 
-const MemberSelector = ({ fuse, following, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
+const MemberSelector = ({ fuse, following, inactive, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -56,6 +56,52 @@ const MemberSelector = ({ fuse, following, loading, users, adds, dels, prepareTo
     }
   }
 
+  // Sub-component for results
+  const results = () => {
+    // When the list has no members or soon-to-be-added members
+    if (!users.length && !searchResults.length) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-gray-400 italic">
+          <h4 className="text-2xl">There are no members in this list!</h4>
+          <p>Why not add one to it?</p>
+        </div>
+      )
+    }
+
+    // When no member could be found through a search query
+    if (!searchResults.length) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full text-gray-400 italic">
+          <h4 className="text-2xl">Couldn&apos;t find any members!</h4>
+          <p>Maybe a typo?</p>
+        </div>
+      )
+    }
+
+    // Display all members of the selected list
+    return pageResults.map(({ item: user, add, del }) => (
+      <MemberItem
+        key={user.id_str}
+        onClick={() => handleItemClick(user, add, del)}
+        user={user}
+        add={add}
+        del={del}
+        limitReached={limitReached}
+      />
+    ))
+  }
+
+  // Display when no list is selected
+  if (inactive) {
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-gray-400 italic">
+        <h4 className="text-2xl">No list selected.</h4>
+        <p>On standby though...</p>
+      </div>
+    )
+  }
+
+  // Loading screen
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-full text-gray-400 italic">
@@ -77,20 +123,10 @@ const MemberSelector = ({ fuse, following, loading, users, adds, dels, prepareTo
         adds={adds}
         dels={dels}
         handleSuggestionClick={handleSuggestionClick}
-        // prepareToAddUser={prepareToAddUser}
         limitReached={limitReached}
       />
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
-        {pageResults.map(({ item: user, add, del }) => (
-          <MemberItem
-            key={user.id_str}
-            onClick={() => handleItemClick(user, add, del)}
-            user={user}
-            add={add}
-            del={del}
-            limitReached={limitReached}
-          />
-        ))}
+        {results()}
       </div>
       {searchResults.length > MEMBERS_PER_PAGE && (
         <div className="flex-initial flex justify-center items-center mb-4">

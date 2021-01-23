@@ -239,6 +239,7 @@ const Home = ({ auth, setAuth }) => {
           <MemberSelector
             fuse={fuseMemberRef.current}
             following={userData.following}
+            inactive={activeListID === -1}
             loading={loadingUsers}
             users={users}
             adds={activeAdds !== undefined ? activeAdds.users : []}
