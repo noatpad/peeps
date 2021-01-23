@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import Modal from './index';
 import Button from '@components/Button';
+import { numberNoun } from '@web-utils/helpers';
 
 const ApplyChangesModal = ({ show, close, applyChanges, add, del }) => {
   // TODO: Style modal better
@@ -18,10 +19,10 @@ const ApplyChangesModal = ({ show, close, applyChanges, add, del }) => {
       <h3 className="text-3xl text-center font-bold mb-4 mx-4">Are you sure you wanna apply these changes?</h3>
       <ul>
         {add.map(({ id, name, users }) => (
-          <li key={id}>Add {users.length} member{users.length !== 1 ? 's' : ''} to the <b>{name}</b> list</li>
+          <li key={id}>Add {numberNoun(users.length, "member")} to the <b>{name}</b> list</li>
         ))}
         {del.map(({ id, name, users }) => (
-          <li key={id}>Delete {users.length} member{users.length !== 1 ? 's' : ''} to the <b>{name}</b> list</li>
+          <li key={id}>Delete {numberNoun(users.length, "member")} to the <b>{name}</b> list</li>
         ))}
       </ul>
       <div className="flex justify-center items-center">

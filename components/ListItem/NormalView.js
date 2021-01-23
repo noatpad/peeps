@@ -1,4 +1,5 @@
 import React from 'react';
+import { numberNoun } from '@web-utils/helpers';
 
 import ItemButton from '@components/ItemButton';
 import { Remove, Edit, Lock, Next } from '@components/Icons';
@@ -38,7 +39,7 @@ const NormalView = ({ item, add, del, setEditMode, handleDeleteModal }) => {
           {mode === 'private' && <div className="mr-1"><Lock size={16}/></div>}
           <p className="text-lg">{name}</p>
         </div>
-        <p className="text-sm text-gray-500 -mt-1">{member_count} member{member_count !== 1 ? 's' : ''}</p>
+        <p className="text-sm text-gray-500 -mt-1">{numberNoun(member_count, "member")}</p>
       </div>
       <div className="flex-initial flex flex-col items-end justify-center">
         {add > 0 && (

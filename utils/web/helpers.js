@@ -1,3 +1,4 @@
+// TODO: Remove unnecessary helpers
 // Custom compare function for sorting lists
 const listSortCompare = (a, b) => {
   const a_name = a.name.toLowerCase();
@@ -24,3 +25,6 @@ export const sortUsers = (users) => users.sort(userSortCompare);
 
 // Constructor for an object to be stored in the `add` or `del` state
 export const changeObj = (id, name) => ({ id, name, users: [] });
+
+// Helper to output a string of a number & a quantifiable noun
+export const numberNoun = (num, noun, plural = `${noun}s`) => `${num} ${num === 1 ? noun : plural}`;

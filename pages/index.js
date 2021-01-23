@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
 import { getUser, getLists, getMembersFromList, applyChanges } from '@web-utils/api';
-import { sortLists, sortUsers, userSortCompare, changeObj } from '@web-utils/helpers';
+import { sortLists, sortUsers, userSortCompare, changeObj, numberNoun } from '@web-utils/helpers';
 
 import Title from '@components/Title';
 import Loading from '@components/Loading';
@@ -216,7 +216,7 @@ const Home = ({ auth, setAuth }) => {
       >
         <SelectorPane
           title="Your lists"
-          subtitle={`${lists.length} list${lists.length !== 1 ? 's' : ''}`}
+          subtitle={numberNoun(lists.length, "list")}
         >
           <ListSelector
             fuse={fuseListRef.current}
@@ -231,7 +231,7 @@ const Home = ({ auth, setAuth }) => {
         </SelectorPane>
         <SelectorPane
           title={activeListID === -1 ? 'Select a list!' : activeList.name}
-          subtitle={activeListID === -1 ? 'The list members will be displayed here...' : `${activeList.member_count} member${activeList.member_count !== 1 ? 's' : ''}`}
+          subtitle={activeListID === -1 ? 'The list members will be displayed here...' : numberNoun(activeList.member_count, "member")}
           adds={activeAdds !== undefined ? activeAdds.users.length : 0}
           dels={activeDels !== undefined ? activeDels.users.length : 0}
           italic={activeListID === -1}
