@@ -4,6 +4,7 @@ import Modal from './index';
 import Button from '@components/Button';
 
 const ApplyChangesModal = ({ show, close, applyChanges, add, del }) => {
+  // TODO: Style modal better
   const [disableApplyButton, setDisableApplyButton] = useState(true);
 
   useEffect(() => {

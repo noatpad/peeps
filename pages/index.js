@@ -17,7 +17,7 @@ import ClearChangesModal from '@components/Modal/ClearChangesModal';
 
 const Home = ({ auth, setAuth }) => {
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({ user: {}, following: [] });
   const [lists, setLists] = useState([]);
   const [loadingLists, setLoadingLists] = useState(false);
   const [activeListID, setActiveListID] = useState(-1);
@@ -28,8 +28,8 @@ const Home = ({ auth, setAuth }) => {
   const [showApplyChangesModal, setShowApplyChangesModal] = useState(false);
   const [showClearChangesModal, setShowClearChangesModal] = useState(false);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
-  const fuseUserRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
-  const fuseFollowingRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
+  const fuseMemberRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
+  // const fuseFollowingRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
   const cookies = new Cookies();
 
@@ -69,9 +69,9 @@ const Home = ({ auth, setAuth }) => {
     fuseListRef.current.setCollection(lists);
   }, [lists]);
 
-  // Update fuse searching for users when users are updated
+  // Update fuse searching for members when members are updated
   useEffect(() => {
-    fuseUserRef.current.setCollection(users);
+    fuseMemberRef.current.setCollection(users);
   }, [users]);
 
   // Get all owned lists when authenticated
@@ -236,7 +236,8 @@ const Home = ({ auth, setAuth }) => {
           italic={activeListID === -1}
         >
           <MemberSelector
-            fuse={fuseUserRef.current}
+            fuse={fuseMemberRef.current}
+            following={userData.following}
             loading={loadingUsers}
             users={users}
             adds={activeAdds !== undefined ? activeAdds.users : []}

@@ -9,8 +9,13 @@ const search = nc()
     const { q } = req.query;
     return get(token, secret, 'users/search', { q, count: 5 })
       .then(({ data }) => {
+        const users = data.map(u => ({
+          ...u,
+          lowercase_name: u.name.toLowerCase(),
+          lowercase_screen_name: u.screen_name.toLowerCase()
+        }))
         console.log(`Got search results of "${q}"`);
-        return res.status(200).send(data);
+        return res.status(200).send(users);
       })
       .catch(err => {
         console.error("Error getting search results", err);

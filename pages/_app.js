@@ -10,6 +10,8 @@ import Footer from '@components/Footer';
 Modal.setAppElement('#__next');
 
 const App = ({ Component, pageProps }) => {
+  // TODO: Code cleanup
+  // TODO: Optimization with useMemo() and shortened API requests/responses
   // TODO: Use next-seo for SEO
   // If tokens are available in cookies, use that instead of authenticating again
   const [auth, setAuth] = useState(false);

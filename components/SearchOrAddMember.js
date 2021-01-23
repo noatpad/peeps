@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Fuse from 'fuse.js';
 import Image from 'next/image';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 import { search } from '@web-utils/api';
-import { MEMBER_COUNT_LIMIT } from '@web-utils/config';
+import { MEMBER_SUGGESTION_COUNT, MEMBER_COUNT_LIMIT } from '@web-utils/config';
 
 import { Search, Add } from './Icons';
 import Loading from './Loading';
@@ -49,14 +50,24 @@ const renderSuggestion = ({ name, screen_name, profile_image_url_https }) => (
   </div>
 )
 
-const SearchOrAddMember = ({ query, setQuery, searchActive, setSearchActive, prepareToAddUser, limitReached }) => {
+const SearchOrAddMember = ({ following, query, setQuery, searchActive, setSearchActive, prepareToAddUser, limitReached }) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
   const [addQuery, setAddQuery] = useState('');
   const [addResults, setAddResults] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
+  const fuseRef = useRef(new Fuse([], {
+    keys: ['lowercase_name', 'lowercase_screen_name'],
+    threshold: 0.3,
+    includeScore: true, ignoreLocation: true, ignoreFieldNorm: true
+  }));
   const searchInputRef = useRef();
   const addInputRef = useRef();
+
+  // Update fuse searching upon getting following list
+  useEffect(() => {
+    fuseRef.current.setCollection(following);
+  }, [following]);
 
   // Unfocus from input when reaching the member limit
   useEffect(() => {
@@ -80,16 +91,28 @@ const SearchOrAddMember = ({ query, setQuery, searchActive, setSearchActive, pre
   const debounceFetchSuggestions = useCallback(
     debounce((value) => {
       setLoadingSearch(true);
+
+      const results = fuseRef.current
+        .search(value.toLowerCase())
+        .map(r => r.item);
+
+      if (results.length >= MEMBER_SUGGESTION_COUNT) {
+        setAddResults(results.slice(0, MEMBER_SUGGESTION_COUNT));
+        setLoadingSearch(false);
+        return;
+      }
+
       search(value)
-        .then(data => {
-          setAddResults(data);
+        .then(users => {
+          const queryResults = users.filter(u => results.every(r => u.id_str !== r.id_str));
+          setAddResults([...results, ...queryResults].slice(0, MEMBER_SUGGESTION_COUNT));
           setLoadingSearch(false);
         })
     }, 400)
   , []);
 
   // Handler for selecting a suggestion
-  const handleSelected = (e, { suggestion }) => {
+  const handleSelected = (_, { suggestion }) => {
     prepareToAddUser(suggestion);
     setAddQuery('');
   }
@@ -147,7 +170,7 @@ const SearchOrAddMember = ({ query, setQuery, searchActive, setSearchActive, pre
               variants: inputVariants,
               animate: !searchActive ? 'active' : 'inactive',
               initial: false,
-              onChange: (e, { newValue }) => setAddQuery(newValue),
+              onChange: (_, { newValue }) => setAddQuery(newValue),
               onFocus: () => setAddFocused(true),
               onBlur: () => setAddFocused(false)
             }}

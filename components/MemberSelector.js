@@ -7,7 +7,7 @@ import SearchOrAddMember from './SearchOrAddMember';
 import MemberItem from './MemberItem';
 import { Prev, Next } from './Icons';
 
-const MemberSelector = ({ fuse, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
+const MemberSelector = ({ fuse, following, loading, users, adds, dels, prepareToAddUser, unprepareToAddUser, prepareToDelUser, unprepareToDelUser }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
@@ -58,6 +58,7 @@ const MemberSelector = ({ fuse, loading, users, adds, dels, prepareToAddUser, un
   return (
     <div className="flex flex-col h-full pt-6">
       <SearchOrAddMember
+        following={following}
         query={query}
         setQuery={setQuery}
         searchActive={searchActive}
