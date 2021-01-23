@@ -98,6 +98,7 @@ const Home = ({ auth, setAuth }) => {
 
   // Select a list
   const selectList = (id_str) => {
+    setLoadingUsers(true);
     setActiveListID(id_str);
   }
 
