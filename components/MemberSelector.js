@@ -35,8 +35,18 @@ const MemberSelector = ({ fuse, following, loading, users, adds, dels, prepareTo
     setLimitReached((users.length + adds.length - dels.length) >= MEMBER_COUNT_LIMIT);
   }, [adds.length, dels.length]);
 
-  // Helper function to pick the right click handler
-  const handleClick = (user, add, del) => {
+  // Helper function to pick the right handler for selecting a suggestion
+  const handleSuggestionClick = (user, aboutToDelete, alreadyAdded) => {
+    if (alreadyAdded) { return }
+    if (aboutToDelete) {
+      unprepareToDelUser(user.id_str);
+    } else {
+      prepareToAddUser(user);
+    }
+  }
+
+  // Helper function to pick the right handler for selecting an item
+  const handleItemClick = (user, add, del) => {
     if (add) {
       unprepareToAddUser(user.id_str);
     } else if (del) {
@@ -59,18 +69,22 @@ const MemberSelector = ({ fuse, following, loading, users, adds, dels, prepareTo
     <div className="flex flex-col h-full pt-6">
       <SearchOrAddMember
         following={following}
+        users={users}
         query={query}
         setQuery={setQuery}
         searchActive={searchActive}
         setSearchActive={setSearchActive}
-        prepareToAddUser={prepareToAddUser}
+        adds={adds}
+        dels={dels}
+        handleSuggestionClick={handleSuggestionClick}
+        // prepareToAddUser={prepareToAddUser}
         limitReached={limitReached}
       />
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
         {pageResults.map(({ item: user, add, del }) => (
           <MemberItem
             key={user.id_str}
-            onClick={() => handleClick(user, add, del)}
+            onClick={() => handleItemClick(user, add, del)}
             user={user}
             add={add}
             del={del}

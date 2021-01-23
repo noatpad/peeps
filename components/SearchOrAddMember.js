@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Fuse from 'fuse.js';
-import Image from 'next/image';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 import { search } from '@web-utils/api';
 import { MEMBER_SUGGESTION_COUNT, MEMBER_COUNT_LIMIT } from '@web-utils/config';
 
-import { Search, Add } from './Icons';
+import { Search, Add, Add2, Remove } from './Icons';
 import Loading from './Loading';
+import ProfilePicture from './ProfilePicture';
 
 // FM Variants
 const barVariants = {
@@ -31,26 +31,7 @@ const warningVariants = {
   inactive: { opacity: 0 }
 }
 
-// Component for suggestion rendering
-const renderSuggestion = ({ name, screen_name, profile_image_url_https }) => (
-  <div className="flex items-center p-2 mx-2 cursor-pointer">
-    <div className="flex-initial flex items-center mr-3">
-      <Image
-        className="rounded-full"
-        src={profile_image_url_https}
-        alt={`${name}'s profile picture`}
-        height={36}
-        width={36}
-      />
-    </div>
-    <div className="flex-1">
-      <p className="text-md -mb-1.5">{name}</p>
-      <p className="text-sm text-gray-500">@{screen_name}</p>
-    </div>
-  </div>
-)
-
-const SearchOrAddMember = ({ following, query, setQuery, searchActive, setSearchActive, prepareToAddUser, limitReached }) => {
+const SearchOrAddMember = ({ following, users, query, setQuery, searchActive, setSearchActive, adds, dels, handleSuggestionClick, limitReached }) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
   const [addQuery, setAddQuery] = useState('');
@@ -74,6 +55,13 @@ const SearchOrAddMember = ({ following, query, setQuery, searchActive, setSearch
     if (!limitReached) { return }
     setAddFocused(false);
   }, [limitReached]);
+
+  // Helper function to get the add/del status of a suggestion
+  const getSuggestionStatus = ({ id_str }) => {
+    const aboutToDelete = dels.some(d => d.id_str === id_str);
+    const alreadyAdded = !aboutToDelete && (adds.some(a => a.id_str === id_str) || users.some(u => u.id_str === id_str));
+    return [aboutToDelete, alreadyAdded];
+  }
 
   // Handler for clicking the search button
   const handleClickSearch = () => {
@@ -113,8 +101,48 @@ const SearchOrAddMember = ({ following, query, setQuery, searchActive, setSearch
 
   // Handler for selecting a suggestion
   const handleSelected = (_, { suggestion }) => {
-    prepareToAddUser(suggestion);
+    const [aboutToDelete, alreadyAdded] = getSuggestionStatus(suggestion);
+    handleSuggestionClick(suggestion, aboutToDelete, alreadyAdded);
     setAddQuery('');
+  }
+
+  // Sub-component for suggestion rendering
+  const renderSuggestion = (user, { isHighlighted }) => {
+    const { name, screen_name } = user;
+    const [aboutToDelete, alreadyAdded] = getSuggestionStatus(user);
+
+    let suggestionClass = "flex items-center px-4 py-2 cursor-pointer";
+    if (aboutToDelete) {
+      suggestionClass += isHighlighted ? ' bg-red-200' : ' bg-red-50';
+    } else if (alreadyAdded) {
+      suggestionClass += isHighlighted ? ' bg-green-200' : ' bg-green-50';
+    } else {
+      suggestionClass += isHighlighted ? ' bg-blue-100' : '';
+    }
+    suggestionClass += ' transition-colors';
+
+    return (
+      <div className={suggestionClass}>
+        <div className="flex-initial flex items-center mr-3">
+          <ProfilePicture
+            user={user}
+            size={36}
+            bigger
+            noAnchor
+          />
+        </div>
+        <div className="flex-1">
+          <p className="text-md -mb-1.5">{name}</p>
+          <p className="text-sm text-gray-500">@{screen_name}</p>
+        </div>
+        {alreadyAdded && (
+          <div className="text-green-500 ml-3"><Add2 size={16}/></div>
+        )}
+        {aboutToDelete && (
+          <div className="text-red-500 ml-3"><Remove size={16}/></div>
+        )}
+      </div>
+    )
   }
 
   return (
@@ -195,7 +223,6 @@ const SearchOrAddMember = ({ following, query, setQuery, searchActive, setSearch
               input: `${searchActive ? "w-0" : "flex-1 mr-3"} disabled:bg-transparent`,
               suggestionsContainer: "absolute top-full left-0 right-0 ml-8 mr-4 rounded-b-lg bg-white shadow-md z-20",
               suggestionsList: "divide-y divide-gray-300",
-              suggestionHighlighted: "bg-green-100"
             }}
           />
         </motion.div>
