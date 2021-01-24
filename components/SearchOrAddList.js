@@ -1,7 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { LIST_NAME_LIMIT } from '@web-utils/config';
 
+import AddListCard from './AddListCard';
 import { Search, Add } from './Icons';
 
 // FM Variants
@@ -20,9 +21,12 @@ const inputVariants = {
   inactive: { width: 0 }
 };
 
-const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newList, setNewList }) => {
+const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList }) => {
+  const [searchActive, setSearchActive] = useState(true);
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
+  const [newListName, setNewListName] = useState('');
+  // const [newList, setNewList] = useState({ name: '', description: '', mode_private: true });
   const searchInputRef = useRef();
   const addInputRef = useRef();
 
@@ -38,68 +42,86 @@ const SearchOrAddList = ({ query, setQuery, searchActive, setSearchActive, newLi
     addInputRef.current.focus();
   }
 
-  const validTitle = newList.name.length > 0 && newList.name.length <= LIST_NAME_LIMIT;
+  // Handler for adding a new list (2/3)
+  const handleAddList = (list) => {
+    setNewListName('');
+    _handleAddList(list);
+  }
+
+  const validName = newListName.length > 0 && newListName.length <= LIST_NAME_LIMIT;
 
   return (
-    <div className="flex-initial flex items-center px-8">
-      <motion.div
-        className={`flex items-center mx-1 border ${searchFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
-        variants={barVariants}
-        animate={searchActive ? 'active' : 'inactive'}
-        initial={false}
-      >
-        <button className="p-2.5" onClick={handleClickSearch}>
-          <Search size={20}/>
-        </button>
+    <React.Fragment>
+      <div className="flex-initial flex items-center px-8">
         <motion.div
-          variants={inputWrapperVariants}
+          className={`flex items-center mx-1 border ${searchFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
+          variants={barVariants}
           animate={searchActive ? 'active' : 'inactive'}
           initial={false}
         >
-          <motion.input
-            ref={searchInputRef}
-            value={query}
-            placeholder="Search for a list..."
-            variants={inputVariants}
+          <button className="p-2.5" onClick={handleClickSearch}>
+            <Search size={20}/>
+          </button>
+          <motion.div
+            variants={inputWrapperVariants}
             animate={searchActive ? 'active' : 'inactive'}
             initial={false}
-            onChange={e => setQuery(e.target.value)}
-            onFocus={() => setSearchFocused(true)}
-            onBlur={() => setSearchFocused(false)}
-          />
+          >
+            <motion.input
+              ref={searchInputRef}
+              value={query}
+              placeholder="Search for a list..."
+              variants={inputVariants}
+              animate={searchActive ? 'active' : 'inactive'}
+              initial={false}
+              onChange={e => setQuery(e.target.value)}
+              onFocus={() => setSearchFocused(true)}
+              onBlur={() => setSearchFocused(false)}
+            />
+          </motion.div>
         </motion.div>
-      </motion.div>
-      <motion.div
-        className={`relative flex items-center mx-1 border ${addFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
-        variants={barVariants}
-        animate={!searchActive ? 'active' : 'inactive'}
-        initial={false}
-      >
-        <button className="p-2" onClick={handleClickAdd}>
-          <Add size={24}/>
-        </button>
         <motion.div
-          variants={inputWrapperVariants}
+          className={`relative flex items-center mx-1 border ${addFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
+          variants={barVariants}
           animate={!searchActive ? 'active' : 'inactive'}
           initial={false}
         >
-          <motion.input
-            variants={inputVariants}
+          <button className="p-2" onClick={handleClickAdd}>
+            <Add size={24}/>
+          </button>
+          <motion.div
+            variants={inputWrapperVariants}
             animate={!searchActive ? 'active' : 'inactive'}
             initial={false}
-            ref={addInputRef}
-            value={newList.name}
-            placeholder="What's the name of the new list?"
-            onChange={e => setNewList({ ...newList, name: e.target.value })}
-            onFocus={() => setAddFocused(true)}
-            onBlur={() => setAddFocused(false)}
-          />
+          >
+            <motion.input
+              variants={inputVariants}
+              animate={!searchActive ? 'active' : 'inactive'}
+              initial={false}
+              ref={addInputRef}
+              value={newListName}
+              placeholder="What's the name of the new list?"
+              onChange={e => setNewListName(e.target.value)}
+              onFocus={() => setAddFocused(true)}
+              onBlur={() => setAddFocused(false)}
+            />
+          </motion.div>
+          <span className={`${!searchActive ? 'initial' : 'hidden'} absolute right-0 mr-3 ${validName ? 'text-gray-300' : 'text-red-400'} transition-colors`}>
+            {newListName.length}/{LIST_NAME_LIMIT}
+          </span>
         </motion.div>
-        <span className={`${!searchActive ? 'initial' : 'hidden'} absolute right-0 mr-3 ${validTitle ? 'text-gray-300' : 'text-red-400'} transition-colors`}>
-          {newList.name.length}/{LIST_NAME_LIMIT}
-        </span>
-      </motion.div>
-    </div>
+      </div>
+      <AnimatePresence>
+        {!searchActive && (
+          <AddListCard
+            name={newListName}
+            validName={validName}
+            limitReached={limitReached}
+            _handleAddList={handleAddList}
+          />
+        )}
+      </AnimatePresence>
+    </React.Fragment>
   )
 }
 

@@ -1,19 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Switch from 'react-switch';
 import { motion } from 'framer-motion';
+import { addList } from '@web-utils/api';
 import { LIST_COUNT_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
 import Button from './Button';
 
-const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus, tooManyLists }) => {
-  const [descriptionFocused, setDescriptionFocused] = useState(false);
+const AddListCard = ({ name, validName, limitReached, _handleAddList }) => {
+  const [description, setDescription] = useState('');
+  const [mode, setMode] = useState(true);
+  const [valid, setValid] = useState(false);
+  const [status, setStatus] = useState(0);
 
-  const validDescription = newList.description.length <= LIST_DESCRIPTION_LIMIT;
+  const validDescription = description.length <= LIST_DESCRIPTION_LIMIT;
   let buttonText;
-  switch (addStatus) {
+  switch (status) {
     case 0: buttonText = 'Add list'; break;
     case 1: buttonText = 'Adding...'; break;
     case 2: buttonText = 'Done!'; break;
+  }
+
+  // When readying a new list, check if the data is valid
+  useEffect(() => {
+    setValid(validName && validDescription && !limitReached);
+  }, [validName, description, limitReached]);
+
+  // Handler for adding a new list (3/3)
+  const handleAddList = () => {
+    if (!valid) { return }
+    setStatus(1);
+    addList({ name, description, mode })
+      .then(list => {
+        _handleAddList(list);
+        setDescription('');
+        setStatus(2);
+        setTimeout(() => setStatus(0), 2000);
+      })
+      .catch(err => console.error(err))
   }
 
   return (
@@ -21,17 +44,15 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus,
       <label className="block ml-2" htmlFor="list-description">Description <span className="text-gray-400 italic">(optional)</span></label>
       <div className="relative">
         <textarea
-          className={`w-full p-2 border ${descriptionFocused ? 'border-blue-400' : 'border-gray-300'} rounded-md resize-none transition-colors`}
+          className={`w-full p-2 border border-gray-300 rounded-md resize-none focus:border-blue-400 transition-colors`}
           name="list-description"
-          value={newList.description}
+          value={description}
           placeholder="Say something about your list..."
           rows={2}
-          onChange={(e) => setNewList({ ...newList, description: e.target.value })}
-          onFocus={() => setDescriptionFocused(true)}
-          onBlur={() => setDescriptionFocused(false)}
+          onChange={(e) => setDescription(e.target.value)}
         />
         <span className={`absolute right-0 bottom-0 m-2 ${validDescription ? 'text-gray-300' : 'text-red-400'} transition-colors`}>
-          {newList.description.length}/{LIST_DESCRIPTION_LIMIT}
+          {description.length}/{LIST_DESCRIPTION_LIMIT}
         </span>
       </div>
       <div className="flex justify-center items-center mt-4">
@@ -39,8 +60,8 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus,
           <span className="absolute top-1/2 right-full mx-2 transform -translate-y-1/2">Public</span>
           <Switch
             className={`react-switch`}
-            checked={newList.mode_private}
-            onChange={(checked) => setNewList({ ...newList, mode_private: checked })}
+            checked={mode}
+            onChange={(checked) => setMode(checked)}
             uncheckedIcon={false}
             checkedIcon={false}
           />
@@ -50,16 +71,16 @@ const AddListCard = ({ newList, setNewList, validList, handleAddList, addStatus,
       <div className="flex justify-center mt-2">
         <Button
           run={handleAddList}
-          disabled={!validList}
-          loading={addStatus === 1}
-          done={addStatus === 2}
+          disabled={!valid}
+          loading={status === 1}
+          done={status === 2}
           primary
           small
         >
           {buttonText}
         </Button>
       </div>
-      {tooManyLists && (
+      {limitReached && (
         <p className="text-center text-sm text-red-400">You&apos;ve reached your limit of {LIST_COUNT_LIMIT} lists!</p>
       )}
     </motion.div>

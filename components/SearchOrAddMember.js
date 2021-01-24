@@ -6,9 +6,9 @@ import debounce from 'lodash/debounce';
 import { search } from '@web-utils/api';
 import { MEMBER_SUGGESTION_COUNT, MEMBER_COUNT_LIMIT } from '@web-utils/config';
 
-import { Search, Add, Add2, Remove } from './Icons';
 import Loading from './Loading';
 import ProfilePicture from './ProfilePicture';
+import { Search, Add, Add2, Remove } from './Icons';
 
 // FM Variants
 const barVariants = {
@@ -29,9 +29,20 @@ const inputVariants = {
 const warningVariants = {
   active: { opacity: 1, transition: { opacity: { delay: 0.3 }}},
   inactive: { opacity: 0 }
-}
+};
 
-const SearchOrAddMember = ({ following, users, query, setQuery, searchActive, setSearchActive, adds, dels, handleSuggestionClick, limitReached }) => {
+const SearchOrAddMember = ({
+  following,
+  users,
+  query,
+  setQuery,
+  searchActive,
+  setSearchActive,
+  adds,
+  dels,
+  handleSuggestionClick,
+  limitReached
+}) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
   const [addQuery, setAddQuery] = useState('');
@@ -40,7 +51,9 @@ const SearchOrAddMember = ({ following, users, query, setQuery, searchActive, se
   const fuseRef = useRef(new Fuse([], {
     keys: ['lowercase_name', 'lowercase_screen_name'],
     threshold: 0.3,
-    includeScore: true, ignoreLocation: true, ignoreFieldNorm: true
+    includeScore: true,
+    ignoreLocation: true,
+    ignoreFieldNorm: true
   }));
   const searchInputRef = useRef();
   const addInputRef = useRef();

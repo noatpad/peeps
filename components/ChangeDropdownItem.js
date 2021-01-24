@@ -6,6 +6,7 @@ import ProfilePicture from './ProfilePicture';
 import StackedProfilePictures from './StackedProfilePictures';
 import { Next } from './Icons';
 
+// FM Variants
 const caretVariants = {
   open: { rotate: 90 },
   closed: { rotate: 0 }

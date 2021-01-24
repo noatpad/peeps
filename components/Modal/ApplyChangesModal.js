@@ -1,32 +1,18 @@
 import React, { useState, useEffect } from 'react';
 
-import Modal from './index';
 import Button from '@components/Button';
 import ChangeDropdownItem from '@components/ChangeDropdownItem';
-import { listSortCompare } from '@web-utils/helpers';
+import Modal from './index';
 
-const ApplyChangesModal = ({ show, close, applyChanges, add, del }) => {
+const ApplyChangesModal = ({ show, close, applyChanges, changes }) => {
   const [disableApplyButton, setDisableApplyButton] = useState(true);
-  const [changes, setChanges] = useState([]);
 
+  // Delay confirmation for apply changes button
   useEffect(() => {
     if (!show) { return }
     setDisableApplyButton(true);
     setTimeout(() => setDisableApplyButton(false), 1500);
   }, [show]);
-
-  useEffect(() => {
-    const changesPerList = add.map(a => ({ id: a.id, name: a.name, additions: a.users }));
-    del.forEach(d => {
-      const index = changesPerList.findIndex(c => c.id === d.id);
-      if (index !== -1) {
-        changesPerList[index].deletions = d.users;
-      } else {
-        changesPerList.push({ id: d.id, name: d.name, deletions: d.users });
-      }
-    })
-    setChanges(changesPerList.sort(listSortCompare));
-  }, [add, del]);
 
   return (
     <Modal show={show} close={close} width="w-3/5">

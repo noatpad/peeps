@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import Modal from 'react-modal';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -18,12 +18,13 @@ const routeVariants = {
 }
 
 const App = ({ Component, pageProps, router }) => {
+  // TODO: Error handling from API
+  // TODO: Set <Head> for each page
   // TODO: Responsive design
   // TODO: Code cleanup
   // TODO: Optimization with useMemo() and shortened API requests/responses
   // TODO: Use next-seo for SEO
   // If tokens are available in cookies, use that instead of authenticating again
-  const [auth, setAuth] = useState(false);
   useRouterScroll();
 
   return (
@@ -42,11 +43,7 @@ const App = ({ Component, pageProps, router }) => {
           animate="enter"
           exit="exit"
         >
-          <Component
-            auth={auth}
-            setAuth={setAuth}
-            {...pageProps}
-          />
+          <Component {...pageProps}/>
         </motion.div>
       </AnimatePresence>
       <Footer/>

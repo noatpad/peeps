@@ -8,8 +8,8 @@ const add = nc()
     if (!req.body) { return res.status(400).send('Expected body') }
 
     const { token, secret } = req.cookies;
-    const { name, description, mode_private } = req.body;
-    return post(token, secret, 'lists/create', { name, description, mode: mode_private ? 'private' : 'public' })
+    const { name, description, mode } = req.body;
+    return post(token, secret, 'lists/create', { name, description, mode: mode ? 'private' : 'public' })
       .then(({ data }) => {
         const list = {
           ...data,

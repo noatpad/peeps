@@ -4,18 +4,19 @@ import { motion } from 'framer-motion';
 import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
 import { getUser, getLists, getMembersFromList, applyChanges } from '@web-utils/api';
-import { sortLists, sortUsers, userSortCompare, changeObj, numberNoun } from '@web-utils/helpers';
+import { listSortCompare, userSortCompare, changeObj, numberNoun } from '@web-utils/helpers';
 
-import Title from '@components/Title';
-import Loading from '@components/Loading';
-import SelectorPane from '@components/SelectorPane';
-import ListSelector from '@components/ListSelector';
-import MemberSelector from '@components/MemberSelector';
-import Button from '@components/Button';
 import ApplyChangesModal from '@components/Modal/ApplyChangesModal';
+import Button from '@components/Button';
 import ClearChangesModal from '@components/Modal/ClearChangesModal';
+import ListSelector from '@components/ListSelector';
+import Loading from '@components/Loading';
+import MemberSelector from '@components/MemberSelector';
+import SelectorPane from '@components/SelectorPane';
+import Title from '@components/Title';
 
-const Home = ({ auth, setAuth }) => {
+const Home = () => {
+  const [auth, setAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({ user: {}, following: [] });
   const [lists, setLists] = useState([]);
@@ -33,19 +34,8 @@ const Home = ({ auth, setAuth }) => {
   const cookies = new Cookies();
 
   const activeList = activeListID === -1 ? undefined : lists.find(l => l.id_str === activeListID);
-  const activeAdds = activeListID === -1 ? undefined : add.find(a => a.id === activeListID);
-  const activeDels = activeListID === -1 ? undefined : del.find(d => d.id === activeListID);
-
-  // Helper-to-hook function to get and set lists
-  const handleGetLists = () => {
-    setLoadingLists(true);
-    getLists()
-      .then((lists) => {
-        setLists(sortLists(lists));
-        setLoadingLists(false);
-      })
-      .catch(err => console.error(err))
-  }
+  const activeAdds = activeListID === -1 ? [] : add.find(a => a.id === activeListID)?.users ?? [];
+  const activeDels = activeListID === -1 ? [] : del.find(d => d.id === activeListID)?.users ?? [];
 
   // Verify that you can make API calls
   useEffect(() => {
@@ -63,6 +53,18 @@ const Home = ({ auth, setAuth }) => {
     }
   }, [loading]);
 
+  // Get all owned lists when authenticated
+  useEffect(() => {
+    if (!auth) { return }
+    setLoadingLists(true);
+    getLists()
+      .then((lists) => {
+        setLists(lists.sort(listSortCompare));
+        setLoadingLists(false);
+      })
+      .catch(err => console.error(err))
+  }, [auth]);
+
   // Update fuse searching for lists when lists are updated
   useEffect(() => {
     fuseListRef.current.setCollection(lists);
@@ -73,12 +75,6 @@ const Home = ({ auth, setAuth }) => {
     fuseMemberRef.current.setCollection(users);
   }, [users]);
 
-  // Get all owned lists when authenticated
-  useEffect(() => {
-    if (!auth) { return }
-    handleGetLists();
-  }, [auth]);
-
   // Get users when selecting a list
   useEffect(() => {
     if (!auth) { return }
@@ -88,12 +84,26 @@ const Home = ({ auth, setAuth }) => {
       setLoadingUsers(true);
       getMembersFromList(activeListID)
         .then((users) => {
-          setUsers(sortUsers(users));
+          setUsers(users.sort(userSortCompare));
           setLoadingUsers(false);
         })
         .catch(err => console.error(err))
     }
   }, [activeListID]);
+
+  // Helper to merge changes by list
+  const mergedChanges = () => {
+    const changesPerList = add.map(a => ({ id: a.id, name: a.name, additions: a.users }));
+    del.forEach(d => {
+      const index = changesPerList.findIndex(c => c.id === d.id);
+      if (index !== -1) {
+        changesPerList[index].deletions = d.users;
+      } else {
+        changesPerList.push({ id: d.id, name: d.name, deletions: d.users });
+      }
+    })
+    return changesPerList.sort(listSortCompare);
+  }
 
   // Select a list
   const selectList = (id_str) => {
@@ -108,7 +118,7 @@ const Home = ({ auth, setAuth }) => {
     const newAdd = [...add];
     let index = newAdd.findIndex(a => a.id === activeListID);
     if (index === -1) {
-      newAdd.push(changeObj(activeListID, activeList.name));
+      newAdd.push({ id: activeListID, name: activeList.name, users: [] });
       index = newAdd.length - 1;
     }
 
@@ -139,7 +149,7 @@ const Home = ({ auth, setAuth }) => {
     const newDel = [...del];
     let index = newDel.findIndex(a => a.id === activeListID);
     if (index === -1) {
-      newDel.push(changeObj(activeListID, activeList.name));
+      newDel.push({ id: activeListID, name: activeList.name, users: [] });
       index = newDel.length - 1;
     }
     newDel[index].users.push(userToDel);
@@ -215,20 +225,20 @@ const Home = ({ auth, setAuth }) => {
           />
         </SelectorPane>
         <SelectorPane
-          title={activeListID === -1 ? 'Select a list!' : activeList.name}
-          subtitle={activeListID === -1 ? 'The list members will be displayed here...' : numberNoun(activeList.member_count, "member")}
-          adds={activeAdds !== undefined ? activeAdds.users.length : 0}
-          dels={activeDels !== undefined ? activeDels.users.length : 0}
+          title={activeList?.name ?? 'Select a list!'}
+          subtitle={activeListID === -1 ? 'List members will be displayed here...' : numberNoun(activeList?.member_count ?? 0, "member")}
+          addCount={activeAdds.length}
+          delCount={activeDels.length}
           italic={activeListID === -1}
         >
           <MemberSelector
             fuse={fuseMemberRef.current}
-            following={userData.following}
+            following={userData?.following ?? []}
             inactive={activeListID === -1}
             loading={loadingUsers}
             users={users}
-            adds={activeAdds !== undefined ? activeAdds.users : []}
-            dels={activeDels !== undefined ? activeDels.users : []}
+            adds={activeAdds}
+            dels={activeDels}
             prepareToAddUser={prepareToAddUser}
             unprepareToAddUser={unprepareToAddUser}
             prepareToDelUser={prepareToDelUser}
@@ -244,9 +254,8 @@ const Home = ({ auth, setAuth }) => {
       <ApplyChangesModal
         show={showApplyChangesModal}
         close={() => setShowApplyChangesModal(false)}
+        changes={mergedChanges()}
         applyChanges={handleApplyChanges}
-        add={add}
-        del={del}
       />
       <ClearChangesModal
         show={showClearChangesModal}

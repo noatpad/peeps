@@ -6,6 +6,7 @@ import Button from '@components/Button';
 const DeleteListModal = ({ show, close, listName, handleDeleteList }) => {
   const [disableDeleteButton, setDisableDeleteButton] = useState(true);
 
+  // Delay confirmation for the delete button
   useEffect(() => {
     if (!show) { return }
     setDisableDeleteButton(true);
@@ -14,7 +15,7 @@ const DeleteListModal = ({ show, close, listName, handleDeleteList }) => {
 
   return (
     <Modal show={show} close={close}>
-      <p className="text-center">You sure you wanna delete the list <b>{listName}</b>?</p>
+      <h4 className="text-xl text-center">You sure you wanna delete the list <b>{listName}</b>?</h4>
       <div className="flex justify-center items-center">
         <Button run={close} small>No, don&apos;t</Button>
         <Button run={handleDeleteList} loading={disableDeleteButton} warning small>Yes, delete</Button>

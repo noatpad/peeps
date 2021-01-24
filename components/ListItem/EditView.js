@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Switch from 'react-switch';
+import { updateList } from '@web-utils/api';
 import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
 import Button from '@components/Button';
 
-const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
+const EditView = ({ item, active, exitEditMode, _handleUpdateList }) => {
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [mode, setMode] = useState(item.mode === 'private');
   const [valid, setValid] = useState(false);
+  const [pending, setPending] = useState(false);
   const nameInputRef = useRef();
 
   const validTitle = name.length > 0 && name.length <= LIST_NAME_LIMIT;
@@ -24,8 +26,20 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
     setValid(validTitle && validDescription);
   }, [name, description]);
 
+  // Handler for updating a list (2/2)
+  const handleUpdateList = (id, name, description, mode) => {
+    const list = { id, name, description, mode };
+    setPending(true);
+    updateList(list)
+      .then(list => {
+        _handleUpdateList(list);
+        exitEditMode();
+      })
+      .catch(err => console.error(err));
+  }
+
   return (
-    <div className="flex-1 flex flex-col mx-2">
+    <div className={`flex-1 flex flex-col relative p-3 mx-2 my-6 ${active ? 'ring-2 bg-blue-50' : ''} rounded-md shadow transition-all`}>
       <div className="flex flex-col">
         <label className="ml-2 text-sm text-gray-500">Name</label>
         <div className="relative">
@@ -71,17 +85,17 @@ const EditView = ({ item, updatePending, setEditMode, handleUpdate }) => {
       </div>
       <div className="flex justify-center mt-2">
         <Button
-          run={() => setEditMode(false)}
-          disabled={updatePending}
+          run={exitEditMode}
+          disabled={pending}
           warning
           small
         >
           Cancel
         </Button>
         <Button
-          run={() => handleUpdate(item.id_str, name, description, mode)}
+          run={() => handleUpdateList(item.id_str, name, description, mode)}
           disabled={!valid}
-          loading={updatePending}
+          loading={pending}
           primary
           small
         >

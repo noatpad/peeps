@@ -4,23 +4,24 @@ import { numberNoun } from '@web-utils/helpers';
 import ItemButton from '@components/ItemButton';
 import { Remove, Edit, Lock, Next } from '@components/Icons';
 
-const NormalView = ({ item, add, del, setEditMode, handleDeleteModal }) => {
-  const { name, member_count, mode } = item;
+const NormalView = ({ item, active, addCount, delCount, enterEditMode, selectList, _handleDeleteModal }) => {
+  const { id_str, name, member_count, mode } = item;
 
-  // Handle clicking the edit button
+  // Handler for clicking the edit button
   const handleEditClick = (e) => {
     e.stopPropagation();
-    setEditMode(true);
+    // setEditMode(true);
+    enterEditMode();
   }
 
-  // Handle clicking the delete button
-  const handleDeleteClick = (e) => {
+  // Handler for clicking the delete button (2/2)
+  const handleDeleteModal = (e) => {
     e.stopPropagation();
-    handleDeleteModal(item);
+    _handleDeleteModal(item);
   }
 
   return (
-    <React.Fragment>
+    <div className={`flex relative p-3 my-6 bg-gradient-to-r from-transparent ${active ? 'ring-2 bg-blue-50' : 'hover:to-blue-50'} rounded-md shadow cursor-pointer transition-all`} onClick={() => selectList(id_str)}>
       <div className="absolute top-0 left-0 bottom-0 ml-3 flex flex-col justify-center z-10">
         <ItemButton
           onClick={handleEditClick}
@@ -29,7 +30,7 @@ const NormalView = ({ item, add, del, setEditMode, handleDeleteModal }) => {
           text="Edit list info"
         />
         <ItemButton
-          onClick={handleDeleteClick}
+          onClick={handleDeleteModal}
           icon={<Remove size={16}/>}
           color="text-red-400"
           text="Remove list"
@@ -43,21 +44,21 @@ const NormalView = ({ item, add, del, setEditMode, handleDeleteModal }) => {
         <p className="text-sm text-gray-500 -mt-1">{numberNoun(member_count, "member")}</p>
       </div>
       <div className="flex-initial flex flex-col items-end justify-center">
-        {add > 0 && (
+        {addCount > 0 && (
           <span className="text-sm text-green-600">
-            +{add}
+            +{addCount}
           </span>
         )}
-        {del > 0 && (
+        {delCount > 0 && (
           <span className="text-sm text-red-600">
-            -{del}
+            -{delCount}
           </span>
         )}
       </div>
       <button className="flex-initial flex items-center">
         <Next size={20}/>
       </button>
-    </React.Fragment>
+    </div>
   )
 }
 
