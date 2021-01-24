@@ -5,7 +5,7 @@ const biggerPic = (url) => url.replace(/_normal.jpg/, '_bigger.jpg');
 
 const ProfilePicture = ({ user: { name, screen_name, profile_image_url_https: image_url }, size, bigger, noAnchor }) => (
   noAnchor ? (
-    <div className="inline-flex justify-center">
+    <div className="inline-flex justify-center" style={{ height: size, width: size }}>
       <Image
         className="rounded-full"
         src={bigger ? biggerPic(image_url) : image_url}

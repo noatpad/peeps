@@ -1,6 +1,6 @@
 // TODO: Remove unnecessary helpers
 // Custom compare function for sorting lists
-const listSortCompare = (a, b) => {
+export const listSortCompare = (a, b) => {
   const a_name = a.name.toLowerCase();
   const b_name = b.name.toLowerCase();
   if (a_name < b_name) { return -1 }

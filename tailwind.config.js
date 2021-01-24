@@ -3,6 +3,9 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      maxHeight: {
+        '3/4': '75%'
+      },
       zIndex: {
         '-10': '-10'
       }
