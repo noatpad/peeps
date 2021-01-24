@@ -7,26 +7,30 @@ import { Search, Add } from './Icons';
 
 // FM Variants
 const barVariants = {
-  active: { flex: 1 },
-  inactive: { flex: 0 }
+  inactive: { flex: 0 },
+  active: { flex: 1 }
 };
 
 const inputWrapperVariants = {
-  active: { flex: 1, marginRight: '0.75rem' },
-  inactive: { flex: 0, marginRight: '0px' }
+  inactive: { flex: 0, marginRight: '0px' },
+  active: { flex: 1, marginRight: '0.75rem' }
 };
 
 const inputVariants = {
-  active: { width: '100%' },
-  inactive: { width: 0 }
+  inactive: { width: 0 },
+  active: { width: '100%' }
 };
+
+const nameLimitVariants = {
+  active: { opacity: 1 },
+  inactive: { opacity: 0 }
+}
 
 const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
   const [newListName, setNewListName] = useState('');
-  // const [newList, setNewList] = useState({ name: '', description: '', mode_private: true });
   const searchInputRef = useRef();
   const addInputRef = useRef();
 
@@ -56,16 +60,16 @@ const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList }) => {
         <motion.div
           className={`flex items-center mx-1 border ${searchFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
           variants={barVariants}
-          animate={searchActive ? 'active' : 'inactive'}
           initial={false}
+          animate={searchActive ? 'active' : 'inactive'}
         >
           <button className="p-2.5" onClick={handleClickSearch}>
             <Search size={20}/>
           </button>
           <motion.div
             variants={inputWrapperVariants}
-            animate={searchActive ? 'active' : 'inactive'}
             initial={false}
+            animate={searchActive ? 'active' : 'inactive'}
           >
             <motion.input
               ref={searchInputRef}
@@ -106,9 +110,19 @@ const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList }) => {
               onBlur={() => setAddFocused(false)}
             />
           </motion.div>
-          <span className={`${!searchActive ? 'initial' : 'hidden'} absolute right-0 mr-3 ${validName ? 'text-gray-300' : 'text-red-400'} transition-colors`}>
-            {newListName.length}/{LIST_NAME_LIMIT}
-          </span>
+          <AnimatePresence>
+            {!searchActive && (
+              <motion.span
+                className={`absolute right-0 mr-3 ${validName ? 'text-gray-300' : 'text-red-400'} transition-colors`}
+                variants={nameLimitVariants}
+                initial="inactive"
+                animate="active"
+                exit="inactive"
+              >
+                {newListName.length}/{LIST_NAME_LIMIT}
+              </motion.span>
+            )}
+          </AnimatePresence>
         </motion.div>
       </div>
       <AnimatePresence>
