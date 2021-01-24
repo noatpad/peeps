@@ -29,7 +29,6 @@ const Home = ({ auth, setAuth }) => {
   const [showClearChangesModal, setShowClearChangesModal] = useState(false);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const fuseMemberRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
-  // const fuseFollowingRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
   const cookies = new Cookies();
 
@@ -165,18 +164,8 @@ const Home = ({ auth, setAuth }) => {
   const handleApplyChanges = () => {
     applyChanges(add, del)
       .then(_ => {
-        setActiveListID(-1);
-        setUsers([]);
-        setAdd([]);
-        setDel([]);
-        console.log('Changes applied!');
-      })
-      .then(_ => {
-        setTimeout(() => {
-          handleGetLists();
-          setShowApplyChangesModal(false);
-          console.log('Refreshed lists!');
-        }, 5000);
+        setShowApplyChangesModal(false);
+        router.replace('/done');
       })
       .catch(err => console.error(err))
   }
@@ -193,9 +182,7 @@ const Home = ({ auth, setAuth }) => {
   if (loading) {
     return (
       <main>
-        <div className="py-40">
-          <Title/>
-        </div>
+        <Title/>
         <div className="text-center">
           <Loading size={100}/>
         </div>
@@ -205,9 +192,7 @@ const Home = ({ auth, setAuth }) => {
 
   return (
     <main>
-      <div className="py-40">
-        <Title user={userData.user}/>
-      </div>
+      <Title user={userData.user}/>
       <motion.div
         className="flex my-12"
         initial={{ opacity: 0, y: -100 }}
@@ -255,6 +240,7 @@ const Home = ({ auth, setAuth }) => {
         <Button run={() => setShowClearChangesModal(true)} disabled={!add.length && !del.length} warning>Clear</Button>
         <Button run={() => setShowApplyChangesModal(true)} disabled={!add.length && !del.length} primary>Apply</Button>
       </div>
+      {/* MODALS */}
       <ApplyChangesModal
         show={showApplyChangesModal}
         close={() => setShowApplyChangesModal(false)}
