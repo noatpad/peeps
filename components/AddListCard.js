@@ -6,6 +6,18 @@ import { LIST_COUNT_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
 import Button from './Button';
 
+// FM Variants
+const wrapperVariants = {
+  exit: {
+    opacity: 0,
+    height: 0
+  },
+  enter: {
+    opacity: 1,
+    height: 'auto'
+  }
+};
+
 const AddListCard = ({ name, validName, limitReached, _handleAddList }) => {
   const [description, setDescription] = useState('');
   const [mode, setMode] = useState(true);
@@ -40,49 +52,51 @@ const AddListCard = ({ name, validName, limitReached, _handleAddList }) => {
   }
 
   return (
-    <motion.div className="p-4 mx-16 mt-4 mb-2 rounded-lg shadow-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-      <label className="block ml-2" htmlFor="list-description">Description <span className="text-gray-400 italic">(optional)</span></label>
-      <div className="relative">
-        <textarea
-          className={`w-full p-2 border border-gray-300 rounded-md resize-none focus:border-blue-400 transition-colors`}
-          name="list-description"
-          value={description}
-          placeholder="Say something about your list..."
-          rows={2}
-          onChange={(e) => setDescription(e.target.value)}
-        />
-        <span className={`absolute right-0 bottom-0 m-2 ${validDescription ? 'text-gray-300' : 'text-red-400'} transition-colors`}>
-          {description.length}/{LIST_DESCRIPTION_LIMIT}
-        </span>
-      </div>
-      <div className="flex justify-center items-center mt-4">
-        <label className="relative h-7 text-gray-600">
-          <span className="absolute top-1/2 right-full mx-2 transform -translate-y-1/2">Public</span>
-          <Switch
-            className={`react-switch`}
-            checked={mode}
-            onChange={(checked) => setMode(checked)}
-            uncheckedIcon={false}
-            checkedIcon={false}
+    <motion.div className="overflow-hidden" variants={wrapperVariants} initial="exit" animate="enter" exit="exit">
+      <div className="p-4 mx-16 my-4 rounded-lg shadow-md">
+        <label className="block ml-2" htmlFor="list-description">Description <span className="text-gray-400 italic">(optional)</span></label>
+        <div className="relative">
+          <textarea
+            className={`w-full p-2 border border-gray-300 rounded-md resize-none focus:border-blue-400 transition-colors`}
+            name="list-description"
+            value={description}
+            placeholder="Say something about your list..."
+            rows={2}
+            onChange={(e) => setDescription(e.target.value)}
           />
-          <span className="absolute top-1/2 left-full mx-2 transform -translate-y-1/2">Private</span>
-        </label>
+          <span className={`absolute right-0 bottom-0 m-2 ${validDescription ? 'text-gray-300' : 'text-red-400'} transition-colors`}>
+            {description.length}/{LIST_DESCRIPTION_LIMIT}
+          </span>
+        </div>
+        <div className="flex justify-center items-center mt-4">
+          <label className="relative h-7 text-gray-600">
+            <span className="absolute top-1/2 right-full mx-2 transform -translate-y-1/2">Public</span>
+            <Switch
+              className={`react-switch`}
+              checked={mode}
+              onChange={(checked) => setMode(checked)}
+              uncheckedIcon={false}
+              checkedIcon={false}
+            />
+            <span className="absolute top-1/2 left-full mx-2 transform -translate-y-1/2">Private</span>
+          </label>
+        </div>
+        <div className="flex justify-center mt-2">
+          <Button
+            run={handleAddList}
+            disabled={!valid}
+            loading={status === 1}
+            done={status === 2}
+            primary
+            small
+          >
+            {buttonText}
+          </Button>
+        </div>
+        {limitReached && (
+          <p className="text-center text-sm text-red-400">You&apos;ve reached your limit of {LIST_COUNT_LIMIT} lists!</p>
+        )}
       </div>
-      <div className="flex justify-center mt-2">
-        <Button
-          run={handleAddList}
-          disabled={!valid}
-          loading={status === 1}
-          done={status === 2}
-          primary
-          small
-        >
-          {buttonText}
-        </Button>
-      </div>
-      {limitReached && (
-        <p className="text-center text-sm text-red-400">You&apos;ve reached your limit of {LIST_COUNT_LIMIT} lists!</p>
-      )}
     </motion.div>
   )
 }
