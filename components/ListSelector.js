@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimateSharedLayout } from 'framer-motion';
 import { deleteList } from '@web-utils/api';
 import { LIST_COUNT_LIMIT, LISTS_PER_PAGE } from '@web-utils/config';
 import { listSortCompare } from '@web-utils/helpers';
@@ -93,17 +94,19 @@ const ListSelector = ({
         _handleAddList={handleAddList}
       />
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
-        <ListResults
-          results={pageResults}
-          add={add}
-          del={del}
-          activeListID={activeListID}
-          noLists={!lists.length}
-          noHits={!searchResults.length}
-          selectList={selectList}
-          _handleUpdateList={handleUpdateList}
-          _handleDeleteModal={handleDeleteModal}
-        />
+        {/* <AnimateSharedLayout> */}
+          <ListResults
+            results={pageResults}
+            add={add}
+            del={del}
+            activeListID={activeListID}
+            noLists={!lists.length}
+            noHits={!searchResults.length}
+            selectList={selectList}
+            _handleUpdateList={handleUpdateList}
+            _handleDeleteModal={handleDeleteModal}
+          />
+        {/* </AnimateSharedLayout> */}
       </div>
       <PaginationBar
         itemCount={searchResults.length}

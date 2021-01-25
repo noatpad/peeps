@@ -1,16 +1,34 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { numberNoun } from '@web-utils/helpers';
 
 import ItemButton from '@components/ItemButton';
 import { Remove, Edit, Lock, Next } from '@components/Icons';
 
-const NormalView = ({ item, active, addCount, delCount, enterEditMode, selectList, _handleDeleteModal }) => {
+// FM Variants
+const wrapperVariants = {
+  exit: {
+    opacity: 0,
+    y: 20,
+    transition: {
+      duration: 0.2
+    }
+  },
+  enter: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.3
+    }
+  }
+}
+
+const NormalView = ({ item, addCount, delCount, enterEditMode, selectList, _handleDeleteModal }) => {
   const { id_str, name, member_count, mode } = item;
 
   // Handler for clicking the edit button
   const handleEditClick = (e) => {
     e.stopPropagation();
-    // setEditMode(true);
     enterEditMode();
   }
 
@@ -21,7 +39,14 @@ const NormalView = ({ item, active, addCount, delCount, enterEditMode, selectLis
   }
 
   return (
-    <div className={`flex relative p-3 my-6 bg-gradient-to-r from-transparent ${active ? 'ring-2 bg-blue-50' : 'hover:to-blue-50'} rounded-md shadow cursor-pointer transition-all`} onClick={() => selectList(id_str)}>
+    <motion.div
+      className={`flex p-3 bg-gradient-to-r from-transparent cursor-pointer hover:to-blue-50`}
+      onClick={() => selectList(id_str)}
+      variants={wrapperVariants}
+      initial="exit"
+      animate="enter"
+      exit="exit"
+    >
       <div className="absolute top-0 left-0 bottom-0 ml-3 flex flex-col justify-center z-10">
         <ItemButton
           onClick={handleEditClick}
@@ -58,7 +83,7 @@ const NormalView = ({ item, active, addCount, delCount, enterEditMode, selectLis
       <button className="flex-initial flex items-center">
         <Next size={20}/>
       </button>
-    </div>
+    </motion.div>
   )
 }
 

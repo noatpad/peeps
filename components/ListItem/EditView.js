@@ -1,11 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Switch from 'react-switch';
 import { updateList } from '@web-utils/api';
 import { LIST_NAME_LIMIT, LIST_DESCRIPTION_LIMIT } from '@web-utils/config';
 
 import Button from '@components/Button';
 
-const EditView = ({ item, active, exitEditMode, _handleUpdateList }) => {
+// FM Variants
+const wrapperVariants = {
+  exit: {
+    opacity: 0,
+    y: -20,
+    transition: {
+      duration: 0.2
+    }
+  },
+  enter: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.3
+    }
+  }
+}
+
+const EditView = ({ item, exitEditMode, _handleUpdateList }) => {
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [mode, setMode] = useState(item.mode === 'private');
@@ -39,7 +58,13 @@ const EditView = ({ item, active, exitEditMode, _handleUpdateList }) => {
   }
 
   return (
-    <div className={`flex-1 flex flex-col relative p-3 mx-2 my-6 ${active ? 'ring-2 bg-blue-50' : ''} rounded-md shadow transition-all`}>
+    <motion.div
+      className={`flex flex-col p-3`}
+      variants={wrapperVariants}
+      initial="exit"
+      animate="enter"
+      exit="exit"
+    >
       <div className="flex flex-col">
         <label className="ml-2 text-sm text-gray-500">Name</label>
         <div className="relative">
@@ -102,7 +127,7 @@ const EditView = ({ item, active, exitEditMode, _handleUpdateList }) => {
           Update
         </Button>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
