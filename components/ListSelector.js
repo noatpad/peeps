@@ -6,8 +6,8 @@ import { listSortCompare } from '@web-utils/helpers';
 import DeleteListModal from './Modal/DeleteListModal';
 import ListResults from './ListResults';
 import Loading from './Loading';
-import SearchOrAddList from './SearchOrAddList';
 import PaginationBar from './PaginationBar';
+import SearchOrAddList from './SearchOrAddList';
 
 const ListSelector = ({
   fuse,
