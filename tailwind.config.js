@@ -3,6 +3,10 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
+      colors: {
+        'twiiter': '#1da1f2',
+        'github': '#333'
+      },
       height: {
         '656': '41rem'
       },

@@ -2,6 +2,20 @@
 /* FONT-FACES */
 @font-face {
   font-family: "SF Compact";
+  src: url('./fonts/SF-Compact-Text-Light.otf');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "SF Compact";
+  src: url('./fonts/SF-Compact-Text-LightItalic.otf');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "SF Compact";
   src: url('./fonts/SF-Compact-Text-Regular.otf');
   font-weight: normal;
   font-style: normal;
