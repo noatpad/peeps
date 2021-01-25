@@ -1,4 +1,5 @@
 import React from 'react';
+import { REPO_URL, TWITTER_URL } from '@web-utils/config';
 
 import { GitHub, Heart, Twitter } from './Icons';
 
@@ -10,10 +11,10 @@ const Footer = () => (
       <span className="align-middle">by <b className="font-bold">a clueless danny</b></span>
     </p>
     <div className="flex justify-center space-x-4">
-      <a className="text-twiiter opacity-70 transform transition-all hover:opacity-100 hover:-translate-y-1" href="https://twitter.com/aCluelessDanny" target="_blank" rel="noopener noreferrer">
+      <a className="text-twiiter opacity-70 transform transition-all hover:opacity-100 hover:-translate-y-1" href={TWITTER_URL} target="_blank" rel="noopener noreferrer">
         <Twitter size={28}/>
       </a>
-      <a className="text-github opacity-70 transform transition-all hover:opacity-100 hover:-translate-y-1" href="https://github.com/aCluelessDanny/peeps" target="_blank" rel="noopener noreferrer">
+      <a className="text-github opacity-70 transform transition-all hover:opacity-100 hover:-translate-y-1" href={REPO_URL} target="_blank" rel="noopener noreferrer">
         <GitHub size={28}/>
       </a>
     </div>

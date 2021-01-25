@@ -1,3 +1,7 @@
+// Common links
+export const TWITTER_URL = "https://twitter.com/aCluelessDanny";
+export const REPO_URL = "https://github.com/aCluelessDanny/peeps";
+
 // Limits for list creation & display
 export const LIST_COUNT_LIMIT = 1000;
 export const LIST_NAME_LIMIT = 25;

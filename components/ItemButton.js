@@ -1,7 +1,18 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const ItemButton = ({ onClick, icon, width = 100, bg = "bg-white", color = 'text-gray-700', hoverColor, text, disabled, reverse }) => {
+const ItemButton = ({
+  onClick,
+  icon,
+  width = 100,
+  bg = "bg-white",
+  color = 'text-gray-700',
+  hoverColor,
+  text,
+  textSize = "text-sm",
+  disabled,
+  reverse
+}) => {
   const textVariants = {
     rest: { width: 0, opacity: 0, transitionEnd: { marginLeft: '0px', marginRight: '0px' }},
     hover: { width: width, opacity: 1, marginLeft: !reverse ? '0.5rem' : '0px', marginRight: reverse ? '0.5rem' : '0px' }
@@ -17,7 +28,7 @@ const ItemButton = ({ onClick, icon, width = 100, bg = "bg-white", color = 'text
       animate="rest"
     >
       <div>{icon}</div>
-      <motion.p className="text-sm overflow-hidden whitespace-nowrap" variants={textVariants}>{text}</motion.p>
+      <motion.p className={`${textSize} overflow-hidden whitespace-nowrap`} variants={textVariants}>{text}</motion.p>
     </motion.button>
   )
 }
