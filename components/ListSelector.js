@@ -94,19 +94,17 @@ const ListSelector = ({
         _handleAddList={handleAddList}
       />
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
-        {/* <AnimateSharedLayout> */}
-          <ListResults
-            results={pageResults}
-            add={add}
-            del={del}
-            activeListID={activeListID}
-            noLists={!lists.length}
-            noHits={!searchResults.length}
-            selectList={selectList}
-            _handleUpdateList={handleUpdateList}
-            _handleDeleteModal={handleDeleteModal}
-          />
-        {/* </AnimateSharedLayout> */}
+        <ListResults
+          results={pageResults}
+          add={add}
+          del={del}
+          activeListID={activeListID}
+          noLists={!lists.length}
+          noHits={!searchResults.length}
+          selectList={selectList}
+          _handleUpdateList={handleUpdateList}
+          _handleDeleteModal={handleDeleteModal}
+        />
       </div>
       <PaginationBar
         itemCount={searchResults.length}

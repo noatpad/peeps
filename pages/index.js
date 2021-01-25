@@ -107,6 +107,7 @@ const Home = () => {
 
   // Select a list
   const selectList = (id_str) => {
+    if (id_str === activeListID) { return }
     setLoadingUsers(true);
     setActiveListID(id_str);
   }
