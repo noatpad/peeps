@@ -226,7 +226,7 @@ const Home = () => {
     <main>
       <Title user={userData.user}/>
       <motion.div
-        className="flex my-12"
+        className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 my-12"
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'tween', ease: 'easeOut', duration: 0.45, delay: 0.3 }}

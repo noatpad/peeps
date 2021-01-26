@@ -56,7 +56,7 @@ const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList, errorH
 
   return (
     <React.Fragment>
-      <div className="flex-initial flex items-center px-8">
+      <div className="flex-initial flex items-center px-4 sm:px-8">
         <motion.div
           className={`flex items-center mx-1 border ${searchFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
           variants={barVariants}
@@ -113,7 +113,7 @@ const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList, errorH
           <AnimatePresence>
             {!searchActive && (
               <motion.span
-                className={`absolute right-0 mr-3 ${validName ? 'text-gray-300' : 'text-red-400'} transition-colors`}
+                className={`absolute right-0 mr-3 bg-white ${validName ? 'text-gray-300' : 'text-red-400'} transition-colors`}
                 variants={nameLimitVariants}
                 initial="inactive"
                 animate="active"

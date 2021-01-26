@@ -16,7 +16,7 @@ const UnauthorizedModal = ({ show, close, error }) => {
   return (
     <Modal show={show} close={handleClose} width="w-96">
       <div className="space-y-2">
-        <h4 className="text-xl text-center">Unauthorized!</h4>
+        <h4 className="text-lg sm:text-xl text-center">Unauthorized!</h4>
         <p className="text-center italic">The app no longer has access to your lists, so we&apos;ll need to log you back in again.</p>
         <div className="flex justify-center items-center">
           <Button run={handleClose} small primary>Go to the home page</Button>

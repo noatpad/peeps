@@ -56,7 +56,7 @@ const AddListCard = ({ name, validName, limitReached, _handleAddList, errorHandl
 
   return (
     <motion.div className="overflow-hidden" variants={wrapperVariants} initial="exit" animate="enter" exit="exit">
-      <div className="p-4 mx-16 my-4 rounded-lg shadow-md">
+      <div className="p-4 mx-4 sm:mx-8 md:mx-16 my-2 sm:my-4 rounded-lg shadow-md">
         <label className="block ml-2" htmlFor="list-description">Description <span className="text-gray-400 italic">(optional)</span></label>
         <div className="relative">
           <textarea

@@ -14,7 +14,7 @@ const ListItem = ({ item, active, addCount, delCount, selectList, _handleUpdateL
 
   return (
     <motion.div
-      className={`relative my-6 rounded-md shadow ${active ? 'ring-2 bg-blue-50' : 'bg-white'} overflow-hidden transition-colors`}
+      className={`relative my-4 sm:my-6 rounded-md shadow ${active ? 'ring-2 bg-blue-50' : 'bg-white'} overflow-hidden transition-colors`}
       variants={itemVariants}
       initial={false}
       animate={editMode ? 'edit' : 'normal'}

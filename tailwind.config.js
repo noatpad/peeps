@@ -8,13 +8,16 @@ module.exports = {
         'github': '#333'
       },
       height: {
-        '656': '41rem'
+        '164': '41rem'
       },
       width: {
         '120': '30rem'
       },
       maxHeight: {
         '3/4': '75%'
+      },
+      maxWidth: {
+        '4/5': '80%'
       },
       zIndex: {
         '-10': '-10'

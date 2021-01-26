@@ -36,7 +36,7 @@ const StackedProfilePictures = ({ add = [], del = [] }) => {
   const stack = merged.slice(0, 2 + (addCounter > 0 ? 0 : 1) + (delCounter > 0 ? 0 : 1));
 
   return (
-    <motion.div className="absolute right-full flex mr-3 -space-x-2.5" variants={wrapperVariants} initial="closed" animate="open" exit="closed">
+    <motion.div className="hidden md:flex items-center absolute inset-y-0 right-full mr-3 -space-x-2.5" variants={wrapperVariants} initial="closed" animate="open" exit="closed">
       {stack.map(u => (
         <motion.div key={u.id_str} variants={itemVariants}>
           <ProfilePicture

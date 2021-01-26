@@ -37,15 +37,15 @@ const ChangeDropdownItem = ({ item }) => {
   const { name, additions, deletions } = item;
 
   return (
-    <div className="container">
-      <div className="px-32">
+    <div>
+      <div className="md:px-28 lg:px-36">
         <div className="relative">
           <AnimatePresence initial={false}>
             {!open && (
               <StackedProfilePictures add={additions} del={deletions}/>
             )}
           </AnimatePresence>
-          <div className="inline-flex items-center text-xl cursor-pointer" onClick={() => setOpen(!open)}>
+          <div className="flex items-center cursor-pointer" onClick={() => setOpen(!open)}>
             <motion.span className="-ml-2" variants={caretVariants} initial={false} animate={open ? 'open' : 'closed'}>
               <Next size={28}/>
             </motion.span>
@@ -60,7 +60,7 @@ const ChangeDropdownItem = ({ item }) => {
       </div>
       <AnimatePresence initial={false}>
         {open && (
-          <motion.div className="flex flex-wrap px-16 overflow-hidden" variants={gridVariants} initial="closed" animate="open" exit="closed">
+          <motion.div className="flex flex-col sm:flex-row space-y-1 overflow-hidden" variants={gridVariants} initial="closed" animate="open" exit="closed">
             {additions && <Members list={additions} plus/>}
             {deletions && <Members list={deletions}/>}
           </motion.div>

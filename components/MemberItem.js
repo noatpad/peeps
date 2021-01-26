@@ -7,7 +7,7 @@ import ProfilePicture from './ProfilePicture';
 const MemberItem = ({ onClick, user, add, del, limitReached }) => {
   const { name, screen_name } = user;
 
-  let itemClass = "flex relative items-center p-3 my-6 rounded-md shadow bg-gradient-to-r from-transparent transition-all";
+  let itemClass = "flex relative items-center p-3 my-4 sm:my-6 rounded-md shadow bg-gradient-to-r from-transparent transition-colors";
   if (add) {
     itemClass += " bg-green-100";
   } else if (del) {

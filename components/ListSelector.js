@@ -94,7 +94,7 @@ const ListSelector = ({
         _handleAddList={handleAddList}
         errorHandler={errorHandler}
       />
-      <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
+      <div className="flex-1 px-4 sm:px-8 md:px-12 mt-4 overflow-scroll scrollGradient">
         <ListResults
           results={pageResults}
           add={add}

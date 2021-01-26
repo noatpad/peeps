@@ -10,7 +10,7 @@ const Modal = ({ show, close, width, children }) => (
       beforeClose: "ReactModal__Overlay--before-close"
     }}
     className={{
-      base: `ReactModal__Content ${width} max-h-3/4 overflow-scroll px-8 py-6 rounded-xl bg-white`,
+      base: `ReactModal__Content ${width} max-h-3/4 max-w-4/5 overflow-scroll px-8 py-6 rounded-xl bg-white`,
       afterOpen: "ReactModal__Content--after-open",
       beforeClose: "ReactModal__Content--before-close"
     }}

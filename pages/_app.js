@@ -25,7 +25,6 @@ const noChangeVariants = {
 
 const App = ({ Component, pageProps, router }) => {
   // TODO: Set <Head> for each page
-  // TODO: Responsive design
   // TODO: Optimization with useMemo()
   // TODO: Shorten API requests/responses
   // TODO: Use next-seo for SEO

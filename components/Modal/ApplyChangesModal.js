@@ -15,9 +15,9 @@ const ApplyChangesModal = ({ show, close, applyChanges, changes }) => {
   }, [show]);
 
   return (
-    <Modal show={show} close={close} width="w-3/5">
-      <div className="flex flex-col items-center mx-8 my-4 space-y-4">
-        <h3 className="text-2xl text-center font-bold">Are you sure you wanna apply these changes?</h3>
+    <Modal show={show} close={close}>
+      <div className="flex flex-col items-center space-y-4">
+        <h3 className="text-lg sm:text-xl text-center font-bold">Are you sure you wanna apply these changes?</h3>
         <div className="container space-y-3">
           {changes.map(c => (
             <ChangeDropdownItem key={c.id} item={c}/>

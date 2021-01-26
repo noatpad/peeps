@@ -164,7 +164,7 @@ const SearchOrAddMember = ({
   }
 
   return (
-    <div className="flex-initial flex items-center px-8">
+    <div className="flex-initial flex items-center px-4 sm:px-8">
       <motion.div
         className={`flex items-center mx-1 border ${searchFocused ? 'border-blue-400' : 'border-gray-300'} rounded-full transition-colors`}
         variants={barVariants}
@@ -239,7 +239,7 @@ const SearchOrAddMember = ({
             theme={{
               container: "flex flex-1",
               input: `${searchActive ? "w-0" : "flex-1 mr-3"} disabled:bg-transparent`,
-              suggestionsContainer: "absolute top-full left-0 right-0 ml-8 mr-4 rounded-b-lg bg-white shadow-md z-20",
+              suggestionsContainer: "absolute top-full left-0 right-0 sm:ml-8 sm:mr-4 rounded-b-lg bg-white shadow-md z-20",
               suggestionsList: "divide-y divide-gray-300",
             }}
           />
