@@ -23,16 +23,29 @@ const noChangeVariants = {
   exit: { y: 0 }
 }
 
+/* PAGES
+- /           -> Main page/app
+- /hello      -> Landing page
+- /faq        -> Frequently asked questions
+- /done       -> Finish applying changes
+- /callback   -> Auth callback redirect
+- /404        -> 404
+*/
+
 const App = ({ Component, pageProps, router }) => {
   // TODO: Set <Head> for each page
   // TODO: Optimization with useMemo()
   // TODO: Shorten API requests/responses
   // TODO: Use next-seo for SEO
+  const [faqDirectAccess, setFaqDirectAccess] = useState(true);
   const [routeVariant, setRouteVariant] = useState(normalVariants);
   useRouterScroll();
 
+  // Make no transition for / -> /hello
   useEffect(() => {
-    const handleRouteChange = (url) => { setRouteVariant(url === '/hello' ? noChangeVariants : normalVariants) }
+    const handleRouteChange = (url) => {
+      setRouteVariant((router.route === '/' && url === '/hello') ? noChangeVariants : normalVariants);
+    }
     router.events.on('routeChangeStart', handleRouteChange);
     return () => router.events.off('routeChangeStart', handleRouteChange);
   }, []);
@@ -43,7 +56,7 @@ const App = ({ Component, pageProps, router }) => {
         <title>peeps</title>
       </Head>
       <div className="absolute top-0 left-0 right-0 h-screen bg-gradient-to-b from-blue-200 to-transparent -z-10"/>
-      <Header/>
+      <Header clickFAQ={() => setFaqDirectAccess(false)} goToMain={faqDirectAccess}/>
       <AnimatePresence exitBeforeEnter>
         <motion.div
           key={router.route}
