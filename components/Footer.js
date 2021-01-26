@@ -6,7 +6,7 @@ import { GitHub, Heart, Twitter } from './Icons';
 const Footer = () => (
   <footer className="px-4 pt-16 pb-20 mt-10 bg-gray-100 font-light text-center space-y-6">
     <p>
-      <span className="align-middle">Developed with</span>
+      <span className="align-middle">developed with</span>
       <span className="text-red-500"><Heart size={20}/></span>
       <span className="align-middle">by <b className="font-bold">a clueless danny</b></span>
     </p>
