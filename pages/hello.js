@@ -6,9 +6,11 @@ import Button from '@components/Button';
 
 // TODO: Implement and style landing page
 const Hello = () => (
-  <main className="flex flex-col justify-center items-center h-screen w-full text-center">
+  <main className="min-h-screen">
     <Title/>
-    <Button run={startAuth} primary>Authenticate?</Button>
+    <div className="flex justify-center">
+      <Button run={startAuth} primary>Authenticate?</Button>
+    </div>
   </main>
 )
 

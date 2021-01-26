@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { REPO_URL } from '@web-utils/config';
 
-import { QuestionCircle } from './Icons';
+import { Home, QuestionCircle } from './Icons';
 import ItemButton from './ItemButton';
 
 // TODO: Add signout button and page
@@ -14,6 +14,28 @@ const Header = () => (
           <ItemButton
             icon={<QuestionCircle size={36}/>}
             text="How does this work?"
+            textSize="text-base"
+            color="text-black"
+            width={170}
+          />
+        </a>
+      </Link>
+      <Link href="/hello">
+        <a>
+          <ItemButton
+            icon={<Home size={36}/>}
+            text="/hello"
+            textSize="text-base"
+            color="text-black"
+            width={170}
+          />
+        </a>
+      </Link>
+      <Link href="/">
+        <a>
+          <ItemButton
+            icon={<Home size={36}/>}
+            text="/"
             textSize="text-base"
             color="text-black"
             width={170}
