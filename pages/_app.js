@@ -18,13 +18,11 @@ const routeVariants = {
 }
 
 const App = ({ Component, pageProps, router }) => {
-  // TODO: Error handling from API
   // TODO: Set <Head> for each page
   // TODO: Responsive design
-  // TODO: Code cleanup
-  // TODO: Optimization with useMemo() and shortened API requests/responses
+  // TODO: Optimization with useMemo()
+  // TODO: Shorten API requests/responses
   // TODO: Use next-seo for SEO
-  // If tokens are available in cookies, use that instead of authenticating again
   useRouterScroll();
 
   return (

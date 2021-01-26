@@ -11,7 +11,8 @@ const ListResults = ({
   noHits,
   selectList,
   _handleUpdateList,
-  _handleDeleteModal
+  _handleDeleteModal,
+  errorHandler
 }) => {
   // When user has no lists
   if (noLists) {
@@ -44,6 +45,7 @@ const ListResults = ({
       selectList={selectList}
       _handleUpdateList={_handleUpdateList}
       _handleDeleteModal={_handleDeleteModal}
+      errorHandler={errorHandler}
     />
   ))
 }

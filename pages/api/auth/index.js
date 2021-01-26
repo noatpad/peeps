@@ -1,19 +1,19 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
 import { getRequestToken } from '@api-utils/auth';
+import { errorStatus } from '@api-utils/twitter';
 
 const auth = nc()
   .use(morgan('dev'))
-  .post((req, res) => {
-    return getRequestToken()
-      .then(data => {
-        console.log('Got request token. Redirecting to authentication page...');
-        res.status(200).send(data);
-      })
-      .catch(err => {
-        console.error(err);
-        res.status(500).send('Error getting OAuth request token');
-      })
+  .post(async (req, res) => {
+    try {
+      const data = await getRequestToken();
+      console.log('Got request token. Redirecting to authentication page...');
+      return res.status(200).send(data);
+    } catch (err) {
+      console.error('Error getting request token');
+      return res.status(errorStatus(err)).send(err);
+    }
   })
 
 export default auth;

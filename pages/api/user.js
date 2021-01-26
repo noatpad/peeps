@@ -1,12 +1,19 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { get, post } from '@api-utils/twitter';
+import { errorStatus, get, post } from '@api-utils/twitter';
 import { USER_LOOKUP_LIMIT } from '@api-utils/config';
+import { checkCookies } from '@api-utils/middleware';
 
 const verify = (token, secret) => (
   get(token, secret, 'account/verify_credentials')
-    .then(({ data }) => data)
-    .catch(err => err)
+    .then(({ data }) => {
+      console.log(`Got user data of ${data.name} (@${data.screen_name})`);
+      return data;
+    })
+    .catch(err => {
+      console.error("Error getting user data");
+      return Promise.reject(err);
+    })
 )
 
 const lookup = (token, secret, user_id) => {
@@ -17,7 +24,7 @@ const lookup = (token, secret, user_id) => {
         lowercase_name: user.name.toLowerCase(),
         lowercase_screen_name: user.screen_name.toLowerCase()
       })))
-      .catch(err => err)
+      .catch(err => Promise.reject(err))
   )
 }
 
@@ -28,8 +35,12 @@ const followingLookup = (token, secret, ids) => {
   }
 
   return Promise.all(chunks.map(c => lookup(token, secret, c.join(','))))
-    .then(arrays => [].concat(...arrays))
-    .catch(errors => errors)
+    .then(arrays => {
+      const following = [].concat(...arrays);
+      console.log(`Got ${following.length} users they follow`);
+      return following;
+    })
+    .catch(errors => Promise.reject(errors))
 }
 
 const getFollowing = (token, secret, cursor = -1, following = []) => (
@@ -39,21 +50,24 @@ const getFollowing = (token, secret, cursor = -1, following = []) => (
       if (data.next_cursor_str === '0') { return followingLookup(token, secret, following) }
       return getFollowing(token, secret, data.next_cursor_str, following);
     })
+    .catch(err => {
+      console.error("Error getting user's following list");
+      return Promise.reject(err);
+    })
 )
 
 const user = nc()
   .use(morgan('dev'))
-  .get((req, res) => {
+  .use(checkCookies)
+  .get(async (req, res) => {
     const { token, secret } = req.cookies;
-    return Promise.all([verify(token, secret), getFollowing(token, secret)])
-      .then(([user, following]) => {
-        console.log(`Got user data of ${user.name} (@${user.screen_name}), as well as ${following.length} users they follow`);
-        return res.status(200).send({ user, following })
-      })
-      .catch(errors => {
-        console.error('Error getting user data', res.status(500).send(errors));
-        return res.status(500).send(errors)
-      });
+    try {
+      const user = await verify(token, secret);
+      const following = await getFollowing(token, secret);
+      return res.status(200).send({ user, following });
+    } catch (err) {
+      return res.status(errorStatus(err)).send(err);
+    }
   })
 
 export default user;

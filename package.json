@@ -29,8 +29,7 @@
     "react-spinners": "^0.10.4",
     "react-switch": "^5.0.1",
     "tailwindcss": "^2.0.2",
-    "twit": "^2.2.11",
-    "universal-cookie": "^4.0.4"
+    "twit": "^2.2.11"
   },
   "devDependencies": {
     "eslint": "^7.16.0",

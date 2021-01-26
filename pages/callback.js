@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { completeAuth } from '@web-utils/api';
 
+// TODO: React accordingly when receiving a declined callback instead of a successful one
 const Callback = () => {
   const router = useRouter();
 

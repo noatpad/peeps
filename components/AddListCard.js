@@ -18,7 +18,7 @@ const wrapperVariants = {
   }
 };
 
-const AddListCard = ({ name, validName, limitReached, _handleAddList }) => {
+const AddListCard = ({ name, validName, limitReached, _handleAddList, errorHandler }) => {
   const [description, setDescription] = useState('');
   const [mode, setMode] = useState(true);
   const [valid, setValid] = useState(false);
@@ -48,7 +48,10 @@ const AddListCard = ({ name, validName, limitReached, _handleAddList }) => {
         setStatus(2);
         setTimeout(() => setStatus(0), 2000);
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        errorHandler(err);
+        setStatus(0);
+      })
   }
 
   return (

@@ -41,7 +41,8 @@ const SearchOrAddMember = ({
   adds,
   dels,
   handleSuggestionClick,
-  limitReached
+  limitReached,
+  errorHandler
 }) => {
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
@@ -107,8 +108,12 @@ const SearchOrAddMember = ({
         .then(users => {
           const queryResults = users.filter(u => results.every(r => u.id_str !== r.id_str));
           setAddResults([...results, ...queryResults].slice(0, MEMBER_SUGGESTION_COUNT));
-          setLoadingSearch(false);
         })
+        .catch(err => {
+          setAddQuery('');
+          errorHandler(err);
+        })
+        .finally(() => setLoadingSearch(false))
     }, 400)
   , []);
 

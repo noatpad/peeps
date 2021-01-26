@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
-import Cookies from 'universal-cookie';
 import Fuse from 'fuse.js';
 import { getUser, getLists, getMembersFromList, applyChanges } from '@web-utils/api';
-import { listSortCompare, userSortCompare, changeObj, numberNoun } from '@web-utils/helpers';
+import { listSortCompare, userSortCompare, numberNoun } from '@web-utils/helpers';
 
 import ApplyChangesModal from '@components/Modal/ApplyChangesModal';
 import Button from '@components/Button';
 import ClearChangesModal from '@components/Modal/ClearChangesModal';
+import ErrorModal from '@components/Modal/ErrorModal';
 import ListSelector from '@components/ListSelector';
 import Loading from '@components/Loading';
 import MemberSelector from '@components/MemberSelector';
 import SelectorPane from '@components/SelectorPane';
 import Title from '@components/Title';
+import UnauthorizedModal from '@components/Modal/UnauthorizedModal';
 
 const Home = () => {
   const [auth, setAuth] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({ user: {}, following: [] });
   const [lists, setLists] = useState([]);
   const [loadingLists, setLoadingLists] = useState(false);
@@ -28,10 +28,12 @@ const Home = () => {
   const [del, setDel] = useState([]);
   const [showApplyChangesModal, setShowApplyChangesModal] = useState(false);
   const [showClearChangesModal, setShowClearChangesModal] = useState(false);
+  const [apiError, setApiError] = useState({});
+  const [showUnauthorizedModal, setShowUnauthorizedModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const fuseListRef = useRef(new Fuse([], { keys: ['lowercase_name'] }));
   const fuseMemberRef = useRef(new Fuse([], { keys: ['lowercase_name', 'lowercase_screen_name'] }));
   const router = useRouter();
-  const cookies = new Cookies();
 
   const activeList = activeListID === -1 ? undefined : lists.find(l => l.id_str === activeListID);
   const activeAdds = activeListID === -1 ? [] : add.find(a => a.id === activeListID)?.users ?? [];
@@ -39,30 +41,28 @@ const Home = () => {
 
   // Verify that you can make API calls
   useEffect(() => {
-    const tokenInCookie = cookies.get('token') !== undefined && cookies.get('secret') !== undefined;
-    if (loading && tokenInCookie) {
-      getUser()
-        .then(data => {
-          setUserData(data);
-          setAuth(true);
-        })
-        .catch(err => console.log(err))
-        .finally(() => setLoading(false))
-    } else if (!auth) {
-      router.replace('/hello');
-    }
-  }, [loading]);
+    getUser()
+      .then(data => {
+        setUserData(data);
+        setAuth(true);
+      })
+      .catch(err => {
+        if (err.status === 401) {
+          router.push('/hello');
+        } else {
+          errorHandler(err);
+        }
+      })
+  }, []);
 
   // Get all owned lists when authenticated
   useEffect(() => {
     if (!auth) { return }
     setLoadingLists(true);
     getLists()
-      .then((lists) => {
-        setLists(lists.sort(listSortCompare));
-        setLoadingLists(false);
-      })
-      .catch(err => console.error(err))
+      .then(lists => setLists(lists.sort(listSortCompare)))
+      .catch(err => errorHandler(err))
+      .finally(() => setLoadingLists(false));
   }, [auth]);
 
   // Update fuse searching for lists when lists are updated
@@ -83,13 +83,25 @@ const Home = () => {
     } else {
       setLoadingUsers(true);
       getMembersFromList(activeListID)
-        .then((users) => {
-          setUsers(users.sort(userSortCompare));
-          setLoadingUsers(false);
+        .then((users) => setUsers(users.sort(userSortCompare)))
+        .catch(err => {
+          errorHandler(err);
+          setActiveListID(-1);
         })
-        .catch(err => console.error(err))
+        .finally(() => setLoadingUsers(false));
     }
   }, [activeListID]);
+
+  // Simple error handler for unauthorized or other errored responses
+  const errorHandler = ({ data, status }) => {
+    console.error(data);
+    setApiError(data);
+    if (status === 401) {
+      setShowUnauthorizedModal(true);
+    } else {
+      setShowErrorModal(true);
+    }
+  }
 
   // Helper to merge changes by list
   const mergedChanges = () => {
@@ -174,11 +186,9 @@ const Home = () => {
   // Apply all changes
   const handleApplyChanges = () => {
     applyChanges(add, del)
-      .then(_ => {
-        setShowApplyChangesModal(false);
-        router.replace('/done');
-      })
-      .catch(err => console.error(err))
+      .then(_ => router.replace('/done'))
+      .catch(err => errorHandler(err))
+      .finally(() => setShowApplyChangesModal(false))
   }
 
   // Clear all changes
@@ -189,14 +199,25 @@ const Home = () => {
     console.log('Clear changes!');
   }
 
-  // Loading screen
-  if (loading) {
+  // Loading screen when not authenticated
+  if (!auth) {
     return (
       <main>
         <Title/>
         <div className="text-center">
           <Loading size={100}/>
         </div>
+        {/* MODALS */}
+        <UnauthorizedModal
+          show={showUnauthorizedModal}
+          close={() => setShowUnauthorizedModal(false)}
+          error={apiError}
+        />
+        <ErrorModal
+          show={showErrorModal}
+          close={() => setShowErrorModal(false)}
+          error={apiError}
+        />
       </main>
     )
   }
@@ -223,6 +244,7 @@ const Home = () => {
             add={add}
             del={del}
             selectList={selectList}
+            errorHandler={errorHandler}
           />
         </SelectorPane>
         <SelectorPane
@@ -244,6 +266,7 @@ const Home = () => {
             unprepareToAddUser={unprepareToAddUser}
             prepareToDelUser={prepareToDelUser}
             unprepareToDelUser={unprepareToDelUser}
+            errorHandler={errorHandler}
           />
         </SelectorPane>
       </motion.div>
@@ -262,6 +285,16 @@ const Home = () => {
         show={showClearChangesModal}
         close={() => setShowClearChangesModal(false)}
         clearChanges={handleClearChanges}
+      />
+      <UnauthorizedModal
+        show={showUnauthorizedModal}
+        close={() => setShowUnauthorizedModal(false)}
+        error={apiError}
+      />
+      <ErrorModal
+        show={showErrorModal}
+        close={() => setShowErrorModal(false)}
+        error={apiError}
       />
     </main>
   )

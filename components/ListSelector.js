@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimateSharedLayout } from 'framer-motion';
 import { deleteList } from '@web-utils/api';
 import { LIST_COUNT_LIMIT, LISTS_PER_PAGE } from '@web-utils/config';
 import { listSortCompare } from '@web-utils/helpers';
@@ -18,7 +17,8 @@ const ListSelector = ({
   activeListID,
   add,
   del,
-  selectList
+  selectList,
+  errorHandler
 }) => {
   const [page, setPage] = useState(1);
   const [query, setQuery] = useState('');
@@ -70,9 +70,9 @@ const ListSelector = ({
         }
         setLists(lists.filter(list => list.id_str !== listToRemove.id_str));
         setListToRemove({});
-        setShowDeleteModal(false);
       })
-      .catch(err => console.error(err))
+      .catch(err => errorHandler(err))
+      .finally(() => setShowDeleteModal(false))
   }
 
   // Loading screen
@@ -92,6 +92,7 @@ const ListSelector = ({
         setQuery={setQuery}
         limitReached={lists.length >= LIST_COUNT_LIMIT}
         _handleAddList={handleAddList}
+        errorHandler={errorHandler}
       />
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
         <ListResults
@@ -104,6 +105,7 @@ const ListSelector = ({
           selectList={selectList}
           _handleUpdateList={handleUpdateList}
           _handleDeleteModal={handleDeleteModal}
+          errorHandler={errorHandler}
         />
       </div>
       <PaginationBar

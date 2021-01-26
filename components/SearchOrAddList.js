@@ -26,7 +26,7 @@ const nameLimitVariants = {
   inactive: { opacity: 0 }
 }
 
-const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList }) => {
+const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList, errorHandler }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [searchFocused, setSearchFocused] = useState(false);
   const [addFocused, setAddFocused] = useState(false);
@@ -132,6 +132,7 @@ const SearchOrAddList = ({ query, setQuery, limitReached, _handleAddList }) => {
             validName={validName}
             limitReached={limitReached}
             _handleAddList={handleAddList}
+            errorHandler={errorHandler}
           />
         )}
       </AnimatePresence>

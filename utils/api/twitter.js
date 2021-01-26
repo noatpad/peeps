@@ -15,7 +15,7 @@ export const get = (token, secret, endpoint, params = {}) => {
   const T = twitter(token, secret);
   return T.get(endpoint, params)
     .then(resp => resp)
-    .catch(err => err)
+    .catch(err => Promise.reject(err))
 }
 
 // Common POST request through twit
@@ -23,5 +23,10 @@ export const post = (token, secret, endpoint, params = {}) => {
   const T = twitter(token, secret);
   return T.post(endpoint, params)
     .then(resp => resp)
-    .catch(err => err)
+    .catch(err => Promise.reject(err))
+}
+
+export const errorStatus = (err) => {
+  console.error(err);
+  return err.status ?? 500;
 }

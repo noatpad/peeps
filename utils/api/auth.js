@@ -61,7 +61,7 @@ export const getRequestToken = () => {
   const url = `${AUTH_URL}/oauth/request_token`;
   return axios.post(url, null, { headers: { 'Authorization': getAuthHeader('POST', url) }})
     .then(({ data }) => qs.parse(data))
-    .catch(err => err)
+    .catch(err => Promise.reject(err))
 }
 
 // Obtain an access token
@@ -70,5 +70,5 @@ export const getAccessToken = (request_token, request_secret, verifier) => {
   const params = { oauth_token: request_token, oauth_verifier: verifier };
   return axios.post(url, null, { params, headers: { 'Authorization': getAuthHeader('POST', url, request_token, request_secret, params) }})
     .then(({ data }) => qs.parse(data))
-    .catch(err => err)
+    .catch(err => Promise.reject(err))
 }

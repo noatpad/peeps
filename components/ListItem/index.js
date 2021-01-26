@@ -9,7 +9,7 @@ const itemVariants = {
   edit: { height: 322, transition: { type: "spring", duration: 0.4 }}
 };
 
-const ListItem = ({ item, active, addCount, delCount, selectList, _handleUpdateList, _handleDeleteModal }) => {
+const ListItem = ({ item, active, addCount, delCount, selectList, _handleUpdateList, _handleDeleteModal, errorHandler }) => {
   const [editMode, setEditMode] = useState(false);
 
   return (
@@ -26,6 +26,7 @@ const ListItem = ({ item, active, addCount, delCount, selectList, _handleUpdateL
             item={item}
             exitEditMode={() => setEditMode(false)}
             _handleUpdateList={_handleUpdateList}
+            errorHandler={errorHandler}
           />
         ) : (
           <NormalView
@@ -41,25 +42,6 @@ const ListItem = ({ item, active, addCount, delCount, selectList, _handleUpdateL
       </AnimatePresence>
     </motion.div>
   )
-
-  // return editMode ? (
-  //   <EditView
-  //     item={item}
-  //     active={active}
-  //     exitEditMode={() => setEditMode(false)}
-  //     _handleUpdateList={_handleUpdateList}
-  //   />
-  // ) : (
-  //   <NormalView
-  //     item={item}
-  //     active={active}
-  //     addCount={addCount}
-  //     delCount={delCount}
-  //     enterEditMode={() => setEditMode(true)}
-  //     selectList={selectList}
-  //     _handleDeleteModal={_handleDeleteModal}
-  //   />
-  // )
 }
 
 export default ListItem;

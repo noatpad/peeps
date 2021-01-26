@@ -17,7 +17,8 @@ const MemberSelector = ({
   prepareToAddUser,
   unprepareToAddUser,
   prepareToDelUser,
-  unprepareToDelUser
+  unprepareToDelUser,
+  errorHandler
 }) => {
   const [searchActive, setSearchActive] = useState(true);
   const [query, setQuery] = useState('');
@@ -100,6 +101,7 @@ const MemberSelector = ({
         dels={dels}
         handleSuggestionClick={handleSuggestionClick}
         limitReached={limitReached}
+        errorHandler={errorHandler}
       />
       <div className="flex-1 px-12 my-4 overflow-scroll scrollGradient">
         <MemberResults

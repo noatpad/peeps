@@ -24,7 +24,7 @@ const wrapperVariants = {
   }
 }
 
-const EditView = ({ item, exitEditMode, _handleUpdateList }) => {
+const EditView = ({ item, exitEditMode, _handleUpdateList, errorHandler }) => {
   const [name, setName] = useState(item.name);
   const [description, setDescription] = useState(item.description);
   const [mode, setMode] = useState(item.mode === 'private');
@@ -54,7 +54,10 @@ const EditView = ({ item, exitEditMode, _handleUpdateList }) => {
         _handleUpdateList(list);
         exitEditMode();
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        errorHandler(err);
+        setPending(false);
+      });
   }
 
   return (
