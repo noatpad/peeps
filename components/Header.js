@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { REPO_URL } from '@web-utils/config';
 
-import { Home, LeftCircle, QuestionCircle } from './Icons';
+import { Home, LeftCircle, Logout, QuestionCircle } from './Icons';
 import ItemButton from './ItemButton';
 
 const buttonVariants = {
@@ -57,6 +57,19 @@ const Header = ({ clickFAQ, goToMain }) => {
             </motion.div>
           )}
         </AnimatePresence>
+        <Link href="/bye">
+          <a>
+            <ItemButton
+              icon={<Logout size={36}/>}
+              text="Log out"
+              textSize="text-base"
+              bg="bg-red-400"
+              color="text-black"
+              hoverColor="text-white"
+              width={170}
+            />
+          </a>
+        </Link>
         <Link href="/hello">
           <a>
             <ItemButton

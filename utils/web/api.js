@@ -32,6 +32,13 @@ export const completeAuth = (request_token, verifier) => {
     .catch(err => Promise.reject(err))
 }
 
+// Used to delete auth cookies
+export const logout = () => (
+  axios.post('/auth/logout')
+    .then(_ => _)
+    .catch(err => Promise.reject(err))
+)
+
 // Get user data and his following list
 export const getUser = () => (
   axios.get('/user')

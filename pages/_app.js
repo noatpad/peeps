@@ -38,6 +38,7 @@ const App = ({ Component, pageProps, router }) => {
   // TODO: Optimization with useMemo()
   // TODO: Shorten API requests/responses
   // TODO: Use next-seo for SEO
+  const [auth, setAuth] = useState(false);
   const [faqDirectAccess, setFaqDirectAccess] = useState(true);
   const [routeVariant, setRouteVariant] = useState(normalVariants);
   useRouterScroll();
@@ -67,7 +68,7 @@ const App = ({ Component, pageProps, router }) => {
           animate="enter"
           exit="exit"
         >
-          <Component {...pageProps}/>
+          <Component {...pageProps} auth={auth} setAuth={setAuth}/>
         </motion.div>
       </AnimatePresence>
       <Footer/>
