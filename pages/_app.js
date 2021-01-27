@@ -33,6 +33,7 @@ const noChangeVariants = {
 */
 
 const App = ({ Component, pageProps, router }) => {
+  // TODO: Make auth cookies secure, httponly, & have an expiry date
   // TODO: Set <Head> for each page
   // TODO: Optimization with useMemo()
   // TODO: Shorten API requests/responses

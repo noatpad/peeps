@@ -49,7 +49,7 @@ const Header = ({ clickFAQ, goToMain }) => {
               <ItemButton
                 onClick={handleGoToFAQ}
                 icon={<QuestionCircle size={36}/>}
-                text="How does this work?"
+                text="Got a question?"
                 textSize="text-base"
                 color="text-black"
                 width={170}

@@ -31,14 +31,14 @@ const QnA = ({ q, a }) => {
             initial={false}
             animate={open ? 'open' : 'close'}
           >
-            <Next size={28}/>
+            <Next size={32}/>
           </motion.div>
         </div>
         <div className="flex-1 text-lg md:text-xl">
           <h3 className="inline-block font-bold cursor-pointer" onClick={() => setOpen(!open)}>{q}</h3>
           <AnimatePresence initial={false}>
             {open && (
-              <motion.div className="overflow-hidden" variants={answerVariants} initial="initial" animate="animate" exit="initial">
+              <motion.div className="flex overflow-hidden" variants={answerVariants} initial="initial" animate="animate" exit="initial">
                 {a}
               </motion.div>
             )}
