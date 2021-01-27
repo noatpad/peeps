@@ -33,13 +33,12 @@ const noChangeVariants = {
 */
 
 const App = ({ Component, pageProps, router }) => {
-  // TODO: Make auth cookies secure, httponly, & have an expiry date
   // TODO: Set <Head> for each page
   // TODO: Optimization with useMemo()
   // TODO: Shorten API requests/responses
   // TODO: Use next-seo for SEO
+  // IDEA: Show API usage to user (in the form of credits)
   const [auth, setAuth] = useState(false);
-  const [faqDirectAccess, setFaqDirectAccess] = useState(true);
   const [routeVariant, setRouteVariant] = useState(normalVariants);
   useRouterScroll();
 
@@ -58,7 +57,7 @@ const App = ({ Component, pageProps, router }) => {
         <title>peeps</title>
       </Head>
       <div className="absolute top-0 left-0 right-0 h-screen bg-gradient-to-b from-blue-200 to-transparent -z-10"/>
-      <Header clickFAQ={() => setFaqDirectAccess(false)} goToMain={faqDirectAccess}/>
+      <Header auth={auth}/>
       <AnimatePresence exitBeforeEnter>
         <motion.div
           key={router.route}
