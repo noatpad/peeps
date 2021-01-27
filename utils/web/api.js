@@ -21,6 +21,13 @@ export const startAuth = () => (
     .catch(err => Promise.reject(err))
 )
 
+export const startDevAuth = () => (
+  axios.post('/auth', { dev: true })
+    .then(_ => window.location.href = '/')
+    .catch(err => Promise.reject(err))
+)
+
+
 // Wrap up authentication with an access token
 export const completeAuth = (request_token, verifier) => {
   const request_secret = sessionStorage.getItem('request_secret');

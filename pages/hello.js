@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { startAuth } from '@web-utils/api';
+import { startAuth, startDevAuth } from '@web-utils/api';
 
 import Title from '@components/Title';
 import Button from '@components/Button';
-import { TWITTER_URL } from '@web-utils/config';
+import { DEV_MODE, TWITTER_URL } from '@web-utils/config';
 
 const dropVariant = {
   initial: { opacity: 0, y: -50 },
@@ -18,6 +18,13 @@ const Hello = () => {
   const handleAuth = () => {
     setLoading(true);
     startAuth()
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false))
+  }
+
+  const handleDevAuth = () => {
+    setLoading(true);
+    startDevAuth()
       .catch(err => console.error(err))
       .finally(() => setLoading(false))
   }
@@ -35,6 +42,9 @@ const Hello = () => {
           <motion.h2 className="text-3xl text-center font-light" variants={dropVariant}>a simple list manager for Twitter</motion.h2>
           <motion.div className="flex justify-center mt-4" variants={dropVariant}>
             <Button run={handleAuth} loading={loading} primary>Log in with Twitter</Button>
+            {DEV_MODE && (
+              <Button run={handleDevAuth} loading={loading}>Dev login</Button>
+            )}
           </motion.div>
         </div>
         <div className="flex flex-col lg:flex-row mt-24 space-y-8 lg:space-y-0 lg:space-x-8 text-lg">

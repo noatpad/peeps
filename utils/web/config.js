@@ -1,3 +1,6 @@
+// Dev stuff
+export const DEV_MODE = process.env.NEXT_PUBLIC_DEV_LOGIN && true;
+
 // Common links
 export const TWITTER_URL = "https://twitter.com/aCluelessDanny";
 export const REPO_URL = "https://github.com/aCluelessDanny/peeps";
@@ -13,4 +16,5 @@ export const MEMBER_SUGGESTION_COUNT = 5;
 export const MEMBER_COUNT_LIMIT = 5000;
 export const MEMBERS_PER_PAGE = 20;
 
+// Twitter API shenanigans
 export const RATE_LIMIT_CODE = 88;
