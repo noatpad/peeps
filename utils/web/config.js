@@ -12,3 +12,5 @@ export const LISTS_PER_PAGE = 10;
 export const MEMBER_SUGGESTION_COUNT = 5;
 export const MEMBER_COUNT_LIMIT = 5000;
 export const MEMBERS_PER_PAGE = 20;
+
+export const RATE_LIMIT_CODE = 88;
