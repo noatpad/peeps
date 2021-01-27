@@ -1,7 +1,8 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { errorStatus, post } from '@api-utils/twitter';
+import { getToken } from '@api-utils/cookies';
 import { checkCookies } from '@api-utils/middleware';
+import { errorStatus, post } from '@api-utils/twitter';
 
 const update = nc()
   .use(morgan(('dev')))
@@ -9,7 +10,7 @@ const update = nc()
   .post(async (req, res) => {
     if (!req.body) { return res.status(400).send('Expected body') }
 
-    const { token, secret } = req.cookies;
+    const [token, secret] = getToken(req.cookies);
     const { id } = req.query;
     const { name, description, mode } = req.body;
     try {

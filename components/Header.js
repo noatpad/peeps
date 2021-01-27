@@ -12,7 +12,6 @@ const buttonVariants = {
   enter: { opacity: 1 }
 }
 
-// TODO: Add signout button and page
 const Header = ({ auth }) => {
   const [clickedFAQ, setClickedFAQ] = useState(false);
   const router = useRouter();

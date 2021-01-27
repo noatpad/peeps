@@ -1,8 +1,9 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { errorStatus, post } from '@api-utils/twitter';
+import { getToken } from '@api-utils/cookies';
 import { ADD_LIMIT, DEL_LIMIT } from '@api-utils/config';
 import { checkCookies } from '@api-utils/middleware';
+import { errorStatus, post } from '@api-utils/twitter';
 
 const removeMembers = async (token, secret, { id, users }) => {
   try {
@@ -42,7 +43,7 @@ const apply = nc()
   .post(async (req, res) => {
     if (!req.body) { return res.status(400).send('Expected body') }
 
-    const { token, secret } = req.cookies;
+    const [token, secret] = getToken(req.cookies);
     const { add, del } = req.body;
 
     try {

@@ -1,15 +1,8 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { serialize } from 'cookie';
 import { getAccessToken } from '@api-utils/auth';
+import { authCookie } from '@api-utils/cookies';
 import { errorStatus } from '@api-utils/twitter';
-
-const options = {
-  path: '/',
-  maxAge: 60 * 60 * 24 * 7,   // 1 week
-  httpOnly: true,
-  secure: true
-}
 
 const done = nc()
   .use(morgan('dev'))
@@ -19,11 +12,7 @@ const done = nc()
     const { request_token, request_secret, verifier } = req.body;
     try {
       const data = await getAccessToken(request_token, request_secret, verifier);
-      // TODO: Use a single cookie instead of 2
-      res.setHeader('Set-Cookie', [
-        serialize('token', data.oauth_token, options),
-        serialize('secret', data.oauth_token_secret, options)
-      ]);
+      res.setHeader('Set-Cookie', authCookie(data.oauth_token, data.oauth_token_secret));
       console.log('Authenticated!');
       return res.status(200).send(data);
     } catch (err) {

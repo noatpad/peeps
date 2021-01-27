@@ -1,13 +1,14 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { errorStatus, get } from '@api-utils/twitter';
+import { getToken } from '@api-utils/cookies';
 import { checkCookies } from '@api-utils/middleware';
+import { errorStatus, get } from '@api-utils/twitter';
 
 const lists = nc()
   .use(morgan('dev'))
   .use(checkCookies)
   .get(async (req, res) => {
-    const { token, secret } = req.cookies;
+    const [token, secret] = getToken(req.cookies);
     try {
       const { data } = await get(token, secret, 'lists/ownerships', { count: 1000 });
       const lists = data.lists.map(l => ({

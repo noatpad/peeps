@@ -1,13 +1,14 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { errorStatus, post } from '@api-utils/twitter';
+import { getToken } from '@api-utils/cookies';
 import { checkCookies } from '@api-utils/middleware';
+import { errorStatus, post } from '@api-utils/twitter';
 
 const del = nc()
   .use(morgan(('dev')))
   .use(checkCookies)
   .post(async (req, res) => {
-    const { token, secret } = req.cookies;
+    const [token, secret] = getToken(req.cookies);
     const { id } = req.query;
     try {
       const { data } = await post(token, secret, 'lists/destroy', { list_id: id });

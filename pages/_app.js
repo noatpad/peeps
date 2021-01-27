@@ -29,6 +29,7 @@ const noChangeVariants = {
 - /faq        -> Frequently asked questions
 - /done       -> Finish applying changes
 - /callback   -> Auth callback redirect
+- /bye        -> Logout helper page
 - /404        -> 404
 */
 

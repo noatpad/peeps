@@ -1,8 +1,9 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { errorStatus, get, post } from '@api-utils/twitter';
+import { getToken } from '@api-utils/cookies';
 import { USER_LOOKUP_LIMIT } from '@api-utils/config';
 import { checkCookies } from '@api-utils/middleware';
+import { errorStatus, get, post } from '@api-utils/twitter';
 
 const verify = (token, secret) => (
   get(token, secret, 'account/verify_credentials')
@@ -60,7 +61,7 @@ const user = nc()
   .use(morgan('dev'))
   .use(checkCookies)
   .get(async (req, res) => {
-    const { token, secret } = req.cookies;
+    const [token, secret] = getToken(req.cookies);
     try {
       const user = await verify(token, secret);
       const following = await getFollowing(token, secret);

@@ -1,7 +1,8 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { errorStatus, post } from '@api-utils/twitter';
+import { getToken } from '@api-utils/cookies';
 import { checkCookies } from '@api-utils/middleware';
+import { errorStatus, post } from '@api-utils/twitter';
 
 const add = nc()
   .use(morgan('dev'))
@@ -9,7 +10,7 @@ const add = nc()
   .post(async (req, res) => {
     if (!req.body) { return res.status(400).send('Expected body') }
 
-    const { token, secret } = req.cookies;
+    const [token, secret] = getToken(req.cookies);
     const { name, description, mode } = req.body;
     try {
       const { data } = await post(token, secret, 'lists/create', { name, description, mode: mode ? 'private' : 'public' });

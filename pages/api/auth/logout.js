@@ -1,23 +1,14 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
-import { serialize } from 'cookie';
+import { expireCookie } from '@api-utils/cookies';
 import { errorStatus } from '@api-utils/twitter';
 
-const options = {
-  path: '/',
-  maxAge: -1,      // expire right away
-  httpOnly: true,
-  secure: true
-}
 
 const logout = nc()
   .use(morgan('dev'))
   .post(async (req, res) => {
     try {
-      res.setHeader('Set-Cookie', [
-        serialize('token', '', options),
-        serialize('secret', '', options)
-      ]);
+      res.setHeader('Set-Cookie', expireCookie());
       console.log('Logged off!');
       return res.status(200).send('Logged off!');
     } catch (err) {
