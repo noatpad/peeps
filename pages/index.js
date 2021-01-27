@@ -17,6 +17,7 @@ import Title from '@components/Title';
 import UnauthorizedModal from '@components/Modal/UnauthorizedModal';
 
 const Home = ({ auth, setAuth }) => {
+  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState({ user: {}, following: [] });
   const [lists, setLists] = useState([]);
   const [loadingLists, setLoadingLists] = useState(false);
@@ -44,6 +45,7 @@ const Home = ({ auth, setAuth }) => {
       .then(data => {
         setUserData(data);
         setAuth(true);
+        setLoading(false);
       })
       .catch(err => {
         if (err.status === 401) {
@@ -199,7 +201,7 @@ const Home = ({ auth, setAuth }) => {
   }
 
   // Loading screen when not authenticated
-  if (!auth) {
+  if (loading) {
     return (
       <main>
         <Title/>
