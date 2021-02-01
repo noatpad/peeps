@@ -35,13 +35,16 @@ const noChangeVariants = {
 
 const App = ({ Component, pageProps, router }) => {
   // TODO: Optimization with React.memo()
-  // IDEA: Cache information here instead of '/' to save API requests
   // TODO: Update FAQ
   // TODO: Use next-seo for SEO
   // TODO: Make favicon
   // IDEA: Show API usage to user (in the form of credits)
   // TODO: Run Lighthouse auditing and fix appropriate things
   const [auth, setAuth] = useState(false);
+  const [userData, setUserData] = useState(undefined);
+  const [lists, setLists] = useState(undefined);
+  const [add, setAdd] = useState([]);
+  const [del, setDel] = useState([]);
   const [routeVariant, setRouteVariant] = useState(normalVariants);
   useRouterScroll();
 
@@ -70,7 +73,19 @@ const App = ({ Component, pageProps, router }) => {
           animate="enter"
           exit="exit"
         >
-          <Component {...pageProps} auth={auth} setAuth={setAuth}/>
+          <Component
+            {...pageProps}
+            auth={auth}
+            setAuth={setAuth}
+            userData={userData}
+            setUserData={setUserData}
+            lists={lists}
+            setLists={setLists}
+            add={add}
+            setAdd={setAdd}
+            del={del}
+            setDel={setDel}
+          />
         </motion.div>
       </AnimatePresence>
       <Footer/>

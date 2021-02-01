@@ -16,16 +16,18 @@ import SelectorPane from '@components/SelectorPane';
 import Title from '@components/Title';
 import UnauthorizedModal from '@components/Modal/UnauthorizedModal';
 
-const Home = ({ auth, setAuth }) => {
+const Home = ({
+  auth, setAuth,
+  userData, setUserData,
+  lists, setLists,
+  add, setAdd,
+  del, setDel
+}) => {
   const [loading, setLoading] = useState(true);
-  const [userData, setUserData] = useState({ user: {}, following: [] });
-  const [lists, setLists] = useState([]);
   const [loadingLists, setLoadingLists] = useState(false);
   const [activeListID, setActiveListID] = useState(-1);
   const [users, setUsers] = useState([]);
   const [loadingUsers, setLoadingUsers] = useState(false);
-  const [add, setAdd] = useState([]);
-  const [del, setDel] = useState([]);
   const [showApplyChangesModal, setShowApplyChangesModal] = useState(false);
   const [showClearChangesModal, setShowClearChangesModal] = useState(false);
   const [apiError, setApiError] = useState({});
@@ -41,6 +43,12 @@ const Home = ({ auth, setAuth }) => {
 
   // Verify that you can make API calls
   useEffect(() => {
+    if (userData) {
+      setAuth(true);
+      setLoading(false);
+      return;
+    }
+
     getUser()
       .then(data => {
         setUserData(data);
@@ -58,7 +66,7 @@ const Home = ({ auth, setAuth }) => {
 
   // Get all owned lists when authenticated
   useEffect(() => {
-    if (!auth) { return }
+    if (!auth || lists) { return }
     setLoadingLists(true);
     getLists()
       .then(lists => setLists(lists.sort(listSortCompare)))
@@ -225,7 +233,7 @@ const Home = ({ auth, setAuth }) => {
 
   return (
     <main>
-      <Title user={userData.user}/>
+      <Title user={userData?.user}/>
       <motion.div
         className="flex flex-col lg:flex-row space-y-8 lg:space-y-0 my-12"
         initial={{ opacity: 0, y: -100 }}
@@ -234,12 +242,12 @@ const Home = ({ auth, setAuth }) => {
       >
         <SelectorPane
           title="Your lists"
-          subtitle={numberNoun(lists.length, "list")}
+          subtitle={numberNoun(lists?.length ?? 0, "list")}
         >
           <ListSelector
             fuse={fuseListRef.current}
             loading={loadingLists}
-            lists={lists}
+            lists={lists ?? []}
             setLists={setLists}
             activeListID={activeListID}
             add={add}
