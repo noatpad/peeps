@@ -1,6 +1,7 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
 import { getToken } from '@api-utils/cookies';
+import { getMinifiedUser } from '@api-utils/helpers';
 import { checkCookies } from '@api-utils/middleware';
 import { errorStatus, get } from '@api-utils/twitter';
 
@@ -13,7 +14,7 @@ const search = nc()
     try {
       const { data } = await get(token, secret, 'users/search', { q, count: 5 });
       const users = data.map(u => ({
-        ...u,
+        ...getMinifiedUser(u),
         lowercase_name: u.name.toLowerCase(),
         lowercase_screen_name: u.screen_name.toLowerCase()
       }));

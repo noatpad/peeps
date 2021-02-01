@@ -34,12 +34,13 @@ const noChangeVariants = {
 */
 
 const App = ({ Component, pageProps, router }) => {
-  // TODO: Set <Head> for each page
-  // TODO: Optimization with useMemo()
-  // TODO: Shorten API requests/responses
+  // TODO: Optimization with React.memo()
   // IDEA: Cache information here instead of '/' to save API requests
+  // TODO: Update FAQ
   // TODO: Use next-seo for SEO
+  // TODO: Make favicon
   // IDEA: Show API usage to user (in the form of credits)
+  // TODO: Run Lighthouse auditing and fix appropriate things
   const [auth, setAuth] = useState(false);
   const [routeVariant, setRouteVariant] = useState(normalVariants);
   useRouterScroll();

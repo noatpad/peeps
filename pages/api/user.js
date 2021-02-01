@@ -2,6 +2,7 @@ import nc from 'next-connect';
 import morgan from 'morgan';
 import { getToken } from '@api-utils/cookies';
 import { USER_LOOKUP_LIMIT } from '@api-utils/config';
+import { getMinifiedUser } from '@api-utils/helpers';
 import { checkCookies } from '@api-utils/middleware';
 import { errorStatus, get, post } from '@api-utils/twitter';
 
@@ -9,7 +10,7 @@ const verify = (token, secret) => (
   get(token, secret, 'account/verify_credentials')
     .then(({ data }) => {
       console.log(`Got user data of ${data.name} (@${data.screen_name})`);
-      return data;
+      return getMinifiedUser(data);
     })
     .catch(err => {
       console.error("Error getting user data");
@@ -21,7 +22,7 @@ const lookup = (token, secret, user_id) => {
   return (
     post(token, secret, 'users/lookup', { user_id })
       .then(({ data }) => data.map(user => ({
-        ...user,
+        ...getMinifiedUser(user),
         lowercase_name: user.name.toLowerCase(),
         lowercase_screen_name: user.screen_name.toLowerCase()
       })))

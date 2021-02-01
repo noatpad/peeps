@@ -1,6 +1,7 @@
 import nc from 'next-connect';
 import morgan from 'morgan';
 import { getToken } from '@api-utils/cookies';
+import { getMinifiedList } from '@api-utils/helpers';
 import { checkCookies } from '@api-utils/middleware';
 import { errorStatus, post } from '@api-utils/twitter';
 
@@ -15,7 +16,7 @@ const add = nc()
     try {
       const { data } = await post(token, secret, 'lists/create', { name, description, mode: mode ? 'private' : 'public' });
       const list = {
-        ...data,
+        ...getMinifiedList(data),
         lowercase_name: data.name.toLowerCase(),
         add: [],
         del: []
