@@ -37,6 +37,7 @@ const App = ({ Component, pageProps, router }) => {
   // TODO: Set <Head> for each page
   // TODO: Optimization with useMemo()
   // TODO: Shorten API requests/responses
+  // IDEA: Cache information here instead of '/' to save API requests
   // TODO: Use next-seo for SEO
   // IDEA: Show API usage to user (in the form of credits)
   const [auth, setAuth] = useState(false);

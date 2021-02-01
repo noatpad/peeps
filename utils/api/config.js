@@ -7,6 +7,7 @@ export const DEV_AUTH = DEV_MODE ? {
 export const API_KEY = process.env.API_KEY;
 export const API_SECRET = process.env.API_SECRET;
 export const CALLBACK_URL = `${process.env.BASE_URL}/callback`;
+export const ENC_KEY = process.env.COOKIE_ENC_KEY;
 
 // Twitter API shenanigans
 export const USER_LOOKUP_LIMIT = 25;
