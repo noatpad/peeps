@@ -70,14 +70,7 @@ const Home = ({
   // Get all owned lists when authenticated
   useEffect(() => {
     if (!auth || lists) { return }
-    setLoadingLists(true);
-    getLists()
-      .then(({ lists, rate_limit }) => {
-        setLists(lists.sort(listSortCompare));
-        setRateLimits({ ...rateLimits, lists: rate_limit });
-      })
-      .catch(err => errorHandler(err))
-      .finally(() => setLoadingLists(false));
+    prepareLists();
   }, [auth]);
 
   // Update fuse searching for lists when lists are updated
@@ -158,6 +151,19 @@ const Home = ({
     if (id_str === activeListID) { return }
     setLoadingUsers(true);
     setActiveListID(id_str);
+  }
+
+  // Load lists
+  const prepareLists = () => {
+    setActiveListID(-1);
+    setLoadingLists(true);
+    getLists()
+      .then(({ lists, rate_limit }) => {
+        setLists(lists.sort(listSortCompare));
+        setRateLimits({ ...rateLimits, lists: rate_limit });
+      })
+      .catch(err => errorHandler(err))
+      .finally(() => setLoadingLists(false));
   }
 
   // Prepare a user to be added to a list
@@ -324,6 +330,7 @@ const Home = ({
         </div>
       </motion.div>
       <div className="flex justify-center">
+        <Button run={prepareLists}>Refresh lists</Button>
         <Button run={() => setShowClearChangesModal(true)} disabled={!add.length && !del.length} warning>Clear</Button>
         <Button run={() => setShowApplyChangesModal(true)} disabled={!add.length && !del.length} primary>Apply</Button>
       </div>

@@ -38,7 +38,6 @@ const App = ({ Component, pageProps, router }) => {
   // TODO: Update FAQ
   // TODO: Use next-seo for SEO
   // TODO: Make favicon
-  // IDEA: Show API usage to user (in the form of credits)
   // TODO: Run Lighthouse auditing and fix appropriate things
   const [auth, setAuth] = useState(false);
   const [userData, setUserData] = useState(undefined);
