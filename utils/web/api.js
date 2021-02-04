@@ -9,6 +9,13 @@ axios.interceptors.response.use(
   }
 )
 
+// Get rate limit data from headers
+const getRateLimitHeaders = (headers) => ({
+  limit: headers['x-rate-limit-limit'],
+  remaining: headers['x-rate-limit-remaining'],
+  reset: Math.round(Date.now() / 1000) >= headers['x-rate-limit-reset'] ? -1 : headers['x-rate-limit-reset']
+})
+
 // Start authentication with a request token
 export const startAuth = () => (
   axios.post('/auth')
@@ -46,6 +53,13 @@ export const logout = () => (
     .catch(err => Promise.reject(err))
 )
 
+// Get rate limit statuses
+export const checkRateLimitStatus = () => (
+  axios.get('/rate_limits')
+    .then(({ data }) => data)
+    .catch(err => Promise.reject(err))
+)
+
 // Get user data and his following list
 export const getUser = () => (
   axios.get('/user')
@@ -56,14 +70,14 @@ export const getUser = () => (
 // Get all lists owned by the user
 export const getLists = () => (
   axios.get('/lists')
-    .then(({ data }) => data)
+    .then(({ data, headers }) => ({ lists: data, rate_limit: getRateLimitHeaders(headers) }))
     .catch(err => Promise.reject(err))
 )
 
 // Get all members from a given list
 export const getMembersFromList = (id) => (
   axios.get(`/lists/${id}/members`)
-    .then(({ data }) => data)
+    .then(({ data, headers }) => ({ users: data, rate_limit: getRateLimitHeaders(headers) }))
     .catch(err => Promise.reject(err))
 )
 
@@ -91,7 +105,7 @@ export const updateList = ({ id, ...rest }) => (
 // Search for a user
 export const search = (q) => (
   axios.get('/search', { params: { q }})
-    .then(({ data }) => data)
+    .then(({ data, headers }) => ({ users: data, rate_limit: getRateLimitHeaders(headers) }))
     .catch(err => Promise.reject(err))
 )
 

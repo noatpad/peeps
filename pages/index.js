@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import Fuse from 'fuse.js';
-import { getUser, getLists, getMembersFromList, applyChanges } from '@web-utils/api';
+import { getUser, getLists, getMembersFromList, applyChanges, checkRateLimitStatus } from '@web-utils/api';
 import { listSortCompare, userSortCompare, numberNoun } from '@web-utils/helpers';
 
 import ApplyChangesModal from '@components/Modal/ApplyChangesModal';
@@ -15,6 +15,7 @@ import MemberSelector from '@components/MemberSelector';
 import SelectorPane from '@components/SelectorPane';
 import Title from '@components/Title';
 import UnauthorizedModal from '@components/Modal/UnauthorizedModal';
+import RateLimitBar from '@components/RateLimitBar';
 
 const Home = ({
   auth, setAuth,
@@ -30,6 +31,7 @@ const Home = ({
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [showApplyChangesModal, setShowApplyChangesModal] = useState(false);
   const [showClearChangesModal, setShowClearChangesModal] = useState(false);
+  const [rateLimits, setRateLimits] = useState({});
   const [apiError, setApiError] = useState({});
   const [showUnauthorizedModal, setShowUnauthorizedModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -42,26 +44,27 @@ const Home = ({
   const activeDels = activeListID === -1 ? [] : del.find(d => d.id === activeListID)?.users ?? [];
 
   // Verify that you can make API calls
-  useEffect(() => {
+  useEffect(async () => {
     if (userData) {
+      await checkRateLimits();
       setAuth(true);
       setLoading(false);
-      return;
+    } else {
+      await getUser()
+        .then(async data => {
+          await checkRateLimits();
+          setUserData(data);
+          setAuth(true);
+          setLoading(false);
+        })
+        .catch(err => {
+          if (err.status === 401) {
+            setTimeout(() => router.replace('/hello'), 500);
+          } else {
+            errorHandler(err);
+          }
+        })
     }
-
-    getUser()
-      .then(data => {
-        setUserData(data);
-        setAuth(true);
-        setLoading(false);
-      })
-      .catch(err => {
-        if (err.status === 401) {
-          setTimeout(() => router.replace('/hello'), 500);
-        } else {
-          errorHandler(err);
-        }
-      })
   }, []);
 
   // Get all owned lists when authenticated
@@ -69,7 +72,10 @@ const Home = ({
     if (!auth || lists) { return }
     setLoadingLists(true);
     getLists()
-      .then(lists => setLists(lists.sort(listSortCompare)))
+      .then(({ lists, rate_limit }) => {
+        setLists(lists.sort(listSortCompare));
+        setRateLimits({ ...rateLimits, lists: rate_limit });
+      })
       .catch(err => errorHandler(err))
       .finally(() => setLoadingLists(false));
   }, [auth]);
@@ -92,7 +98,10 @@ const Home = ({
     } else {
       setLoadingUsers(true);
       getMembersFromList(activeListID)
-        .then((users) => setUsers(users.sort(userSortCompare)))
+        .then(({ users, rate_limit }) => {
+          setUsers(users.sort(userSortCompare));
+          setRateLimits({ ...rateLimits, members: rate_limit });
+        })
         .catch(err => {
           errorHandler(err);
           setActiveListID(-1);
@@ -100,6 +109,24 @@ const Home = ({
         .finally(() => setLoadingUsers(false));
     }
   }, [activeListID]);
+
+  // Helper to get rate limit statuses
+  const checkRateLimits = () => (
+    checkRateLimitStatus()
+      .then(limits => setRateLimits(limits))
+      .catch(err => errorHandler(err))
+  )
+
+  // Refresh rate limit upon hitting the reset time
+  const refreshRateLimit = (endpoint) => {
+    const newRateLimits = { ...rateLimits };
+    newRateLimits[endpoint].remaining = rateLimits[endpoint].limit;
+    newRateLimits[endpoint].reset = -1;
+    setRateLimits(newRateLimits);
+  }
+
+  // Helper to set rate limit status for searches
+  const setSearchRateLimit = (rate_limit) => setRateLimits({ ...rateLimits, search: rate_limit });
 
   // Simple error handler for unauthorized or other errored responses
   const errorHandler = ({ data, status }) => {
@@ -240,44 +267,61 @@ const Home = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ type: 'tween', ease: 'easeOut', duration: 0.45, delay: 0.3 }}
       >
-        <SelectorPane
-          title="Your lists"
-          subtitle={numberNoun(lists?.length ?? 0, "list")}
-        >
-          <ListSelector
-            fuse={fuseListRef.current}
-            loading={loadingLists}
-            lists={lists ?? []}
-            setLists={setLists}
-            activeListID={activeListID}
-            add={add}
-            del={del}
-            selectList={selectList}
-            errorHandler={errorHandler}
-          />
-        </SelectorPane>
-        <SelectorPane
-          title={activeList?.name ?? 'Select a list!'}
-          subtitle={activeListID === -1 ? 'List members will be displayed here...' : numberNoun(activeList?.member_count ?? 0, "member")}
-          addCount={activeAdds.length}
-          delCount={activeDels.length}
-          italic={activeListID === -1}
-        >
-          <MemberSelector
-            fuse={fuseMemberRef.current}
-            following={userData?.following ?? []}
-            inactive={activeListID === -1}
-            loading={loadingUsers}
-            users={users}
-            adds={activeAdds}
-            dels={activeDels}
-            prepareToAddUser={prepareToAddUser}
-            unprepareToAddUser={unprepareToAddUser}
-            prepareToDelUser={prepareToDelUser}
-            unprepareToDelUser={unprepareToDelUser}
-            errorHandler={errorHandler}
-          />
-        </SelectorPane>
+        <div className="lg:flex-1 mx-4 sm:mx-8 md:mx-12 lg:mx-8 xl:mx-14 2xl:mx-20 space-y-3">
+          {rateLimits.user && (
+            <RateLimitBar title="User" rateLimit={rateLimits.user} refresh={() => refreshRateLimit('user')}/>
+          )}
+          {rateLimits.lists && (
+            <RateLimitBar title="Lists" rateLimit={rateLimits.lists} refresh={() => refreshRateLimit('lists')}/>
+          )}
+          <SelectorPane
+            title="Your lists"
+            subtitle={numberNoun(lists?.length ?? 0, "list")}
+          >
+            <ListSelector
+              fuse={fuseListRef.current}
+              loading={loadingLists}
+              lists={lists ?? []}
+              setLists={setLists}
+              activeListID={activeListID}
+              add={add}
+              del={del}
+              selectList={selectList}
+              errorHandler={errorHandler}
+            />
+          </SelectorPane>
+        </div>
+        <div className="lg:flex-1 mx-4 sm:mx-8 md:mx-12 lg:mx-8 xl:mx-14 2xl:mx-20 space-y-3">
+          {rateLimits.members && (
+            <RateLimitBar title="List Members" rateLimit={rateLimits.members} refresh={() => refreshRateLimit('members')}/>
+          )}
+          {rateLimits.search && (
+            <RateLimitBar title="Search" rateLimit={rateLimits.search} refresh={() => refreshRateLimit('search')}/>
+          )}
+          <SelectorPane
+            title={activeList?.name ?? 'Select a list!'}
+            subtitle={activeListID === -1 ? 'List members will be displayed here...' : numberNoun(activeList?.member_count ?? 0, "member")}
+            addCount={activeAdds.length}
+            delCount={activeDels.length}
+            italic={activeListID === -1}
+          >
+            <MemberSelector
+              fuse={fuseMemberRef.current}
+              following={userData?.following ?? []}
+              inactive={activeListID === -1}
+              loading={loadingUsers}
+              users={users}
+              adds={activeAdds}
+              dels={activeDels}
+              prepareToAddUser={prepareToAddUser}
+              unprepareToAddUser={unprepareToAddUser}
+              prepareToDelUser={prepareToDelUser}
+              unprepareToDelUser={unprepareToDelUser}
+              setSearchRateLimit={setSearchRateLimit}
+              errorHandler={errorHandler}
+            />
+          </SelectorPane>
+        </div>
       </motion.div>
       <div className="flex justify-center">
         <Button run={() => setShowClearChangesModal(true)} disabled={!add.length && !del.length} warning>Clear</Button>

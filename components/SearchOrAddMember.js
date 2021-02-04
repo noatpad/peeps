@@ -42,6 +42,7 @@ const SearchOrAddMember = ({
   dels,
   handleSuggestionClick,
   limitReached,
+  setSearchRateLimit,
   errorHandler
 }) => {
   const [searchFocused, setSearchFocused] = useState(false);
@@ -105,9 +106,10 @@ const SearchOrAddMember = ({
       }
 
       search(value)
-        .then(users => {
+        .then(({ users, rate_limit }) => {
           const queryResults = users.filter(u => results.every(r => u.id_str !== r.id_str));
           setAddResults([...results, ...queryResults].slice(0, MEMBER_SUGGESTION_COUNT));
+          setSearchRateLimit(rate_limit);
         })
         .catch(err => {
           setAddQuery('');

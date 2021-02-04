@@ -18,6 +18,7 @@ const MemberSelector = ({
   unprepareToAddUser,
   prepareToDelUser,
   unprepareToDelUser,
+  setSearchRateLimit,
   errorHandler
 }) => {
   const [searchActive, setSearchActive] = useState(true);
@@ -101,6 +102,7 @@ const MemberSelector = ({
         dels={dels}
         handleSuggestionClick={handleSuggestionClick}
         limitReached={limitReached}
+        setSearchRateLimit={setSearchRateLimit}
         errorHandler={errorHandler}
       />
       <div className="flex-1 px-4 sm:px-8 md:px-12 mt-4 overflow-scroll scrollGradient">
