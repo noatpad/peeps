@@ -19,22 +19,22 @@ const MemberItem = ({ onClick, user, add, del, limitReached }) => {
 
     if (add) {
       icon = <Add2 size={16}/>;
-      bg = "bg-green-400";
+      bg = "hover:bg-green-400";
       color = "text-green-500";
-      hoverColor = "text-white";
+      hoverColor = "hover:text-white";
       text = "Cancel addition";
     } else if (del) {
       icon = <Remove size={16}/>;
-      bg = "bg-red-400";
+      bg = "hover:bg-red-400";
       color = "text-red-500";
-      hoverColor = "text-white";
+      hoverColor = "hover:text-white";
       text = "Cancel removal";
       disabled = limitReached;
     } else {
       icon = <Ellipsis size={16}/>;
-      bg = "bg-white";
+      bg = "hover:bg-white";
       color = "text-gray-600"
-      hoverColor = "text-red-400";
+      hoverColor = "hover:text-red-400";
       text = "Remove member";
     }
 

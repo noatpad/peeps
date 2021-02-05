@@ -102,9 +102,9 @@ const Header = ({ auth }) => {
                             icon={<Logout size={36}/>}
                             text="Log out"
                             textSize="text-base"
-                            bg="bg-red-400"
+                            bg="hover:bg-red-400"
                             color="text-black"
-                            hoverColor="text-white"
+                            hoverColor="hover:text-white"
                             width={170}
                           />
                         </a>

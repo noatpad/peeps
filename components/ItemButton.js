@@ -5,7 +5,7 @@ const ItemButton = ({
   onClick,
   icon,
   width = 100,
-  bg = "bg-white",
+  bg = "hover:bg-white",
   color = 'text-gray-700',
   hoverColor,
   text,
@@ -20,7 +20,7 @@ const ItemButton = ({
 
   return (
     <motion.button
-      className={`flex ${reverse ? 'flex-row-reverse' : 'flex-row'} items-center p-1 rounded group ${color} hover:${bg} hover:shadow-md ${hoverColor ? `hover:${hoverColor}` : ''} disabled:opacity-50 disabled:text-opacity-50 disabled:cursor-not-allowed transition-all`}
+      className={`flex ${reverse ? 'flex-row-reverse' : 'flex-row'} items-center p-1 rounded group ${color} ${bg} ${hoverColor} hover:shadow-md disabled:opacity-50 disabled:text-opacity-50 disabled:cursor-not-allowed transition-all`}
       onClick={onClick}
       disabled={disabled}
       initial={false}
