@@ -17,7 +17,6 @@ const rate_limits = nc()
         lists: data.resources.lists['/lists/ownerships'],
         members: data.resources.lists['/lists/members']
       }
-      console.log(limits);
       console.log('Got rate limit statuses');
       return res.status(200).send(limits);
     } catch (err) {

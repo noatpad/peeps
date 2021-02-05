@@ -275,10 +275,20 @@ const Home = ({
       >
         <div className="lg:flex-1 mx-4 sm:mx-8 md:mx-12 lg:mx-8 xl:mx-14 2xl:mx-20 space-y-3">
           {rateLimits.user && (
-            <RateLimitBar title="User" rateLimit={rateLimits.user} refresh={() => refreshRateLimit('user')}/>
+            <RateLimitBar
+              title="User"
+              rateLimit={rateLimits.user}
+              refresh={() => refreshRateLimit('user')}
+              creditText="You use a credit when you refresh the page."
+            />
           )}
           {rateLimits.lists && (
-            <RateLimitBar title="Lists" rateLimit={rateLimits.lists} refresh={() => refreshRateLimit('lists')}/>
+            <RateLimitBar
+              title="Lists"
+              rateLimit={rateLimits.lists}
+              refresh={() => refreshRateLimit('lists')}
+              creditText="You use a credit when you refresh the page or press the 'Refresh lists' button."
+            />
           )}
           <SelectorPane
             title="Your lists"
@@ -299,10 +309,20 @@ const Home = ({
         </div>
         <div className="lg:flex-1 mx-4 sm:mx-8 md:mx-12 lg:mx-8 xl:mx-14 2xl:mx-20 space-y-3">
           {rateLimits.members && (
-            <RateLimitBar title="List Members" rateLimit={rateLimits.members} refresh={() => refreshRateLimit('members')}/>
+            <RateLimitBar
+              title="List Members"
+              rateLimit={rateLimits.members}
+              refresh={() => refreshRateLimit('members')}
+              creditText="You use a credit when you select a list and view its members."
+            />
           )}
           {rateLimits.search && (
-            <RateLimitBar title="Search" rateLimit={rateLimits.search} refresh={() => refreshRateLimit('search')}/>
+            <RateLimitBar
+              title="Search"
+              rateLimit={rateLimits.search}
+              refresh={() => refreshRateLimit('search')}
+              creditText="You use a credit when you search for a user to add and a non-follower is shown in the suggestions."
+            />
           )}
           <SelectorPane
             title={activeList?.name ?? 'Select a list!'}
