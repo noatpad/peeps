@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Modal from 'react-modal';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -44,13 +44,13 @@ const App = ({ Component, pageProps, router }) => {
   const [lists, setLists] = useState(undefined);
   const [add, setAdd] = useState([]);
   const [del, setDel] = useState([]);
-  const [routeVariant, setRouteVariant] = useState(normalVariants);
+  const routeVariant = useRef(normalVariants);
   useRouterScroll();
 
   // Make no transition for / -> /hello
   useEffect(() => {
     const handleRouteChange = (url) => {
-      setRouteVariant((router.route === '/' && url === '/hello') ? noChangeVariants : normalVariants);
+      routeVariant.current = (router.route === '/' && url === '/hello' && !auth) ? noChangeVariants : normalVariants;
     }
     router.events.on('routeChangeStart', handleRouteChange);
     return () => router.events.off('routeChangeStart', handleRouteChange);
@@ -67,7 +67,7 @@ const App = ({ Component, pageProps, router }) => {
         <motion.div
           key={router.route}
           className="container min-h-screen mx-auto px-8"
-          variants={routeVariant}
+          variants={routeVariant.current}
           initial="initial"
           animate="enter"
           exit="exit"
