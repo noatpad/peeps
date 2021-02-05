@@ -28,5 +28,5 @@ export const post = (token, secret, endpoint, params = {}) => {
 
 export const errorStatus = (err) => {
   console.error('ERROR!', err ?? "Unknown error...");
-  return err?.status ?? 500;
+  return err?.status ?? err?.statusCode ?? 500;
 }
