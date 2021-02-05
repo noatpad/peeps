@@ -117,19 +117,19 @@ const questions = [
 ]
 
 const FAQ = () => (
-  <motion.main
-    className="py-36 lg:mx-24 xl:mx-36 2xl:mx-48 space-y-4"
-    transition={{ staggerChildren: 0.1 }}
-    initial="initial"
-    animate="animate"
-  >
+  <main className="py-36 lg:mx-24 xl:mx-36 2xl:mx-48 space-y-4">
     <h1 className="text-5xl font-bold text-center">FAQ</h1>
-    <div className="space-y-2">
+    <motion.div
+      className="space-y-4"
+      transition={{ delay: 0.1, staggerChildren: 0.05 }}
+      initial="initial"
+      animate="animate"
+    >
       {questions.map(({ q, a }, i) => (
         <QnA key={i} q={q} a={a}/>
       ))}
-    </div>
-  </motion.main>
+    </motion.div>
+  </main>
 )
 
 export default FAQ;
