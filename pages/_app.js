@@ -35,9 +35,9 @@ const noChangeVariants = {
 
 const App = ({ Component, pageProps, router }) => {
   // TODO: Optimization with React.memo()
-  // TODO: Update FAQ
   // TODO: Use next-seo for SEO
   // TODO: Make favicon
+  // TODO: Update FAQ
   // TODO: Run Lighthouse auditing and fix appropriate things
   const [auth, setAuth] = useState(false);
   const [userData, setUserData] = useState(undefined);

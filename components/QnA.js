@@ -34,7 +34,7 @@ const QnA = ({ q, a }) => {
             <Next size={32}/>
           </motion.div>
         </div>
-        <div className="flex-1 pr-3 text-lg md:text-xl">
+        <div className="flex-1 mr-6 text-lg md:text-xl">
           <h3 className="font-bold py-1.5 cursor-pointer" onClick={() => setOpen(!open)}>{q}</h3>
           <AnimatePresence initial={false}>
             {open && (
