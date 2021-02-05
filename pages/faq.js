@@ -99,7 +99,12 @@ const questions = [
         <p>
           You might&apos;ve noticed upon authenticating this app, it asks for a <em>ton</em> of permissions (such as tweeting on your behalf or follow accounts for you). The <em>only</em> thing this app does is sees & edits your lists (as well as grab your following list, which will be elaborated in a bit), but it&apos;s currently impossible to ask for only specific permissions, because of how the API works.
         </p>
-        {/* TODO: Add images */}
+        <div>
+          <ImageAndCaption imageURL="/images/permissions.png" alt="It asks for so many permissions??" width={878} height={1152}/>
+        </div>
+        <div>
+          <ImageAndCaption imageURL="/images/edit_perms.png" alt="Unfortunately, I can only select permissions based on this criteria" width={1218} height={1008}/>
+        </div>
         <h4 className="font-bold italic">Extra question: Why use my following list?</h4>
         <p>
           Twitter&apos;s search endpoint is rather dumb. So to make up for it, the app uses your following list to prioritize them when adding members to lists.
