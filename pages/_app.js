@@ -36,7 +36,6 @@ const noChangeVariants = {
 const App = ({ Component, pageProps, router }) => {
   // TODO: Optimization with React.memo()
   // TODO: Use next-seo for SEO
-  // TODO: Make favicon
   // TODO: Update FAQ
   // TODO: Run Lighthouse auditing and fix appropriate things
   const [auth, setAuth] = useState(false);
@@ -60,6 +59,7 @@ const App = ({ Component, pageProps, router }) => {
     <div className="relative">
       <Head>
         <title>peeps</title>
+        <link rel="shortcut icon" href="/favicon.png?v=1.0"/>
       </Head>
       <div className="absolute top-0 left-0 right-0 h-screen bg-gradient-to-b from-blue-200 to-transparent -z-10"/>
       <Header auth={auth}/>
