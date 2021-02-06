@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 import Modal from 'react-modal';
+import { NextSeo } from 'next-seo';
 import { AnimatePresence, motion } from 'framer-motion';
 import useRouterScroll from '@web-utils/useRouterScroll';
 
@@ -35,7 +36,6 @@ const noChangeVariants = {
 
 const App = ({ Component, pageProps, router }) => {
   // TODO: Optimization with React.memo()
-  // TODO: Use next-seo for SEO
   // TODO: Run Lighthouse auditing and fix appropriate things
   const [auth, setAuth] = useState(false);
   const [userData, setUserData] = useState(undefined);
@@ -60,6 +60,29 @@ const App = ({ Component, pageProps, router }) => {
         <title>peeps</title>
         <link rel="shortcut icon" href="/favicon.png?v=1.0"/>
       </Head>
+      <NextSeo
+        title="peeps"
+        description="A simple web app to organize your Twitter lists"
+        canonical="https://peeps.vercel.app"
+        openGraph={{
+          url: "https://peeps.vercel.app",
+          title: "peeps",
+          description: "A simple web app to organize your Twitter lists",
+          images: [
+            {
+              url: '/images/logo.png',
+              alt: "Peeps logo",
+              height: 1500,
+              width: 1500
+            }
+          ]
+        }}
+        twitter={{
+          handle: '@aCluelessDanny',
+          site: "https://peeps.vercel.app",
+          cardType: "summary"
+        }}
+      />
       <div className="absolute top-0 left-0 right-0 h-screen bg-gradient-to-b from-blue-200 to-transparent -z-10"/>
       <Header auth={auth}/>
       <AnimatePresence exitBeforeEnter>
