@@ -13,7 +13,7 @@ const caretVariants = {
 };
 
 const answerVariants = {
-  initial: { opacity: 0, height: 0, marginBottom: '0' },
+  initial: { opacity: 0, height: 0, marginBottom: '0rem' },
   animate: { opacity: 1, height: 'auto', marginBottom: '0.5rem' }
 }
 
@@ -29,11 +29,11 @@ const QnA = ({ q, a, hash }) => {
   }, []);
 
   return (
-    <motion.div variants={dropVariants} className="p-1 bg-white rounded-md shadow-md" ref={wrapperRef}>
+    <motion.div variants={dropVariants} className="px-4 sm:px-2 bg-white rounded-md shadow-md" ref={wrapperRef}>
       <div className="flex">
-        <div>
+        <div className="hidden sm:block">
           <motion.div
-            className="cursor-pointer px-1.5 pt-1 pb-1.5"
+            className="cursor-pointer py-1"
             onClick={() => setOpen(!open)}
             variants={caretVariants}
             initial={false}
@@ -42,7 +42,7 @@ const QnA = ({ q, a, hash }) => {
             <Next size={32}/>
           </motion.div>
         </div>
-        <div className="flex-1 mr-6 text-lg md:text-xl">
+        <div className="flex-1 mr-0 sm:mr-6 text-lg md:text-xl">
           <h3 className="font-bold py-1.5 cursor-pointer" onClick={() => setOpen(!open)}>{q}</h3>
           <AnimatePresence initial={false}>
             {open && (

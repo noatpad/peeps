@@ -38,9 +38,9 @@ const Hello = () => {
         initial="initial"
         animate="animate"
       >
-        <div>
+        <div className="space-y-3">
           <motion.h2 className="text-3xl text-center font-light" variants={dropVariant}>a simple list manager for Twitter</motion.h2>
-          <motion.div className="flex justify-center mt-4" variants={dropVariant}>
+          <motion.div className="flex justify-center" variants={dropVariant}>
             <Button run={handleAuth} loading={loading} primary>Log in with Twitter</Button>
             {DEV_MODE && (
               <Button run={handleDevAuth} loading={loading}>Dev login</Button>

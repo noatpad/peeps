@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import ProfilePicture from './ProfilePicture';
 
 const Title = ({ user }) => (
-  <div className="pt-48 pb-28 text-center">
+  <div className="pt-40 sm:pt-48 pb-20 sm:pb-28 text-center">
     {user && (
       <motion.div
         className="inline-flex items-center justify-center transform translate-y-2"

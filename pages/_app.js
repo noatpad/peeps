@@ -37,8 +37,6 @@ const noChangeVariants = {
 const App = ({ Component, pageProps, router }) => {
   // IDEA: When applying too many changes at once, sometimes the member count is outdated or set to 0, perhaps waiting a bit between requests, or doing a "dummy" request after a pause can fix it
   // IDEA: Dark mode?
-  // IDEA: Decrease top margin for title on mobile
-  // IDEA: Remove QnA caret on mobile
   // TODO: Optimization with React.memo()
   const [auth, setAuth] = useState(false);
   const [userData, setUserData] = useState(undefined);
