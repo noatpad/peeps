@@ -80,7 +80,6 @@ const Home = ({
 
   // Update fuse searching for members when members are updated
   useEffect(() => {
-    console.log(users, activeAdds);
     fuseMemberRef.current.setCollection([...users, ...activeAdds]);
   }, [users, activeAdds]);
 
@@ -231,12 +230,12 @@ const Home = ({
   }
 
   // Apply all changes
-  const handleApplyChanges = () => {
+  const handleApplyChanges = () => (
     applyChanges(add, del)
       .then(_ => router.replace('/done'))
       .catch(err => errorHandler(err))
       .finally(() => setShowApplyChangesModal(false))
-  }
+  )
 
   // Clear all changes
   const handleClearChanges = () => {

@@ -63,7 +63,7 @@ const ListSelector = ({
   }
 
   // Handler for deleting a list
-  const handleDeleteList = () => {
+  const handleDeleteList = () => (
     deleteList(listToRemove.id_str)
       .then(_ => {
         if (listToRemove.id_str === activeListID) {
@@ -75,7 +75,7 @@ const ListSelector = ({
       })
       .catch(err => errorHandler(err))
       .finally(() => setShowDeleteModal(false))
-  }
+  )
 
   // Loading screen
   if (loading) {
@@ -120,7 +120,7 @@ const ListSelector = ({
         show={showDeleteModal}
         close={() => setShowDeleteModal(false)}
         listName={listToRemove.name}
-        handleDeleteList={handleDeleteList}
+        _handleDeleteList={handleDeleteList}
       />
     </div>
   )

@@ -6,6 +6,7 @@ import Modal from './index';
 
 const ApplyChangesModal = ({ show, close, applyChanges, changes }) => {
   const [disableApplyButton, setDisableApplyButton] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   // Delay confirmation for apply changes button
   useEffect(() => {
@@ -13,6 +14,12 @@ const ApplyChangesModal = ({ show, close, applyChanges, changes }) => {
     setDisableApplyButton(true);
     setTimeout(() => setDisableApplyButton(false), 1500);
   }, [show]);
+
+  const handleApplyChanges = () => {
+    setLoading(true)
+    applyChanges()
+      .finally(() => setLoading(false));
+  }
 
   return (
     <Modal show={show} close={close}>
@@ -25,7 +32,7 @@ const ApplyChangesModal = ({ show, close, applyChanges, changes }) => {
         </div>
         <div className="flex justify-center items-center">
           <Button run={close} warning small>No</Button>
-          <Button run={applyChanges} loading={disableApplyButton} primary small>Yes</Button>
+          <Button run={handleApplyChanges} loading={disableApplyButton || loading} primary small>Yes</Button>
         </div>
       </div>
     </Modal>
