@@ -17,12 +17,15 @@ const answerVariants = {
   animate: { opacity: 1, height: 'auto', marginBottom: '0.5rem' }
 }
 
-const QnA = ({ q, a, alreadyOpen = false }) => {
-  const [open, setOpen] = useState(alreadyOpen);
+const QnA = ({ q, a, hash }) => {
+  const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
 
   useEffect(() => {
-    if (alreadyOpen) { wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+    if (window.location.hash === hash) {
+      setOpen(true);
+      wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }, []);
 
   return (

@@ -169,8 +169,8 @@ const FAQ = () => (
       initial="initial"
       animate="animate"
     >
-      {questions.map(({ q, a, hash }, i) => (
-        <QnA key={i} q={q} a={a} alreadyOpen={hash === window.location.hash}/>
+      {questions.map((item, i) => (
+        <QnA key={i} {...item}/>
       ))}
     </motion.div>
   </main>
