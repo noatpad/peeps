@@ -108,10 +108,11 @@ const questions = [
         </div>
         <h4 className="font-bold italic">Extra question: Why use my following list?</h4>
         <p>
-          Twitter&apos;s search endpoint is rather dumb. So to make up for it, the app uses your following list to prioritize them when adding members to lists.
+          I make use of the API&apos;s search endpoint to help search for members to add to lists. The problem is that it&apos;s really dumb, as it&apos;s only looking for exact matches. So to make up for it, the app uses your following list to prioritize them when searching.
         </p>
       </div>
-    )
+    ),
+    hash: "#permissions"
   },
   {
     q: "I still don't trust this!",

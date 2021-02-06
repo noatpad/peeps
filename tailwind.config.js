@@ -18,6 +18,7 @@ module.exports = {
       },
       maxWidth: {
         '14rem': '14rem',
+        '28rem': '28rem',
         '4/5': '80%'
       },
       zIndex: {
