@@ -4,11 +4,16 @@ import Link from 'next/link';
 
 import Loading from '@components/Loading';
 
-const Done = () => {
+const Done = ({ forceRefreshLists }) => {
   const router = useRouter();
 
   // Send user back to main page in 5 seconds (should be ample time for lists to be fully updated)
-  useEffect(() => { setTimeout(() => router.replace('/'), 5000) }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      forceRefreshLists();
+      router.replace('/');
+    }, 5000)
+  }, []);
 
   return (
     <main className="flex flex-col justify-center items-center h-screen w-full text-center">

@@ -35,7 +35,6 @@ const noChangeVariants = {
 */
 
 const App = ({ Component, pageProps, router }) => {
-  // FIXME: Clear changes upon applying them
   // IDEA: When applying too many changes at once, sometimes the member count is outdated or set to 0, perhaps waiting a bit between requests, or doing a "dummy" request after a pause can fix it
   // IDEA: Dark mode?
   // IDEA: Decrease top margin for title on mobile
@@ -57,6 +56,11 @@ const App = ({ Component, pageProps, router }) => {
     router.events.on('routeChangeStart', handleRouteChange);
     return () => router.events.off('routeChangeStart', handleRouteChange);
   }, []);
+
+  const forceRefreshLists = () => {
+    setAuth(false);
+    setLists(undefined);
+  }
 
   return (
     <div className="relative">
@@ -110,6 +114,7 @@ const App = ({ Component, pageProps, router }) => {
             setAdd={setAdd}
             del={del}
             setDel={setDel}
+            forceRefreshLists={forceRefreshLists}
           />
         </motion.div>
       </AnimatePresence>

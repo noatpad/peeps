@@ -232,7 +232,11 @@ const Home = ({
   // Apply all changes
   const handleApplyChanges = () => (
     applyChanges(add, del)
-      .then(_ => router.replace('/done'))
+      .then(_ => {
+        setAdd([]);
+        setDel([]);
+        router.replace('/done');
+      })
       .catch(err => errorHandler(err))
       .finally(() => setShowApplyChangesModal(false))
   )
