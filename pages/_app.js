@@ -76,7 +76,7 @@ const App = ({ Component, pageProps, router }) => {
           description: "A simple web app to organize your Twitter lists",
           images: [
             {
-              url: 'https://peeps.vercel.app/images/logo.png',
+              url: 'https://peeps.vercel.app/images/twitter_card_logo.png',
               alt: "Peeps logo",
               height: 1533,
               width: 1533
