@@ -1,9 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { REPO_URL, TWITTER_URL } from '@web-utils/config';
 
 import QnA from '@components/QnA';
-import { REPO_URL, TWITTER_URL } from '@web-utils/config';
 import ImageAndCaption from '@components/ImageAndCaption';
+import KofiButton from '@components/KofiButton';
 
 const questions = [
   {
@@ -151,10 +152,23 @@ const questions = [
   {
     q: "Something else on your mind?",
     a: (
-      <div>
+      <div className="space-y-1">
         <p>
           If you got something else on your mind or you found a bug, don&apos;t hesitate to submit an issue at the repo on <a className="underline" href={REPO_URL} target="_blank" rel="noopener noreferrer">GitHub</a> or shoot a message over on <a className="underline" href={TWITTER_URL} target="_blank" rel="noopener noreferrer">Twitter</a>!
         </p>
+      </div>
+    )
+  },
+  {
+    q: "Like the app and can spare a cup of coffee?",
+    a: (
+      <div>
+        <p>
+          If you really like the tool & wanna show a bit of support, you can drop me a coffee here! It took a bit to get this done overtime, and I&apos;d appreciate the support~
+        </p>
+        <div className="flex justify-center my-2">
+          <KofiButton/>
+        </div>
       </div>
     )
   }

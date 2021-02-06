@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { startAuth, startDevAuth } from '@web-utils/api';
+import { DEV_MODE, TWITTER_URL } from '@web-utils/config';
 
 import Title from '@components/Title';
 import Button from '@components/Button';
-import { DEV_MODE, TWITTER_URL } from '@web-utils/config';
+import KofiButton from '@components/KofiButton';
 
 const dropVariant = {
   initial: { opacity: 0, y: -50 },
@@ -72,11 +73,19 @@ const Hello = () => {
             </p>
           </motion.div>
         </div>
-        <div className="mt-8 text-lg text-center space-y-1">
+        <div className="mt-8 text-lg text-center space-y-2">
           <motion.h3 className="text-3xl font-bold" variants={dropVariant}>Got any questions?</motion.h3>
           <motion.div variants={dropVariant}>
             <p>The <Link href="/faq"><a className="underline">FAQ</a></Link> page should be enough to answer most questions.</p>
             <p>Also feel free to ask me anything at <a className="underline" href={TWITTER_URL} target="_blank" rel="noopener noreferrer">@aCluelessDanny</a>.</p>
+            <p className="italic">
+              Also if you like the tool & are feeling generous to drop a coffee,
+              <br/>
+              you can do so here & I&apos;ll be very grateful~
+            </p>
+            <div className="flex justify-center my-2">
+              <KofiButton/>
+            </div>
           </motion.div>
         </div>
       </motion.div>
