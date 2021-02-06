@@ -77,7 +77,8 @@ const questions = [
           <ImageAndCaption imageURL="/images/api_credits.png" alt="API credits usage bars" width={937} height={118}/>
         </div>
       </div>
-    )
+    ),
+    hash: '#credits'
   },
   {
     q: "I can't pin lists here!",
@@ -167,8 +168,8 @@ const FAQ = () => (
       initial="initial"
       animate="animate"
     >
-      {questions.map(({ q, a }, i) => (
-        <QnA key={i} q={q} a={a}/>
+      {questions.map(({ q, a, hash }, i) => (
+        <QnA key={i} q={q} a={a} alreadyOpen={hash === window.location.hash}/>
       ))}
     </motion.div>
   </main>

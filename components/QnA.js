@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Next } from './Icons';
 
@@ -17,11 +17,16 @@ const answerVariants = {
   animate: { opacity: 1, height: 'auto', marginBottom: '0.5rem' }
 }
 
-const QnA = ({ q, a }) => {
-  const [open, setOpen] = useState(false);
+const QnA = ({ q, a, alreadyOpen = false }) => {
+  const [open, setOpen] = useState(alreadyOpen);
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    if (alreadyOpen) { wrapperRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+  }, []);
 
   return (
-    <motion.div variants={dropVariants} className="p-1 bg-white rounded-md shadow-md">
+    <motion.div variants={dropVariants} className="p-1 bg-white rounded-md shadow-md" ref={wrapperRef}>
       <div className="flex">
         <div>
           <motion.div

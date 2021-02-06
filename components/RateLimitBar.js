@@ -54,7 +54,7 @@ const RateLimitBar = ({ title, rateLimit, refresh, creditText }) => {
       <ReactTooltip id={title} effect="solid" clickable delayHide={250} className="max-w-14rem text-center">
         <p>{creditText}</p>
         <p>
-          <Link href="/faq"><a className="italic underline"><b>What are API credits?</b></a></Link>
+          <Link href="/faq#credits"><a className="italic underline"><b>What are API credits?</b></a></Link>
         </p>
       </ReactTooltip>
     </div>
