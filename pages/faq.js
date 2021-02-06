@@ -11,7 +11,7 @@ const questions = [
     a: (
       <div>
         <p>
-          <b>Peeps</b> is a simple list manager for Twitter. It allows you to manage your lists as you would normally, but done through a different interface focused on editing your lists with ease.
+          <b>Peeps</b> is a simple list manager for Twitter. It allows you to manage your lists as you would normally, but done through a different interface focused on editing your lists with ease. You can add, remove, & edit lists, as well as add & remove members within them.
         </p>
       </div>
     )
