@@ -166,6 +166,12 @@ const Home = ({
       .finally(() => setLoadingLists(false));
   }
 
+  // Remove deleted changes
+  const handleRemoveDeletedChanges = (id) => {
+    setAdd(add.filter(a => a.id !== id));
+    setDel(del.filter(a => a.id !== id));
+  }
+
   // Prepare a user to be added to a list
   const prepareToAddUser = ({ id_str, name, screen_name, profile_image_url_https }) => {
     const userToAdd = { id_str, name, screen_name, profile_image_url_https };
@@ -303,6 +309,7 @@ const Home = ({
               add={add}
               del={del}
               selectList={selectList}
+              handleRemoveDeletedChanges={handleRemoveDeletedChanges}
               errorHandler={errorHandler}
             />
           </SelectorPane>

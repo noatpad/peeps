@@ -18,6 +18,7 @@ const ListSelector = ({
   add,
   del,
   selectList,
+  handleRemoveDeletedChanges,
   errorHandler
 }) => {
   const [page, setPage] = useState(1);
@@ -69,6 +70,7 @@ const ListSelector = ({
           selectList(-1);
         }
         setLists(lists.filter(list => list.id_str !== listToRemove.id_str));
+        handleRemoveDeletedChanges(listToRemove.id_str);
         setListToRemove({});
       })
       .catch(err => errorHandler(err))
