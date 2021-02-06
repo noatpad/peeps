@@ -35,8 +35,6 @@ const noChangeVariants = {
 */
 
 const App = ({ Component, pageProps, router }) => {
-  // FIXME: When deleting a list, delete changes related to it
-  // FIXME: Member search is broken
   // TODO: Optimization with React.memo()
   const [auth, setAuth] = useState(false);
   const [userData, setUserData] = useState(undefined);
