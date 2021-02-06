@@ -76,10 +76,10 @@ const App = ({ Component, pageProps, router }) => {
           description: "A simple web app to organize your Twitter lists",
           images: [
             {
-              url: '/images/logo.png',
+              url: 'https://peeps.vercel.app/images/logo.png',
               alt: "Peeps logo",
-              height: 1500,
-              width: 1500
+              height: 1533,
+              width: 1533
             }
           ]
         }}
