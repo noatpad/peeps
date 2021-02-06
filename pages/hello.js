@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import ReactTooltip from 'react-tooltip';
 import { startAuth, startDevAuth } from '@web-utils/api';
 
 import Title from '@components/Title';
@@ -42,10 +41,18 @@ const Hello = () => {
         <div>
           <motion.h2 className="text-3xl text-center font-light" variants={dropVariant}>a simple list manager for Twitter</motion.h2>
           <motion.div className="flex justify-center mt-4" variants={dropVariant}>
-            <Button run={handleAuth} loading={loading} primary data-tip data-for="login-info">Log in with Twitter</Button>
+            <Button run={handleAuth} loading={loading} primary>Log in with Twitter</Button>
             {DEV_MODE && (
               <Button run={handleDevAuth} loading={loading}>Dev login</Button>
             )}
+          </motion.div>
+          <motion.div className="max-w-xl mx-auto text-sm text-gray-700 text-center" variants={dropVariant}>
+            <p>
+              <b>A quick note:</b> When you log in, you&apos;ll notice the app will ask for a <em>lot</em> of permissions. This app <b>only</b> reads and writes to lists, as well as read your following list.
+            </p>
+            <p>
+              <Link href="/faq#permissions"><a className="italic underline"><b>See more information here.</b></a></Link>
+            </p>
           </motion.div>
         </div>
         <div className="flex flex-col lg:flex-row mt-24 space-y-8 lg:space-y-0 lg:space-x-8 text-lg">
@@ -73,14 +80,6 @@ const Hello = () => {
           </motion.div>
         </div>
       </motion.div>
-      <ReactTooltip id="login-info" place="bottom" effect="solid" clickable delayHide={250} className="max-w-28rem text-center">
-        <p>
-          When you log in, you&apos;ll notice the app will ask for a <em>lot</em> of permissions. This app <b>only</b> reads and writes to lists, as well as grab your following list.
-        </p>
-        <p>
-          <Link href="/faq#permissions"><a className="italic underline"><b>See more information here.</b></a></Link>
-        </p>
-      </ReactTooltip>
     </main>
   )
 }
