@@ -17,7 +17,9 @@ const removeMembers = async (token, secret, { id, users }) => {
     console.log(`Successfully removed all ${count} members from the list`);
   } catch (err) {
     console.error('Error removing members at this point');
-    return Promise.reject(err);
+    console.error(err);
+    return err;
+    // return Promise.reject(err);
   }
 }
 
@@ -33,7 +35,9 @@ const addMembers = async (token, secret, { id, users }) => {
     console.log(`Successfully added all ${count} members from the list`);
   } catch (err) {
     console.error('Error adding members at this point');
-    return Promise.reject(err);
+    console.error(err);
+    return err;
+    // return Promise.reject(err);
   }
 }
 
