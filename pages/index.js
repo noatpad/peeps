@@ -80,8 +80,9 @@ const Home = ({
 
   // Update fuse searching for members when members are updated
   useEffect(() => {
-    fuseMemberRef.current.setCollection(users);
-  }, [users]);
+    console.log(users, activeAdds);
+    fuseMemberRef.current.setCollection([...users, ...activeAdds]);
+  }, [users, activeAdds]);
 
   // Get users when selecting a list
   useEffect(() => {
@@ -173,9 +174,7 @@ const Home = ({
   }
 
   // Prepare a user to be added to a list
-  const prepareToAddUser = ({ id_str, name, screen_name, profile_image_url_https }) => {
-    const userToAdd = { id_str, name, screen_name, profile_image_url_https };
-
+  const prepareToAddUser = (userToAdd) => {
     const newAdd = [...add];
     let index = newAdd.findIndex(a => a.id === activeListID);
     if (index === -1) {
@@ -184,7 +183,7 @@ const Home = ({
     }
 
     // Skip if the user is already in the list or prepared to be added
-    if (users.some(u => u.id_str === id_str) || newAdd[index].users.some(a => a.id_str === id_str)) { return }
+    if (users.some(u => u.id_str === userToAdd.id_str) || newAdd[index].users.some(a => a.id_str === userToAdd.id_str)) { return }
 
     newAdd[index].users.push(userToAdd);
     newAdd[index].users.sort(userSortCompare);

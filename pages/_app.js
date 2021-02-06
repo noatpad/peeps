@@ -35,7 +35,6 @@ const noChangeVariants = {
 */
 
 const App = ({ Component, pageProps, router }) => {
-  // FIXME: Member search is broken (at least with additions)
   // FIXME: Delete list and apply changes button doesn't toggle into a loading state after clicking
   // FIXME: Clear changes upon applying them
   // IDEA: When applying too many changes at once, sometimes the member count is outdated or set to 0, perhaps waiting a bit between requests, or doing a "dummy" request after a pause can fix it

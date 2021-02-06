@@ -27,15 +27,21 @@ const MemberSelector = ({
   const [limitReached, setLimitReached] = useState(false);
 
   // Fuzzy search list and pagination
-  let searchResults = query ? fuse.search(query.toLowerCase()) : users.map(l => ({ item: l }));
+  let searchResults = query ? fuse.search(query.toLowerCase()) : [...adds, ...users].map(l => ({ item: l }));
+  adds.forEach(a => {
+    const addIndex = searchResults.findIndex(s => s.item.id_str === a.id_str);
+    if (addIndex === -1) { return }
+    searchResults[addIndex].add = true;
+  })
   dels.forEach(d => {
     const delIndex = searchResults.findIndex(s => s.item.id_str === d.id_str);
     if (delIndex === -1) { return }
     searchResults[delIndex].del = true;
   })
-  searchResults = [...adds.map(a => ({ item: a, add: true })), ...searchResults];
   const offset = (page - 1) * MEMBERS_PER_PAGE;
-  const pageResults = searchResults.slice(offset, offset + MEMBERS_PER_PAGE);
+  const pageResults = searchResults
+    .sort((a, _) => a.add ? -1 : 0)
+    .slice(offset, offset + MEMBERS_PER_PAGE);
 
   // Go back to the start page when searching
   useEffect(() => {
