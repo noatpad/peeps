@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { startAuth, startDevAuth } from '@web-utils/api';
 import { DEV_MODE, TWITTER_URL } from '@web-utils/config';
@@ -57,7 +58,9 @@ const Hello = () => {
           </motion.div>
         </div>
         <div className="flex flex-col lg:flex-row mt-24 space-y-8 lg:space-y-0 lg:space-x-8 text-lg">
-          <motion.div className="lg:flex-1 h-40 bg-blue-400" variants={dropVariant}/>
+          <motion.div className="relative h-52 sm:h-72 md:h-96 lg:h-auto lg:flex-1" variants={dropVariant}>
+            <Image src="/images/demo.gif" alt="Demo of app" layout="fill" objectFit="contain"/>
+          </motion.div>
           <motion.div className="mx-auto lg:w-120 space-y-1" variants={dropVariant}>
             <h3 className="text-3xl font-bold">
               Twitter lists are pretty useful. The problem is making them...
