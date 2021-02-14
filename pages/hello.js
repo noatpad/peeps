@@ -15,6 +15,7 @@ const dropVariant = {
 }
 
 const Hello = () => {
+  const [demoLoaded, setDemoLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleAuth = () => {
@@ -58,8 +59,8 @@ const Hello = () => {
           </motion.div>
         </div>
         <div className="flex flex-col lg:flex-row mt-24 space-y-8 lg:space-y-0 lg:space-x-8 text-lg">
-          <motion.div className="relative h-52 sm:h-72 md:h-96 lg:h-auto lg:flex-1" variants={dropVariant}>
-            <Image src="/images/demo.gif" alt="Demo of app" layout="fill" objectFit="contain"/>
+          <motion.div className={`relative h-52 sm:h-72 md:h-96 lg:h-auto lg:flex-1 ${demoLoaded ? 'bg-transparent' : 'bg-blue-400 animate-pulse'} transition-colors`} variants={dropVariant}>
+            <Image src="/images/demo.gif" alt="Demo of app" layout="fill" objectFit="contain" onLoad={() => setDemoLoaded(true)}/>
           </motion.div>
           <motion.div className="mx-auto lg:w-120 space-y-1" variants={dropVariant}>
             <h3 className="text-3xl font-bold">
