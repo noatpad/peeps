@@ -95,6 +95,16 @@ const questions = [
     )
   },
   {
+    q: "My list's member count is 0, but it certainly has members?",
+    a: (
+      <div className="space-y-1">
+        <p>
+          Sometimes, when making rapid changes to lists, the member count can say 0. I&apos;m not 100% sure what causes this or how to remedy this effectively, but a good solution is to wait a bit & then make a small change to the list to fix it (adding or removing a single member should do the trick, for example).
+        </p>
+      </div>
+    )
+  },
+  {
     q: "Why does it ask for so many permissions?",
     a: (
       <div className="space-y-1">
